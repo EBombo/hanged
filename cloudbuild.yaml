@@ -1,19 +1,19 @@
 steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/hanged/hanged-red", "."]
+    args: ["build", "-t", "gcr.io/hanged/hanged-gold", "."]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/hanged/hanged-red"]
+    args: ["push", "gcr.io/hanged/hanged-gold"]
   # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
         "run",
         "deploy",
-        "hanged-red",
+        "hanged-gold",
         "--image",
-        "gcr.io/hanged/hanged-red",
+        "gcr.io/hanged/hanged-gold",
         "--region",
         "us-central1",
         "--platform",
@@ -21,7 +21,7 @@ steps:
         "--allow-unauthenticated",
       ]
 images:
-  - "gcr.io/hanged/hanged-red"
+  - "gcr.io/hanged/hanged-gold"
 options:
   logging: CLOUD_LOGGING_ONLY
   # TODO: Solicitar confirmacion de build y deploy de una nueva version.
