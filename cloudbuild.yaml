@@ -1,19 +1,19 @@
 steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/bingo-322514/bingo-dev", "."]
+    args: ["build", "-t", "gcr.io/hanged/hanged-red", "."]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/bingo-322514/bingo-dev"]
+    args: ["push", "gcr.io/hanged/hanged-red"]
   # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
         "run",
         "deploy",
-        "bingo-dev",
+        "hanged-red",
         "--image",
-        "gcr.io/bingo-322514/bingo-dev",
+        "gcr.io/hanged/hanged-red",
         "--region",
         "us-central1",
         "--platform",
@@ -21,7 +21,7 @@ steps:
         "--allow-unauthenticated",
       ]
 images:
-  - "gcr.io/bingo-322514/bingo-dev"
+  - "gcr.io/hanged/hanged-red"
 options:
   logging: CLOUD_LOGGING_ONLY
   # TODO: Solicitar confirmacion de build y deploy de una nueva version.
