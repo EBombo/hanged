@@ -1,0 +1,16 @@
+{
+  "adminSettings": {
+    "label": "Formulario de configuracion de la APP",
+    "items": {
+      "/admin/settings/manifests": "Edicion de manifests",
+      "/admin/settings/templates": "Edicion de templates"
+    }
+  },
+  "common": {
+    "label": "Acceso común",
+    "items": {
+      "/lobby": "Lobby",
+      "/home": "Home"
+    }
+  }
+}

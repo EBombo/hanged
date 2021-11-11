@@ -1,0 +1,4 @@
+{
+  "validated-account/auth-user": "La cuenta no cumple con los requisitos.",
+  "fetch/users-post": "Hubo un problema al crear la cuenta, inténtalo nuevamente!"
+}
