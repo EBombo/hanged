@@ -1,13 +1,13 @@
 {
   "production": {
     "firebase": {
-      "apiKey": "AIzaSyAimWwi9guF5NMRTLps8D062lPvLtJcp0c",
-      "authDomain": "bingo-322514.firebaseapp.com",
-      "projectId": "bingo-322514",
-      "storageBucket": "bingo-322514.appspot.com",
-      "messagingSenderId": "1028641251477",
-      "appId": "1:1028641251477:web:d37e7c7640a645e3b13b9c",
-      "measurementId": "G-X09GR2PC73"
+      "apiKey": "AIzaSyCHj-xTq64Ap1ZCDGtobfZJEtXiCHGpl50",
+      "authDomain": "hanged.firebaseapp.com",
+      "projectId": "hanged",
+      "storageBucket": "hanged.appspot.com",
+      "messagingSenderId": "904970036395",
+      "appId": "1:904970036395:web:27378dee723d57f88903ee",
+      "measurementId": "G-Q83XT4NT1N"
     },
     "firebaseEvents": {
       "apiKey": "AIzaSyAUBaakhi0swY_FDM3LeuGrfIN1Li7AugM",
@@ -27,13 +27,13 @@
   },
   "development": {
     "firebase": {
-      "apiKey": "AIzaSyDOsWCQ680tRldHqnkDnGSuxiPKH4aFUo8",
-      "authDomain": "bingo-dev-322514.firebaseapp.com",
-      "projectId": "bingo-dev-322514",
-      "storageBucket": "bingo-dev-322514.appspot.com",
-      "messagingSenderId": "513515398141",
-      "appId": "1:513515398141:web:3777fcb7c543a72bea2f94",
-      "measurementId": "G-E79L7Y61V4"
+      "apiKey": "AIzaSyBw8EhGt1VRreGkC9nAmw1wTM-odgYGuYg",
+      "authDomain": "hanged-dev.firebaseapp.com",
+      "projectId": "hanged-dev",
+      "storageBucket": "hanged-dev.appspot.com",
+      "messagingSenderId": "200969960446",
+      "appId": "1:200969960446:web:c96211ad619c460a9e5eaf",
+      "measurementId": "G-71BTC16FJ9"
     },
     "firebaseEvents": {
       "apiKey": "AIzaSyCWpwb6O8pdYT6v4L4YajKfTLCa9XPOUGs",
