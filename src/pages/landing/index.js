@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Anchor } from "../../components/form";
 import { useRouter } from "next/router";
 
-export const Lading = () => {
+export const Landing = () => {
   const router = useRouter();
 
   return (

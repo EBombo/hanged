@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { timeoutPromise } from "../../../../utils/promised";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Winner } from "./Winner";
-import { ButtonAnt, ButtonBingo } from "../../../../components/form";
+import { ButtonAnt, ButtonLobby } from "../../../../components/form";
 import {
   fadeInLeftBig,
   fadeInRightBig,
@@ -198,9 +198,9 @@ export const LobbyClosed = (props) => {
     >
       <div className="header">
         {!isVisibleTitle && (
-          <ButtonBingo variant="primary" margin="10px 10px auto auto" onClick={initializeTransitionToResume}>
+          <ButtonLobby variant="primary" margin="10px 10px auto auto" onClick={initializeTransitionToResume}>
             Siguiente
-          </ButtonBingo>
+          </ButtonLobby>
         )}
       </div>
 

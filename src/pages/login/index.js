@@ -1,4 +1,4 @@
-import { ButtonBingo, InputBingo } from "../../components/form";
+import { ButtonLobby, InputBingo } from "../../components/form";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Image } from "../../components/common/Image";
 import { config, firestore } from "../../firebase";
@@ -109,9 +109,9 @@ const Login = (props) => {
                 disabled={isLoading}
                 placeholder="Pin del juego"
               />
-              <ButtonBingo width="100%" disabled={isLoading} loading={isLoading} htmlType="submit">
+              <ButtonLobby width="100%" disabled={isLoading} loading={isLoading} htmlType="submit">
                 Ingresar
-              </ButtonBingo>
+              </ButtonLobby>
             </div>
           </form>
         )}
