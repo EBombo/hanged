@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "reactn";
-import { ButtonBingo, InputBingo } from "../../components/form";
+import { ButtonLobby, InputBingo } from "../../components/form";
 import { Image } from "../../components/common/Image";
 import { useForm } from "react-hook-form";
 import { config, database } from "../../firebase";
@@ -74,9 +74,9 @@ export const NicknameStep = (props) => {
           disabled={props.isLoading}
           placeholder="Apodo"
         />
-        <ButtonBingo width="100%" disabled={props.isLoading} htmlType="submit">
+        <ButtonLobby width="100%" disabled={props.isLoading} htmlType="submit">
           Ingresar
-        </ButtonBingo>
+        </ButtonLobby>
       </div>
     </NicknameForm>
   );

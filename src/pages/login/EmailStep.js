@@ -2,7 +2,7 @@ import React, { useState } from "reactn";
 import styled from "styled-components";
 import { Image } from "../../components/common/Image";
 import { config } from "../../firebase";
-import { ButtonBingo, InputBingo } from "../../components/form";
+import { ButtonLobby, InputBingo } from "../../components/form";
 import { object, string } from "yup";
 import { useForm } from "react-hook-form";
 import { ModalVerification } from "./ModalVerification";
@@ -48,9 +48,9 @@ export const EmailStep = (props) => {
           disabled={props.isLoading}
           placeholder="Ingresa tu email"
         />
-        <ButtonBingo width="100%" disabled={props.isLoading} htmlType="submit">
+        <ButtonLobby width="100%" disabled={props.isLoading} htmlType="submit">
           Ingresar
-        </ButtonBingo>
+        </ButtonLobby>
       </div>
     </EmailForm>
   );

@@ -40,7 +40,7 @@ export const LobbyLoading = (props) => {
             <div className="step-one-description">Entra a www.ebombo.io</div>
           </div>
           <div className="step-two">
-            <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
+            <div className="step-two-name">{get(props, "lobby.games.name", "")}</div>
           </div>
           <div className="step-three">
             <div className="main-container">
