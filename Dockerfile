@@ -14,16 +14,18 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY . /app
 
 # install dependencies
-#--only=production
 RUN npm install --force
 
-# set port
+# define port
 ARG SERVER_PORT=5000
 ENV SERVER_PORT=$SERVER_PORT
 EXPOSE $SERVER_PORT
 
 # define env
 ENV NODE_ENV=development
+
+# define domain
+ENV DOMAIN=https://hanged-red.ebombo.io
 
 # create build
 #&& rm -rf .next/cache
