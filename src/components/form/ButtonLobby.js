@@ -3,7 +3,7 @@ import React, { forwardRef } from "reactn";
 import { darkTheme } from "../../theme";
 import styled from "styled-components";
 
-export const ButtonBingo = forwardRef((props, ref) => {
+export const ButtonLobby = forwardRef((props, ref) => {
   const theme =
     props.variant === "primary"
       ? darkTheme.buttonPrimary

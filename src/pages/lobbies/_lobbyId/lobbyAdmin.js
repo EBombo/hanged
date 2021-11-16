@@ -2,7 +2,7 @@ import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { config, database, firestore } from "../../../firebase";
-import { ButtonAnt, ButtonBingo } from "../../../components/form";
+import { ButtonAnt, ButtonLobby } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -66,8 +66,7 @@ export const LobbyAdmin = (props) => {
 
   const mapUsersWithCards = () =>
     users.reduce((usersSum, user) => {
-      const card = getBingoCard();
-      const newUser = { ...user, id: user.userId, card: JSON.stringify(card) };
+      const newUser = { ...user, id: user.userId };
       return { ...usersSum, [newUser.id]: newUser };
     }, {});
 
@@ -101,7 +100,7 @@ export const LobbyAdmin = (props) => {
               </AudioStyled>
             }
           >
-            <ButtonBingo variant="primary" margin="10px 20px">
+            <ButtonLobby variant="primary" margin="10px 20px">
               {isPlay ? (
                 <Image
                   cursor="pointer"
@@ -114,7 +113,7 @@ export const LobbyAdmin = (props) => {
               ) : (
                 "►"
               )}
-            </ButtonBingo>
+            </ButtonLobby>
           </Popover>
           <Popover
             content={
@@ -132,7 +131,7 @@ export const LobbyAdmin = (props) => {
               </SliderContent>
             }
           >
-            <ButtonBingo
+            <ButtonLobby
               variant="primary"
               margin="10px 20px"
               disabled={!isPlay}
@@ -159,7 +158,7 @@ export const LobbyAdmin = (props) => {
                 size="contain"
                 margin="auto"
               />
-            </ButtonBingo>
+            </ButtonLobby>
           </Popover>
         </div>
 
@@ -168,7 +167,7 @@ export const LobbyAdmin = (props) => {
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
             {props.lobby.isLocked ? (
-              <ButtonBingo variant="primary" margin="10px 20px">
+              <ButtonLobby variant="primary" margin="10px 20px">
                 <Image
                   cursor="pointer"
                   src={`${config.storageUrl}/resources/lock.svg`}
@@ -177,7 +176,7 @@ export const LobbyAdmin = (props) => {
                   size="contain"
                   margin="auto"
                 />
-              </ButtonBingo>
+              </ButtonLobby>
             ) : (
               props.lobby?.pin
             )}
@@ -185,7 +184,7 @@ export const LobbyAdmin = (props) => {
         </div>
 
         <div className="right-menus">
-          <ButtonBingo
+          <ButtonLobby
             variant="primary"
             margin="10px 20px"
             disabled={isLoadingLock}
@@ -206,7 +205,7 @@ export const LobbyAdmin = (props) => {
                 margin="auto"
               />
             )}
-          </ButtonBingo>
+          </ButtonLobby>
           <ButtonAnt
             className="btn-start"
             loading={isLoadingStart}

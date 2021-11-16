@@ -6,7 +6,7 @@ import get from "lodash/get";
 export const SEOMeta = (props) =>
   isEmpty(props.seo) ? null : (
     <Head>
-      <title>{get(props, "seo.title", "Bingo Ebombo")}</title>
+      <title>{get(props, "seo.title", "Ahorcado Ebombo")}</title>
       {get(props, "seo.description") && <meta name="description" content={props.seo.description} />}
       {get(props, "seo.keywords") && <meta name="keywords" content={props.seo.keywords} />}
     </Head>
