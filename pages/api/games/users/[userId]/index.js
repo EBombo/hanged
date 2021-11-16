@@ -1,5 +1,5 @@
 import Cors from "cors";
-import initMiddleware from "../../../../../../lib";
+import initMiddleware from "../../../../../lib";
 import getGames from "../../../../../src/api/games/users/_userId/getGames";
 
 // You can read more about the available options here:

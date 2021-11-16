@@ -1,4 +1,5 @@
-import { firestore } from "../../../../../firebase";
+import { firestore } from "../../../../firebase";
+import { snapshotToArray } from "../../../../utils/snapshotToArray"
 
 const getGames = async (req, res) => {
   try {
