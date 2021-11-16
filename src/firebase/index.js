@@ -7,11 +7,11 @@ import "firebase/auth";
 import configJson from "./config.json";
 import isEmpty from "lodash/isEmpty";
 
-console.log("process.env.REF_ENV", process.env.REF_ENV);
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+console.log("process.env.DOMAIN", process.env.DOMAIN);
+const DOMAIN = process.env.DOMAIN ?? "localhost:3001";
 
-const isLocal = process.env.REF_ENV === "local";
-const environment = process.env.NODE_ENV;
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+const ENVIRONMENT = process.env.NODE_ENV ?? "development";
 
 const version = "0.0.1";
 
@@ -30,7 +30,7 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
-if (environment?.includes("production")) {
+if (ENVIRONMENT?.includes("production")) {
   config = configJson.production;
 
   console.log("prod", version);
@@ -74,7 +74,7 @@ if (isEmpty(firebase.apps)) {
   }
 }
 
-if (isLocal) {
+if (DOMAIN?.includes("localhost")) {
   //config.serverUrl = config.serverUrlLocal;
   //firestore.useEmulator("localhost", 8080);
   //auth.useEmulator("http://localhost:9099/");
