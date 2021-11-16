@@ -32,7 +32,7 @@ let authEvents;
 
 let firestoreBomboGames;
 
-if (environment?.includes("production")) {
+if (ENVIRONMENT?.includes("production")) {
   config = configJson.production;
 
   console.log("prod", version);
