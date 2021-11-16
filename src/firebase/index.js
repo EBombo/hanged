@@ -7,11 +7,11 @@ import "firebase/auth";
 import configJson from "./config.json";
 import isEmpty from "lodash/isEmpty";
 
-console.log("process.env.DOMAIN", process.env.DOMAIN);
 const DOMAIN = process.env.DOMAIN ?? "localhost:3001";
+console.log("process.env.DOMAIN", DOMAIN);
 
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-const ENVIRONMENT = process.env.NODE_ENV ?? "development";
+const ENVIRONMENT = process.env.ENV ?? "development";
+console.log("process.env.ENV", ENVIRONMENT);
 
 const version = "0.0.1";
 

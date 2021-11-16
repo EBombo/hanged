@@ -22,7 +22,7 @@ ENV SERVER_PORT=$SERVER_PORT
 EXPOSE $SERVER_PORT
 
 # define env
-ENV NODE_ENV=development
+ENV ENV=development
 
 # define domain
 ENV DOMAIN=https://hanged-red.ebombo.io
