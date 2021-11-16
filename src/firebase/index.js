@@ -30,6 +30,8 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
+let firestoreBomboGames;
+
 if (environment?.includes("production")) {
   config = configJson.production;
 
