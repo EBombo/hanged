@@ -37,7 +37,7 @@ try {
 if (
   hostName.includes("-dev") ||
   hostName.includes("localhost") ||
-  hostName.includes("red.") ||
+  hostName.includes("red") ||
   hostName.includes("cloudshell")
 ) {
   config = configJson.development;
