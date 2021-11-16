@@ -2,7 +2,7 @@ import { firestore } from "../../../../../firebase";
 
 const postGame = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.query;
     const game = req.body;
 
     const gamesRef = firestore.collection("games");
