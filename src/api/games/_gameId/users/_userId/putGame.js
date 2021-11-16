@@ -2,7 +2,7 @@ import { firestore } from "../../../../../firebase";
 
 const putGame = async (req, res) => {
   try {
-    const { gameId, userId } = req.params;
+    const { gameId, userId } = req.query;
     const game = req.body;
 
     await firestore.doc(`games/${gameId}`).update({
