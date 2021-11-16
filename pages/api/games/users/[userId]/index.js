@@ -2,6 +2,7 @@ import Cors from "cors";
 import initMiddleware from "../../../../../lib";
 import getGames from "../../../../../src/api/games/users/_userId/getGames";
 
+// TODO: refactor common wrapper: cors
 // You can read more about the available options here:
 // https://github.com/expressjs/cors#configuration-options
 // https://nextjs.org/docs/api-routes/api-middlewares#connectexpress-middleware-support
