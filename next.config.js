@@ -16,4 +16,5 @@ module.exports = withBundleAnalyzer({
 
     return config;
   },
+  assetPrefix: "https://hanged-red.ebombo.io",
 });
