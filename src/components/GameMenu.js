@@ -1,24 +1,31 @@
-import { spinLoaderMin } from "../../components/common/loader";
-import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, firestore } from "../../../firebase";
+import React from "reactn";
 import styled from "styled-components";
-import { ButtonAnt, Input, Select } from "../../components/form";
-import { mediaQuery } from "../../constants";
 import { Collapse } from "antd";
+import { object, string } from "yup";
+import { useForm } from "react-hook-form";
+import { ButtonAnt, Input, Select } from "./form";
+import { mediaQuery } from "../constants";
 
 const showLanguageOption = false;
+const secondsPerRoundOptions = [20, 30, 40, 50, 60];
 
-export const MenuGame = (props) => {
-  const audios = props.audios;
-  const game = props.game;
-  props.showChooseGameMode;
-
+export const GameMenu = (props) => {
   const { Panel } = Collapse;
+
+  const validationSchema = object().shape({
+    newPhrase: string().required().min(1),
+  });
+
+  const { register, errors, handleSubmit, reset } = useForm({
+    validationSchema,
+    reValidateMode: "onSubmit",
+  });
+
   return (
     <GameCss>
       <div>
-        <div className="title">{game.name}</div>
-        { props.showChooseGameMode && (
+        <div className="title">{props.game.name}</div>
+        {props.showChooseGameMode && (
           <div className="container-game">
             <div className="item">
               <div>Versión Simple</div>
@@ -43,15 +50,7 @@ export const MenuGame = (props) => {
                   <div>
                     <div className="title-opt">Idioma</div>
                   </div>
-                  <Select
-                    defaultValue={game?.audio?.id ?? audios[0]?.id}
-                    key={game?.audio?.id ?? audios[0]?.id}
-                    optionsdom={audios.map((audio) => ({
-                      key: audio.id,
-                      code: audio.id,
-                      name: audio.title,
-                    }))}
-                  />
+                  <Select />
                 </div>
               )}
               
@@ -60,13 +59,14 @@ export const MenuGame = (props) => {
                   <div className="title-opt">Música en el Lobby</div>
                 </div>
                 <Select
-                  defaultValue={game?.audio?.id ?? audios[0]?.id}
-                  key={game?.audio?.id ?? audios[0]?.id}
-                  optionsdom={audios.map((audio) => ({
+                  defaultValue={props.game?.audio?.id ?? props.audios[0]?.id}
+                  key={props.game?.audio?.id ?? props.audios[0]?.id}
+                  optionsdom={props.audios.map((audio) => ({
                     key: audio.id,
                     code: audio.id,
                     name: audio.title,
                   }))}
+                  onChange={(value) => props.onAudioChange?.(value)}
                 />
               </div>
               <div className="option with-select">
@@ -74,13 +74,14 @@ export const MenuGame = (props) => {
                   <div className="title-opt">Segundos por ronda</div>
                 </div>
                 <Select
-                  defaultValue={game?.audio?.id ?? audios[0]?.id}
-                  key={game?.audio?.id ?? audios[0]?.id}
-                  optionsdom={audios.map((audio) => ({
-                    key: audio.id,
-                    code: audio.id,
-                    name: audio.title,
+                  defaultValue={props.game?.secondsPerRound ?? secondsPerRoundOptions[0]}
+                  key={props.game?.secondsPerRound ?? secondsPerRoundOptions[0]}
+                  optionsdom={secondsPerRoundOptions.map((second) => ({
+                    key: second,
+                    code: second,
+                    name: second,
                   }))}
+                  onChange={(value) => props.onSecondsPerRoundChange?.(value)}
                 />
               </div>
               <div className="option with-custom-input">
@@ -88,19 +89,55 @@ export const MenuGame = (props) => {
                   <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
                 </div>
                 <hr className="divider"/>
-                <Input className="input-phrase" type="text" />
-                <div className="button-container">
-                  <ButtonAnt
-                    color="secondary"
-                    margin="auto"
-                    variant="secondary"
-                    loading={props.isLoadingSave}
-                    disabled={props.isLoadingSave}
-                    onClick={() => props.createLobby("individual")}
-                  >
-                    Agregar
-                  </ButtonAnt>
-                </div>
+                {props.game.phrases?.map(
+                  (phrase, index) => <Input 
+                    key={`input-phrase-${index}`}
+                    className="input-phrase"
+                    type="text"
+                    defaultValue={phrase}
+                    readOnly/>
+                )}
+                <form onSubmit={handleSubmit((data) => { 
+                  props.addNewPhrase(data.newPhrase);
+                  reset();
+                })}>
+                  <Input
+                    className="input-phrase" 
+                    ref={register}
+                    error={errors.newPhrase}
+                    type="text"
+                    name="newPhrase"
+                    placeholder="Inserta nueva frase"
+                    maxLength={20}
+                  />
+
+                  <div className="btn-container">
+                    <ButtonAnt
+                      className="btn"
+                      color="secondary"
+                      margin="auto"
+                      loading={props.isLoadingSave}
+                      disabled={props.isLoadingSave}
+                      htmlType="submit"
+                    >
+                      Agregar
+                    </ButtonAnt>
+
+                    {!props.showChooseGameMode && (
+                      <ButtonAnt
+                        className="btn success"
+                        color="success"
+                        margin="auto"
+                        loading={props.isLoadingSave}
+                        disabled={props.isLoadingSave}
+                        onClick={() => props.onUpdateGame?.()}
+                      >
+                        Listo
+                      </ButtonAnt>
+                    )}
+                  </div>
+
+                </form>
               </div>
             </div>
           </Panel>
@@ -197,6 +234,10 @@ const GameCss = styled.div`
       .ant-switch {
         margin: auto !important;
       }
+
+      .input-phrase {
+        margin: 0.5rem;
+      }
     }
 
     .with-select {
@@ -217,8 +258,19 @@ const GameCss = styled.div`
       border: 0;
     }
 
-    .button-container {
-      text-align: left;
+    .btn-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem 0;
+
+      .btn {
+        margin: 0 8px;
+        &.success {
+          span {
+            color: ${(props) => props.theme.basic.secondary} !important;
+          }
+        }
+      }
     }
 
   }
