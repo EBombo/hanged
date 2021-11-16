@@ -30,7 +30,9 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
-if (ENVIRONMENT?.includes("production")) {
+let firestoreBomboGames;
+
+if (environment?.includes("production")) {
   config = configJson.production;
 
   console.log("prod", version);
@@ -72,6 +74,15 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
+  // Allow connection with bombo-games firebase
+  try {
+    firebase.initializeApp(config.firebaseBomboGames, "bombo-games");
+    firestoreBomboGames = firebase.app("bombo-games").firestore();
+
+    firestoreBomboGames.settings({ ignoreUndefinedProperties: true });
+  } catch (error) {
+    console.error("error initializeApp", error);
+  }
 }
 
 if (DOMAIN?.includes("localhost")) {
@@ -83,6 +94,7 @@ if (DOMAIN?.includes("localhost")) {
 export {
   analyticsEvents,
   firestoreEvents,
+  firestoreBomboGames,
   storageEvents,
   authEvents,
   firestore,

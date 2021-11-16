@@ -18,6 +18,16 @@
       "appId": "1:83072686764:web:2c5680dc46bfacb5d5dd09",
       "measurementId": "G-BWH1540T4Q"
     },
+    "firebaseBomboGames": {
+      "apiKey": "AIzaSyDjlOSf3XgbkrxAHq22SPJsy5CNmz1XcTg",
+      "authDomain": "bombo-games.firebaseapp.com",
+      "databaseURL": "https://bombo-games-default-rtdb.firebaseio.com",
+      "projectId": "bombo-games",
+      "storageBucket": "bombo-games.appspot.com",
+      "messagingSenderId": "1070628660325",
+      "appId": "1:1070628660325:web:da4704997a7bd837d5528c",
+      "measurementId": "G-KWMV30S3TE"
+    },
     "serverUrlLocal": "http://localhost:8080",
     "serverUrl": "https://api.ebombo.io",
     "serverUrlEvents": "https://api.ebombo.com",
@@ -43,6 +53,15 @@
       "messagingSenderId": "400641140585",
       "appId": "1:400641140585:web:4edded714bb211fd8c7ff8",
       "measurementId": "G-NWBPEND5Q0"
+    },
+    "firebaseBomboGames": {
+      "apiKey": "AIzaSyB7PF1ukaiZOEWt-XmJT5ZtYoY-b5cdOhY",
+      "authDomain": "bombo-games-dev.firebaseapp.com",
+      "projectId": "bombo-games-dev",
+      "storageBucket": "bombo-games-dev.appspot.com",
+      "messagingSenderId": "310996445281",
+      "appId": "1:310996445281:web:d9311966a8488369d1e220",
+      "measurementId": "G-QE8D28XL8Z"
     },
     "serverUrlLocal": "http://localhost:8080",
     "serverUrl": "https://red-api.ebombo.io",
