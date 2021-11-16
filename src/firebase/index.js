@@ -10,8 +10,8 @@ import isEmpty from "lodash/isEmpty";
 console.log("process.env.DOMAIN", process.env.DOMAIN);
 const DOMAIN = process.env.DOMAIN ?? "localhost:3001";
 
-console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-const ENVIRONMENT = process.env.NODE_ENV ?? "development";
+console.log("process.env.ENV", process.env.ENV);
+const ENVIRONMENT = process.env.ENV ?? "development";
 
 const version = "0.0.1";
 
