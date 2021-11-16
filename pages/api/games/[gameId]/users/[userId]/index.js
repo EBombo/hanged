@@ -3,7 +3,9 @@ import initMiddleware from "../../../../../../lib";
 import postGame from "../../../../../../src/api/games/_gameId/users/_userId/postGame";
 import putGame from "../../../../../../src/api/games/_gameId/users/_userId/putGame";
 
-// You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+// You can read more about the available options here:
+// https://github.com/expressjs/cors#configuration-options
+// https://nextjs.org/docs/api-routes/api-middlewares#connectexpress-middleware-support
 const cors = initMiddleware(
   Cors({
     methods: ["GET", "POST", "DELETE"],
