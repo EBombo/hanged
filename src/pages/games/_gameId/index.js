@@ -2,14 +2,12 @@ import { spinLoaderMin } from "../../../components/common/loader";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
-import defaultTo from "lodash/defaultTo";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 import { ButtonAnt, Input, Select, Switch } from "../../../components/form";
 import { useUser } from "../../../hooks";
-import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
 import { Collapse } from "antd";
+import { GameMenu } from "../../../components/GameMenu";
 
 export const Game = (props) => {
   const router = useRouter();
