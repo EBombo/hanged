@@ -20,7 +20,7 @@ const postGame = async (req, res) => {
     return res.send({ success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: error?.message ?? "Something went wrong" });
+    return res.status(500).send({ error: error?.message ?? "Something went wrong" });
   }
 };
 

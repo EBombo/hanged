@@ -12,7 +12,8 @@ const putGame = async (req, res) => {
 
     return res.send({ success: true });
   } catch (error) {
-    res.status(500).send({ error: "Something went wrong" });
+    console.error(error);
+    return res.status(500).send({ error: error?.message ?? "Something went wrong" });
   }
 };
 
