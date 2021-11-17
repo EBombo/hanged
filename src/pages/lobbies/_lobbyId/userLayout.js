@@ -14,7 +14,7 @@ export const UserLayout = (props) => {
 
   return (
     <UserLayoutCss>
-      <div className="description">1-75 números</div>
+      <div className="description"></div>
       <div className="title no-wrap">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
