@@ -6,11 +6,17 @@ import "firebase/database";
 import "firebase/auth";
 import configJson from "./config.json";
 import isEmpty from "lodash/isEmpty";
-import get from "lodash/get";
+
+const DOMAIN = process.env.DOMAIN ?? "localhost:3001";
+console.log("process.env.DOMAIN", DOMAIN);
+
+const ENVIRONMENT = process.env.ENV ?? "development";
+console.log("process.env.ENV", ENVIRONMENT);
 
 const version = "0.0.1";
 
-let hostName;
+const hostName = typeof window === "undefined" ? "" : window.location.hostname.replace("subdomain.", "");
+
 let config;
 
 let firestore;
@@ -24,32 +30,20 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
-try {
-  hostName = process.env.NODE_ENV === "development" ? "localhost" : get(process, "env.GCLOUD_PROJECT", "");
+let firestoreBomboGames;
 
-  if (typeof window !== "undefined") hostName = window.location.hostname.replace("subdomain.", "");
-
-  console.log("projectId", hostName, process.env.NODE_ENV);
-} catch (error) {
-  console.log("Error environment", error);
-}
-
-if (
-  hostName.includes("-dev") ||
-  hostName.includes("localhost") ||
-  hostName.includes("red.") ||
-  hostName.includes("cloudshell")
-) {
-  config = configJson.development;
-
-  console.log("dev", version);
-} else {
+if (ENVIRONMENT?.includes("production")) {
   config = configJson.production;
 
   console.log("prod", version);
+} else {
+  config = configJson.development;
+
+  console.log("dev", version);
 }
 
 if (isEmpty(firebase.apps)) {
+  // Default connection.
   try {
     console.log("initializeApp", isEmpty(firebase.apps));
     firebase.initializeApp(config.firebase);
@@ -65,7 +59,7 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
-  // Allow connection with events firebase
+  // Events connection.
   try {
     firebase.initializeApp(config.firebaseEvents, "events");
     firestoreEvents = firebase.app("events").firestore();
@@ -80,9 +74,18 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
+  // Allow connection with bombo-games firebase
+  try {
+    firebase.initializeApp(config.firebaseBomboGames, "bombo-games");
+    firestoreBomboGames = firebase.app("bombo-games").firestore();
+
+    firestoreBomboGames.settings({ ignoreUndefinedProperties: true });
+  } catch (error) {
+    console.error("error initializeApp", error);
+  }
 }
 
-if (hostName === "localhost") {
+if (DOMAIN?.includes("localhost")) {
   //config.serverUrl = config.serverUrlLocal;
   //firestore.useEmulator("localhost", 8080);
   //auth.useEmulator("http://localhost:9099/");
@@ -91,6 +94,7 @@ if (hostName === "localhost") {
 export {
   analyticsEvents,
   firestoreEvents,
+  firestoreBomboGames,
   storageEvents,
   authEvents,
   firestore,

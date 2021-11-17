@@ -2,8 +2,9 @@ import { firestore } from "../../../../../firebase";
 
 const postGame = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.query;
     const game = req.body;
+
     const gamesRef = firestore.collection("games");
     const gameId = game.id;
 
@@ -18,7 +19,8 @@ const postGame = async (req, res) => {
 
     return res.send({ success: true });
   } catch (error) {
-    res.status(500).send({ error: "Something went wrong" });
+    console.error(error);
+    return res.status(500).send({ error: error?.message ?? "Something went wrong" });
   }
 };
 
