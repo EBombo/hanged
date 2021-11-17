@@ -64,3 +64,6 @@ export const templatesLegend = [
   { name: "verifyAccountLink", value: "Link de verificación" },
   { name: "code", value: "Verification code" },
 ];
+
+export const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+
