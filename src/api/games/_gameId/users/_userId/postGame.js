@@ -5,7 +5,7 @@ const postGame = async (req, res) => {
     const { userId } = req.params;
     const game = req.body;
     const gamesRef = firestore.collection("games");
-    const gameId = gamesRef.doc().id();
+    const gameId = game.id;
 
     await gamesRef.doc(gameId).set({
       ...game,
