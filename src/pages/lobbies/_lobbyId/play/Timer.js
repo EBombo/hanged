@@ -12,7 +12,7 @@ export const Timer = (props) => (
         width="32px"
       />
     </div>
-    <div className="label">{props.secondsLeft ?? 0} segundos</div>
+    <div className="label">{props.isRoundOver ? props.roundOverMessage : `${props.secondsLeft} segundos`}</div>
   </TimerContainer>
 );
 
