@@ -14,7 +14,6 @@ export const UserLayout = (props) => {
 
   return (
     <UserLayoutCss>
-      <div className="description"></div>
       <div className="title no-wrap">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
