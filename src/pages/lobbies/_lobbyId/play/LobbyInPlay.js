@@ -24,6 +24,7 @@ const defaultHandMan = {
 
 export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
+
   const [user, setUser] = useState(null);
   const [game, setGame] = useState({
     ...props.lobby.game,
@@ -46,26 +47,26 @@ export const LobbyInPlay = (props) => {
 
   // TODO: consider refactor time interval
   const timeCountdown = () => {
-      if (secondsLeft === 0 || isRoundOver) {
-        setIsRoundOver(true);
-        return;
-      }
+      if (secondsLeft === 0 || isRoundOver) return setIsRoundOver(true);
       setSecondsLeft(secondsLeft - 1);
   };
+
   useInterval(timeCountdown, 1000);
-  useEffect(() => {
-    setSecondsLeft(props.lobby.game.secondsPerRound);
-  }, [currentPhraseIndex]);
+
+  useEffect(() => setSecondsLeft(game.secondsPerRound), [currentPhraseIndex]);
 
   const onNewLetterPressed = (letter) => {
     if (game.lives === 0) return;
 
     const isMatched = game.phrases[currentPhraseIndex].toUpperCase().includes(letter);
+
     let livesLeft = game.lives;
     let hangedMan = game.hangedMan;
+
     if (!isMatched) {
       ({ livesLeft, hangedMan } = penalize());
     }
+
     if (game.phrases[currentPhraseIndex].split('').filter((letter) => Object.keys(game.lettersPressed).includes(letter)).length === game.phrases[currentPhraseIndex].length) {
       setHasGuessed(true);
       setIsRoundOver(true);
@@ -82,18 +83,17 @@ export const LobbyInPlay = (props) => {
     });
   };
 
+  const isGameOver = () => (game.phrases.length <= (currentPhraseIndex + 1));
+
   const penalize = () => {
     const indexLimb = game.lives - 1;
     const livesLeft = game.lives - 1;
+
     if (livesLeft === 0) setIsRoundOver(true);
+
     const hangedManUpdated = {...game.hangedMan, [orderLimbs[indexLimb]]: "active"};
 
     return { livesLeft, hangedMan: hangedManUpdated};
-  };
-
-  const nextRound = () => {
-    setCurrentPhraseIndex((prev) => prev + 1);
-    resetRound();
   };
 
   const resetRound = () => {
@@ -107,18 +107,26 @@ export const LobbyInPlay = (props) => {
     });
   };
 
+  const nextRound = () => {
+    setCurrentPhraseIndex((prev) => prev + 1);
+    resetRound();
+  };
+
   const resetGame = () => {
     setCurrentPhraseIndex(0);
     resetRound();
   };
 
-  const isGameOver = () => {
-    return (game.phrases.length <= (currentPhraseIndex + 1));
-  };
-
-  const updateGameAndRestart = async (updatedGame) => {
-    resetGame();
-    setGame({...updatedGame});
+  const updateGameAndRestart = (updatedGame) => {
+    setIsRoundOver(false);
+    setHasGuessed(false);
+    setCurrentPhraseIndex(0);
+    setGame({
+      ...updatedGame,
+      lettersPressed: {},
+      hangedMan: { ...defaultHandMan },
+      lives: orderLimbs.length
+    });
   };
 
   // TODO: Consider to refactoring, <Admin> & <User>.
@@ -178,6 +186,11 @@ const GameActions = styled.div`
   margin: 32px 8px 0 8px;
   padding-bottom: 32px;
 
+  ${mediaQuery.afterTablet} {
+    max-width: 1200px;
+    margin: 32px auto 0 auto;
+  }
+
   .btn-action {
     display: inline-block;
     font-weight: bold;
@@ -187,6 +200,11 @@ const GameActions = styled.div`
 const HangedGameContainer = styled.div`
   margin: 0 12px;
   padding-top: 8px;
+
+  ${mediaQuery.afterTablet} {
+    max-width: 700px;
+    margin: 0 auto;
+  }
 
   .guess-phrase-container {
     text-align: center;
