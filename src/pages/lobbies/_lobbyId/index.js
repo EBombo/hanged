@@ -66,15 +66,13 @@ export const Lobby = (props) => {
 
   const lobbyIsClosed = lobby?.isClosed && authUser?.isAdmin;
 
-  return <LobbyInPlay {...additionalProps} />;
-
   if (lobbyIsClosed) return <LobbyClosed {...additionalProps} />;
 
-  if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
-
-  if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
-
-  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
-
-  return <LobbyUser {...additionalProps} />;
+  return <LobbyInPlay {...additionalProps} />;
+  // TODO: handle this when it is used
+  // if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
+  //
+  // if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
+  //
+  // if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
 };
