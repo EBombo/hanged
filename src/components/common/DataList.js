@@ -92,3 +92,8 @@ export const defaultHandMan = {
 
 export const secondsPerRoundOptions = [20, 30, 40, 50, 60];
 
+export const PLAYING = "PLAYING";
+export const TIME_OUT = "TIME_OUT";
+export const HANGED = "HANGED";
+export const GUESSED = "GUESSED";
+

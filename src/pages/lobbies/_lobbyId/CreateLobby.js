@@ -5,7 +5,7 @@ import { useFetch } from "../../../hooks/useFetch";
 import { useRouter } from "next/router";
 import { useUser } from "../../../hooks";
 import { GameMenu } from "../../../components/GameMenu";
-import { secondsPerRoundOptions, limbsOrder, defaultHandMan } from "../../../components/common/DataList";
+import { secondsPerRoundOptions, limbsOrder, defaultHandMan, PLAYING } from "../../../components/common/DataList";
 
 export const CreateLobby = (props) => {
   const { Fetch } = useFetch();
@@ -94,7 +94,7 @@ export const CreateLobby = (props) => {
           lettersPressed: {},
           lives: limbsOrder.length,
           currentPhraseIndex: 0,
-          state: "PLAYING",
+          state: PLAYING,
         },
         typeOfGame,
         id: lobbyId,
