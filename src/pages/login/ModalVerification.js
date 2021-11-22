@@ -2,7 +2,7 @@ import React from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../components/common/ModalContainer";
 import { darkTheme } from "../../theme";
-import { ButtonBingo } from "../../components/form";
+import { ButtonLobby } from "../../components/form";
 
 export const ModalVerification = (props) => (
   <ModalContainer
@@ -20,9 +20,9 @@ export const ModalVerification = (props) => (
         La próxima vez que juegues no va ha ser necesario que coloques tu identificación de jugador otra vez, asi que
         puedes ingresar rápidamente. Lo puedes cambiar en ajustes en cualquier momento.
       </div>
-      <ButtonBingo variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
+      <ButtonLobby variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
         Ok
-      </ButtonBingo>
+      </ButtonLobby>
     </ContentModal>
   </ModalContainer>
 );
