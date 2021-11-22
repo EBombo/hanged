@@ -76,3 +76,19 @@ export const templatesLegend = [
   { name: "verifyAccountLink", value: "Link de verificación" },
   { name: "code", value: "Verification code" },
 ];
+
+export const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+
+export const limbsOrder = ["head", "leftLeg", "rightLeg", "leftArm", "rightArm", "trunk"];
+
+export const defaultHandMan = {
+  head: 'hidden',
+  leftLeg: 'hidden',
+  rightLeg: 'hidden',
+  leftArm: 'hidden',
+  rightArm: 'hidden',
+  trunk: 'hidden',
+};
+
+export const secondsPerRoundOptions = [20, 30, 40, 50, 60];
+

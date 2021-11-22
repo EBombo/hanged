@@ -5,6 +5,7 @@ import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LobbyLoading } from "./LobbyLoading";
+import { LobbyInPlay } from "./play/LobbyInPlay";
 
 import { useUser } from "../../../hooks";
 import { LobbyClosed } from "./closed/LobbyClosed";
@@ -62,11 +63,14 @@ export const Lobby = (props) => {
     ...props,
   };
 
+
   const lobbyIsClosed = lobby?.isClosed && authUser?.isAdmin;
+
+  return <LobbyInPlay {...additionalProps} />;
 
   if (lobbyIsClosed) return <LobbyClosed {...additionalProps} />;
 
-  // if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
+  if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
 
   if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
 

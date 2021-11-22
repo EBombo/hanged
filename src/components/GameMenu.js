@@ -5,9 +5,9 @@ import { object, string } from "yup";
 import { useForm } from "react-hook-form";
 import { ButtonAnt, Input, Select } from "./form";
 import { mediaQuery } from "../constants";
+import { secondsPerRoundOptions } from "./common/DataList";
 
 const showLanguageOption = false;
-const secondsPerRoundOptions = [20, 30, 40, 50, 60];
 
 export const GameMenu = (props) => {
   const { Panel } = Collapse;
