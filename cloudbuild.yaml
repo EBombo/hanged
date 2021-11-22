@@ -5,7 +5,7 @@ steps:
       [
           "build",
           "-t",
-          "gcr.io/${PROJECT_ID}/${PROJECT_ID}-red",
+          "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold",
           "--build-arg=NEXT_PUBLIC_CONFIG=$_CONFIG",
           "--build-arg=NEXT_PUBLIC_DOMAIN=$_DOMAIN",
           "--build-arg=NEXT_PUBLIC_PORT=$_PORT",
@@ -13,16 +13,16 @@ steps:
       ]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/${PROJECT_ID}/${PROJECT_ID}-red"]
+    args: ["push", "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold"]
   # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
           "run",
           "deploy",
-          "${PROJECT_ID}-red",
+          "${PROJECT_ID}-gold",
           "--image",
-          "gcr.io/${PROJECT_ID}/${PROJECT_ID}-red",
+          "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold",
           "--region",
           "us-central1",
           "--platform",
@@ -30,10 +30,10 @@ steps:
           "--allow-unauthenticated",
       ]
     # TODO: Create access to the Google Cloud Storage object to xxxx-compute@developer.gserviceaccount.com.
-    #- name: "gcr.io/cloud-builders/gsutil"
-    #args: ["-m" , "cp" , "-r" , "-n" ,"gs://${PROJECT_ID}-dev.appspot.com/*", "gs://${PROJECT_ID}.appspot.com"]
+  - name: "gcr.io/cloud-builders/gsutil"
+    args: ["-m" , "cp" , "-r" , "-n" ,"gs://${PROJECT_ID}-dev.appspot.com/*", "gs://${PROJECT_ID}.appspot.com"]
 images:
-  - "gcr.io/${PROJECT_ID}/${PROJECT_ID}-red"
+  - "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold"
 options:
   logging: CLOUD_LOGGING_ONLY
   # TODO: Solicitar confirmacion de build y deploy de una nueva version. [PROD]
