@@ -93,7 +93,8 @@ export const CreateLobby = (props) => {
           hangedMan: { ...defaultHandMan },
           lettersPressed: {},
           lives: limbsOrder.length,
-          currentPhraseIndex: 0
+          currentPhraseIndex: 0,
+          state: "PLAYING",
         },
         typeOfGame,
         id: lobbyId,
