@@ -5,7 +5,7 @@ steps:
       [
           "build",
           "-t",
-          "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold",
+          "gcr.io/${PROJECT_ID}/${PROJECT_ID}",
           "--build-arg=NEXT_PUBLIC_CONFIG=$_CONFIG",
           "--build-arg=NEXT_PUBLIC_DOMAIN=$_DOMAIN",
           "--build-arg=NEXT_PUBLIC_PORT=$_PORT",
@@ -13,16 +13,16 @@ steps:
       ]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold"]
+    args: ["push", "gcr.io/${PROJECT_ID}/${PROJECT_ID}"]
   # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       [
           "run",
           "deploy",
-          "${PROJECT_ID}-gold",
+          "${PROJECT_ID}",
           "--image",
-          "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold",
+          "gcr.io/${PROJECT_ID}/${PROJECT_ID}",
           "--region",
           "us-central1",
           "--platform",
@@ -33,7 +33,7 @@ steps:
   - name: "gcr.io/cloud-builders/gsutil"
     args: ["-m" , "cp" , "-r" , "-n" ,"gs://${PROJECT_ID}-dev.appspot.com/*", "gs://${PROJECT_ID}.appspot.com"]
 images:
-  - "gcr.io/${PROJECT_ID}/${PROJECT_ID}-gold"
+  - "gcr.io/${PROJECT_ID}/${PROJECT_ID}"
 options:
   logging: CLOUD_LOGGING_ONLY
   # TODO: Solicitar confirmacion de build y deploy de una nueva version. [PROD]
