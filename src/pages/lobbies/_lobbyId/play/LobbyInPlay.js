@@ -19,7 +19,7 @@ import moment from "moment"
 const getDeltaTime = (dateTime, now) => {
   if (!dateTime) return 0;
   if (dateTime instanceof firebase.firestore.Timestamp) return Math.abs(moment(dateTime.toDate()).diff(moment(now), "seconds"))
-  else return Math.abs(moment(dateTime).diff(moment(now), "seconds"))
+  return Math.abs(moment(dateTime).diff(moment(now), "seconds"))
 };
 const isLastRound = (game) => (game.currentPhraseIndex + 1) === game.phrases.length;
 const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter(limb => limb === "hidden").length;
