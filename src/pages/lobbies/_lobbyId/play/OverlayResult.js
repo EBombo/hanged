@@ -12,7 +12,7 @@ export const OverlayResult = (props) => (
         : (<>
           <Image 
             className="status-icon"
-            src={props.hasGuessed ? `${config.storageUrl}/resources/sucess_guessed.png` : `${config.storageUrl}/resources/fail_guessed.png`}
+            src={props.hasGuessed ? `${config.storageUrl}/resources/success_guess.png` : `${config.storageUrl}/resources/fail_guessed.png`}
             Desktopwidth="56px"
             width="32px"
           />
