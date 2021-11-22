@@ -1,35 +1,42 @@
-# base image
+# Base
 FROM node:14-alpine
 
-# create folder
-RUN mkdir /app
+# Update npm
+RUN npm install -g npm@7
 
-# working directory
+# Working directory
 WORKDIR /app
 
-# add binaries to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+# Working directory
+WORKDIR /app
 
-# copy app files and build
-COPY . /app
+# Copy app files
+COPY package.json package-lock.json ./
 
-# install dependencies
+# Install dependencies
 RUN npm install --force
 
-# define port
-ARG SERVER_PORT=5000
-ENV SERVER_PORT=$SERVER_PORT
-EXPOSE $SERVER_PORT
+# Node env
+ENV NODE_ENV production
 
-# define env
-ENV ENV=development
+# Define port
+ARG NEXT_PUBLIC_PORT
+ENV NEXT_PUBLIC_PORT=$NEXT_PUBLIC_PORT
+EXPOSE $NEXT_PUBLIC_PORT
 
-# define domain
-ENV DOMAIN=https://hanged-red.ebombo.io
+# Define domain
+ARG NEXT_PUBLIC_DOMAIN
+ENV NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN
 
-# create build
-#&& rm -rf .next/cache
+# Define config
+ARG NEXT_PUBLIC_CONFIG
+ENV NEXT_PUBLIC_CONFIG=$NEXT_PUBLIC_CONFIG
+
+# Copy app files
+COPY . .
+
+# Create build
 RUN npm run build
 
-# start app
-CMD [ "npm", "start" ]
+# Run
+CMD [ "npm" , "start" ]
