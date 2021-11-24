@@ -96,7 +96,7 @@ const LoginContainer = styled.div`
   color: ${(props) => props.theme.basic.white};
   width: 100%;
   height: 100vh;
-  background-image: url("${(props) => `${props.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
+  background-image: url("${(props) => `${props.storageUrl}/resources/coral-pattern-tablet.svg`}");
   background-position: center;
   background-size: contain;
 
