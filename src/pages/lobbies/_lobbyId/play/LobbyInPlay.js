@@ -5,7 +5,6 @@ import includes from "lodash/includes";
 import { mediaQuery } from "../../../../constants";
 import { UserLayout } from "../userLayout";
 import { firestore } from "../../../../firebase";
-import firebase from "firebase"
 import { HangedMan } from "./HangedMan";
 import { Timer } from "./Timer";
 import { Alphabet } from "./Alphabet";
@@ -13,173 +12,222 @@ import { OverlayResult } from "./OverlayResult";
 import { ButtonAnt } from "../../../../components/form";
 import { GameSettings } from "./GameSettings";
 import { useInterval } from "../../../../hooks/useInterval";
-import { limbsOrder, defaultHandMan, PLAYING, TIME_OUT, HANGED, GUESSED } from "../../../../components/common/DataList";
-import moment from "moment"
+import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT } from "../../../../components/common/DataList";
+import moment from "moment";
 
-const getDeltaTime = (dateTime, now) => {
-  if (!dateTime) return 0;
-  if (dateTime instanceof firebase.firestore.Timestamp) return Math.abs(moment(dateTime.toDate()).diff(moment(now), "seconds"))
-  return Math.abs(moment(dateTime).diff(moment(now), "seconds"))
+const getDeltaTime = (startAt) => {
+  const diffTime = moment(startAt).diff(moment(), "seconds");
+  return Math.abs(diffTime);
 };
-const isLastRound = (game) => (game.currentPhraseIndex + 1) === game.phrases.length;
-const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter(limb => limb === "hidden").length;
+
+const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
+
+const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter((limb) => limb === "hidden").length;
+
 const phraseIsGuessed = (letters, phrase) => every(phrase, (letter) => includes(letters, letter));
 
 export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
 
-  const [user, setUser] = useState(null);
-  const [game, setGame] = useState({ ...props.lobby.game });
-  const [secondsLeft, setSecondsLeft] = useState(game.secondsPerRound - getDeltaTime(game.roundStartedAt, new Date()));
+  const [lobby, setLobby] = useState(props.lobby);
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(
+    props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
+  );
 
   useEffect(() => {
     const currentUserId = authUser.id;
-    if (props.lobby?.users?.[currentUserId] || props.lobby.game.usersIds.includes(currentUserId)) return;
+    if (props.lobby?.users?.[currentUserId]) return;
+    if (props.lobby.game.usersIds.includes(currentUserId)) return;
 
     props.logout();
   }, [props.lobby.users]);
 
-  useEffect(async () => await saveGameState({ ...game }), [game]);
+  useEffect(() => {
+    const updateLobby = async () =>
+      await firestore.doc(`lobbies/${props.lobby.id}`).update({
+        ...lobby,
+        updateAt: new Date(),
+      });
 
-  // TODO: consider move timer into Timer component. interval re-runs this component
-  const timeCountdown = () => {
-    if (secondsLeft <= 0 && game.state === PLAYING) return setGame({ ...game, state: TIME_OUT});
-    if (game.state === TIME_OUT) return
+    updateLobby();
+  }, [lobby]);
+
+  // TODO: Consider move timer into Timer component. interval re-runs this component.
+  useInterval(() => {
+    if (secondsLeft <= 0 && props.lobby.state === PLAYING) return setLobby({ ...props.lobby, state: TIME_OUT });
+
+    if (props.lobby.state === TIME_OUT) return;
+
     if (!gameMenuEnabled) setSecondsLeft(secondsLeft - 1);
+  }, 1000);
+
+  const penalize = () => {
+    const indexLimb = getLivesLeft(props.lobby.hangedMan) - 1;
+
+    return { ...props.lobby.hangedMan, [limbsOrder[indexLimb]]: "active" };
   };
 
-  useInterval(timeCountdown, 1000);
-
   const onNewLetterPressed = (letter) => {
-    if (getLivesLeft(game.hangedMan) === 0) return;
+    if (getLivesLeft(props.lobby.hangedMan) === 0) return;
 
-    const isMatched = game.phrases[game.currentPhraseIndex].toUpperCase().includes(letter);
+    const isMatched = props.lobby.settings.phrases[props.lobby.currentPhraseIndex].toUpperCase().includes(letter);
 
-    let hangedMan = game.hangedMan;
-    let state = game.state;
+    let hangedMan = props.lobby.hangedMan;
+    let state = props.lobby.state;
 
     // check if isMatched and if the phrase was guessed
-    if (isMatched && phraseIsGuessed([ ...Object.keys(game.lettersPressed), letter ], game.phrases[game.currentPhraseIndex].toUpperCase().replace(/ /g,'')))
+    if (
+      isMatched &&
+      phraseIsGuessed(
+        [...Object.keys(props.lobby.lettersPressed), letter],
+        props.lobby.settings.phrases[props.lobby.currentPhraseIndex].toUpperCase().replace(/ /g, "")
+      )
+    )
       state = GUESSED;
 
-    if (!isMatched) ({ hangedMan } = penalize());
+    if (!isMatched) hangedMan = penalize();
 
     if (getLivesLeft(hangedMan) === 0) state = HANGED;
 
-    setGame({
-      ...game,
-      state, 
-      hangedMan: hangedMan,
-      lettersPressed: { 
-        ...game.lettersPressed,
+    setLobby({
+      ...props.lobby,
+      state,
+      hangedMan,
+      lettersPressed: {
+        ...props.lobby.lettersPressed,
         [letter]: isMatched ? "matched" : "unmatched",
-      }
+      },
     });
   };
 
-  const isGameOver = () => (isLastRound(game) && game.state !== PLAYING);
-
-  const penalize = () => {
-    const indexLimb = getLivesLeft(game.hangedMan) - 1;
-
-    const hangedManUpdated = {...game.hangedMan, [limbsOrder[indexLimb]]: "active"};
-
-    return { hangedMan: hangedManUpdated};
-  };
+  const isGameOver = () => isLastRound(props.lobby) && props.lobby.state !== PLAYING;
 
   const nextRound = () => {
-    if (isLastRound(game)) return;
+    if (isLastRound(props.lobby)) return;
 
-    setSecondsLeft(game.secondsPerRound);
-    setGame({
-      ...game,
-      roundStartedAt: new Date(),
-      lettersPressed: {},
-      hangedMan: { ...defaultHandMan },
+    setSecondsLeft(props.lobby.settings.secondsPerRound);
+
+    setLobby({
+      ...props.lobby,
       state: PLAYING,
-      currentPhraseIndex: game.currentPhraseIndex + 1,
+      lettersPressed: {},
+      startAt: new Date(),
+      hangedMan: defaultHandMan,
+      currentPhraseIndex: props.lobby.currentPhraseIndex + 1,
     });
   };
 
   const resetGame = async () => {
-    setSecondsLeft(game.secondsPerRound);
-    setGame({
-      ...game,
-      roundStartedAt: new Date(),
-      lettersPressed: {},
-      hangedMan: { ...defaultHandMan },
+    setSecondsLeft(props.lobby.settings.secondsPerRound);
+
+    setLobby({
+      ...props.lobby,
       state: PLAYING,
+      lettersPressed: {},
+      startAt: new Date(),
       currentPhraseIndex: 0,
+      hangedMan: defaultHandMan,
     });
   };
 
-  const updateGameAndRestart = (updatedGame) => {
-    setSecondsLeft(updatedGame.secondsPerRound);
-    setGame({
-      ...updatedGame,
-      roundStartedAt: new Date(),
-      lettersPressed: {},
-      hangedMan: { ...defaultHandMan },
-      state: PLAYING,
-      currentPhraseIndex: 0,
-    });
-  };
+  const updateGameAndRestart = (settings) => {
+    setIsLoadingSave(true);
 
-  const saveGameState = async (game) => await firestore.doc(`lobbies/${props.lobby.id}`).update({
-    game,
-    updateAt: new Date(),
-  });
+    setSecondsLeft(settings.secondsPerRound);
+
+    console.log("settings", settings);
+    setLobby({
+      ...props.lobby,
+      settings,
+      state: PLAYING,
+      lettersPressed: {},
+      startAt: new Date(),
+      currentPhraseIndex: 0,
+      hangedMan: defaultHandMan,
+    });
+    setIsLoadingSave(false);
+  };
 
   // TODO: Consider to refactoring, <Admin> & <User>.
   return (
     <>
       <UserLayout {...props} />
+
       <HangedGameContainer>
-        <Timer 
-          className="timer" {...props}
+        <Timer
+          {...props}
+          className="timer"
           secondsLeft={secondsLeft}
-          isRoundOver={game.state !== PLAYING}
           roundOverMessage="Ronda terminada!"
+          isRoundOver={props.lobby.state !== PLAYING}
         />
-        <HangedMan {...props} hangedMan={game.hangedMan}/>
+
+        <HangedMan {...props} hangedMan={props.lobby.hangedMan} />
+
         <div className="guess-phrase-container">
-          {game.phrases[game.currentPhraseIndex].split('').map(
-            (letter, i) => 
-              letter === " "
-                ? <span key={`ws-${i}`} className="whitespace">&nbsp;</span>
-                : <div key={`letter-${i}`} className="letter">
-                    <div className="character">{Object.keys(game.lettersPressed).includes(letter.toUpperCase()) ? letter.toUpperCase() : " "}</div>
-                    <hr className="underscore"/>
-                  </div>
+          {props.lobby.settings.phrases[props.lobby.currentPhraseIndex].split("").map((letter, i) =>
+            letter === " " ? (
+              <span key={`ws-${i}`} className="whitespace">
+                &nbsp;
+              </span>
+            ) : (
+              <div key={`letter-${i}`} className="letter">
+                <div className="character">
+                  {Object.keys(props.lobby.lettersPressed).includes(letter.toUpperCase()) ? letter.toUpperCase() : " "}
+                </div>
+                <hr className="underscore" />
+              </div>
+            )
           )}
         </div>
+
         <Alphabet
           {...props}
-          lettersPressed={game.lettersPressed}
+          lettersPressed={props.lobby.lettersPressed}
           onLetterPressed={(letter) => onNewLetterPressed(letter)}
         />
-        { game.state !== PLAYING &&
-          (<OverlayResult
+
+        {props.lobby.state !== PLAYING && (
+          <OverlayResult
             {...props}
-            hasGuessed={game.state === GUESSED}
-            phrase={game.phrases[game.currentPhraseIndex]}
+            hasGuessed={props.lobby.state === GUESSED}
+            phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]}
             isGameOver={isGameOver()}
             onContinue={() => nextRound()}
             onResetGame={() => resetGame()}
           />
         )}
-        
       </HangedGameContainer>
-      { gameMenuEnabled && (<GameSettings {...props} game={game} onUpdateGame={(updatedGame) => updateGameAndRestart(updatedGame)} setGameMenuEnabled={setGameMenuEnabled}/>) }
+
+      {gameMenuEnabled && (
+        <GameSettings
+          {...props}
+          game={props.lobby.game}
+          isLoadingSave={isLoadingSave}
+          settings={props.lobby.settings}
+          onUpdateGame={(settings) => updateGameAndRestart(settings)}
+          setGameMenuEnabled={setGameMenuEnabled}
+        />
+      )}
+
       <GameActions>
-        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>Editar juego</ButtonAnt>
-        <ButtonAnt color="danger" className="btn-action" onClick={() => nextRound()} disabled={isLastRound(game)}>Saltar turno</ButtonAnt>
+        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
+          Editar juego
+        </ButtonAnt>
+        <ButtonAnt
+          color="danger"
+          className="btn-action"
+          onClick={() => nextRound()}
+          disabled={isLastRound(props.lobby)}
+        >
+          Saltar turno
+        </ButtonAnt>
       </GameActions>
     </>
   );
 };
-
 
 const GameActions = styled.div`
   display: flex;

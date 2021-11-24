@@ -8,6 +8,7 @@ import { Image } from "../../../components/common/Image";
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
+
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(30);

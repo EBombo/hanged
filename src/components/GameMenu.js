@@ -8,16 +8,15 @@ import { mediaQuery } from "../constants";
 import { secondsPerRoundOptions } from "./common/DataList";
 
 const showLanguageOption = false;
+const { Panel } = Collapse;
 
 export const GameMenu = (props) => {
-  const { Panel } = Collapse;
-
-  const validationSchema = object().shape({
+  const schema = object().shape({
     newPhrase: string().required().min(1),
   });
 
   const { register, errors, handleSubmit, reset } = useForm({
-    validationSchema,
+    schema,
     reValidateMode: "onSubmit",
   });
 
@@ -25,6 +24,7 @@ export const GameMenu = (props) => {
     <GameCss>
       <div>
         <div className="title">{props.game.name}</div>
+
         {props.showChooseGameMode && (
           <div className="container-game">
             <div className="item">
@@ -42,6 +42,7 @@ export const GameMenu = (props) => {
             </div>
           </div>
         )}
+
         <Collapse defaultActiveKey={["1"]} accordion>
           <Panel header="Opciones del juego" key="1">
             <div className="options">
@@ -53,7 +54,7 @@ export const GameMenu = (props) => {
                   <Select />
                 </div>
               )}
-              
+
               <div className="option with-select">
                 <div>
                   <div className="title-opt">Música en el Lobby</div>
@@ -74,8 +75,8 @@ export const GameMenu = (props) => {
                   <div className="title-opt">Segundos por ronda</div>
                 </div>
                 <Select
-                  defaultValue={props.game?.secondsPerRound ?? secondsPerRoundOptions[0]}
-                  key={props.game?.secondsPerRound ?? secondsPerRoundOptions[0]}
+                  defaultValue={props.settings?.secondsPerRound ?? secondsPerRoundOptions[0]}
+                  key={props.settings?.secondsPerRound ?? secondsPerRoundOptions[0]}
                   optionsdom={secondsPerRoundOptions.map((second) => ({
                     key: second,
                     code: second,
@@ -88,21 +89,18 @@ export const GameMenu = (props) => {
                 <div>
                   <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
                 </div>
-                <hr className="divider"/>
-                {props.game.phrases?.map(
-                  (phrase, index) => <Input 
-                    key={`input-phrase-${index}`}
-                    className="input-phrase"
-                    type="text"
-                    defaultValue={phrase}
-                    readOnly/>
-                )}
-                <form onSubmit={handleSubmit((data) => { 
-                  props.addNewPhrase(data.newPhrase);
-                  reset();
-                })}>
+                <hr className="divider" />
+                {props.settings.phrases?.map((phrase, index) => (
+                  <Input key={`input-phrase-${index}`} className="input-phrase" type="text" defaultValue={phrase} />
+                ))}
+                <form
+                  onSubmit={handleSubmit((data) => {
+                    props.addNewPhrase(data.newPhrase);
+                    reset();
+                  })}
+                >
                   <Input
-                    className="input-phrase" 
+                    className="input-phrase"
                     ref={register}
                     error={errors.newPhrase}
                     type="text"
@@ -136,7 +134,6 @@ export const GameMenu = (props) => {
                       </ButtonAnt>
                     )}
                   </div>
-
                 </form>
               </div>
             </div>
@@ -265,6 +262,7 @@ const GameCss = styled.div`
 
       .btn {
         margin: 0 8px;
+
         &.success {
           span {
             color: ${(props) => props.theme.basic.secondary} !important;
@@ -272,7 +270,6 @@ const GameCss = styled.div`
         }
       }
     }
-
   }
 
   .awards-container {

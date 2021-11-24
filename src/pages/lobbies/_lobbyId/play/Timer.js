@@ -6,18 +6,13 @@ import { Image } from "../../../../components/common/Image";
 export const Timer = (props) => (
   <TimerContainer>
     <div className="timer">
-      <Image 
-        src={`${config.storageUrl}/resources/timer.png`}
-        Desktopwidth="56px"
-        width="32px"
-      />
+      <Image src={`${config.storageUrl}/resources/timer.png`} Desktopwidth="56px" width="32px" />
     </div>
     <div className="label">{props.isRoundOver ? props.roundOverMessage : `${props.secondsLeft} segundos`}</div>
   </TimerContainer>
 );
 
 const TimerContainer = styled.div`
-  display: inline-block;
   font-family: Lato;
   font-style: normal;
   font-weight: bold;
@@ -32,4 +27,3 @@ const TimerContainer = styled.div`
     margin-left: 14px;
   }
 `;
-

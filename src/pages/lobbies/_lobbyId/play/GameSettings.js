@@ -5,31 +5,24 @@ import { GameMenu } from "../../../../components/GameMenu";
 export const GameSettings = (props) => {
   const [audios] = useGlobal("audios");
 
-  const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const [settings, setSettings] = useState(props.settings);
 
-  let modifiedGame = { ...props.game }; 
-
- return (
-  <GameSettingsContainer>
-    <GameMenu {...props}
-      showChooseGameMode={false}
-      game={modifiedGame}
-      audios={audios}
-      isLoadingSave={isLoadingSave}
-      addNewPhrase={(newPhrase) => modifiedGame.phrases.push(newPhrase)}
-      onAudioChange={(audioId) => {
-        modifiedGame.audio = { id: audioId };
-      }}
-      onSecondsPerRoundChange={(seconds) => {
-        modifiedGame.secondsPerRound = seconds;
-      }}
-      onUpdateGame={() => {
-        props.onUpdateGame(modifiedGame);
-        props.setGameMenuEnabled(false);
-      }}
-    />
-  </GameSettingsContainer>
- );
+  return (
+    <GameSettingsContainer>
+      <GameMenu
+        {...props}
+        audios={audios}
+        isLoadingSave={props.isLoadingSave}
+        onAudioChange={(audioId) => setSettings({ ...settings, audio: { id: audioId } })}
+        onSecondsPerRoundChange={(seconds) => setSettings({ ...settings, secondsPerRound: seconds })}
+        addNewPhrase={(newPhrase) => setSettings({ ...settings, phrases: [...settings.phrases, newPhrase] })}
+        onUpdateGame={() => {
+          props.onUpdateGame(settings);
+          props.setGameMenuEnabled(false);
+        }}
+      />
+    </GameSettingsContainer>
+  );
 };
 
 const GameSettingsContainer = styled.div`
