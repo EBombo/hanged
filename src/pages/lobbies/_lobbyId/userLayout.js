@@ -1,4 +1,4 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
@@ -8,9 +8,20 @@ import { Image } from "../../../components/common/Image";
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
+
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(30);
+
+  useEffect(() => {
+    const currentAudioToPlayId = props.lobby.settings?.audio.id ?? audios[0]?.id;
+    const currentAudioToPlay = audios.find((audio) => audio.id === currentAudioToPlayId);
+
+    const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay.audioUrl);
+
+    props.audioRef.current = currentAudio;
+    props.audioRef.current.play();
+  }, []);
 
   return (
     <UserLayoutCss>

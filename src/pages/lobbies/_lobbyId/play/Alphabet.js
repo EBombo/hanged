@@ -11,15 +11,17 @@ const getColorByLetterState = (lettersPressed, letter) => {
 
 export const Alphabet = (props) => (
   <AlphabetContainer>
-    { alphabet.map((letter, i) => 
+    {alphabet.map((letter, i) => (
       <ButtonAnt
         key={`letter-key-${i}`}
-        color={getColorByLetterState(props.lettersPressed, letter)}
-        disabled={getColorByLetterState(props.lettersPressed, letter) === "default" ? true : false}
         className="letter"
         onClick={() => props.onLetterPressed?.(letter)}
-      >{letter}</ButtonAnt>
-    )}
+        color={getColorByLetterState(props.lettersPressed, letter)}
+        disabled={getColorByLetterState(props.lettersPressed, letter) === "default"}
+      >
+        {letter}
+      </ButtonAnt>
+    ))}
   </AlphabetContainer>
 );
 
@@ -42,5 +44,3 @@ const AlphabetContainer = styled.div`
     font-style: normal;
   }
 `;
-
-

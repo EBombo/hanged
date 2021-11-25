@@ -1,30 +1,23 @@
-import React from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { Collapse } from "antd";
-import { object, string } from "yup";
-import { useForm } from "react-hook-form";
 import { ButtonAnt, Input, Select } from "./form";
 import { mediaQuery } from "../constants";
 import { secondsPerRoundOptions } from "./common/DataList";
+import { config } from "../firebase";
+import { Image } from "./common/Image";
 
 const showLanguageOption = false;
+const { Panel } = Collapse;
 
 export const GameMenu = (props) => {
-  const { Panel } = Collapse;
-
-  const validationSchema = object().shape({
-    newPhrase: string().required().min(1),
-  });
-
-  const { register, errors, handleSubmit, reset } = useForm({
-    validationSchema,
-    reValidateMode: "onSubmit",
-  });
+  const [phrases, setPhrases] = useState([...props.settings.phrases, ""]);
 
   return (
     <GameCss>
       <div>
         <div className="title">{props.game.name}</div>
+
         {props.showChooseGameMode && (
           <div className="container-game">
             <div className="item">
@@ -35,13 +28,14 @@ export const GameMenu = (props) => {
                 margin="auto"
                 loading={props.isLoadingSave}
                 disabled={props.isLoadingSave}
-                onClick={() => props.createLobby("individual")}
+                onClick={() => props.createLobby("individual", phrases)}
               >
                 Simple
               </ButtonAnt>
             </div>
           </div>
         )}
+
         <Collapse defaultActiveKey={["1"]} accordion>
           <Panel header="Opciones del juego" key="1">
             <div className="options">
@@ -53,7 +47,7 @@ export const GameMenu = (props) => {
                   <Select />
                 </div>
               )}
-              
+
               <div className="option with-select">
                 <div>
                   <div className="title-opt">Música en el Lobby</div>
@@ -74,8 +68,8 @@ export const GameMenu = (props) => {
                   <div className="title-opt">Segundos por ronda</div>
                 </div>
                 <Select
-                  defaultValue={props.game?.secondsPerRound ?? secondsPerRoundOptions[0]}
-                  key={props.game?.secondsPerRound ?? secondsPerRoundOptions[0]}
+                  defaultValue={props.settings?.secondsPerRound ?? secondsPerRoundOptions[0]}
+                  key={props.settings?.secondsPerRound ?? secondsPerRoundOptions[0]}
                   optionsdom={secondsPerRoundOptions.map((second) => ({
                     key: second,
                     code: second,
@@ -88,37 +82,60 @@ export const GameMenu = (props) => {
                 <div>
                   <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
                 </div>
-                <hr className="divider"/>
-                {props.game.phrases?.map(
-                  (phrase, index) => <Input 
-                    key={`input-phrase-${index}`}
-                    className="input-phrase"
-                    type="text"
-                    defaultValue={phrase}
-                    readOnly/>
-                )}
-                <form onSubmit={handleSubmit((data) => { 
-                  props.addNewPhrase(data.newPhrase);
-                  reset();
-                })}>
-                  <Input
-                    className="input-phrase" 
-                    ref={register}
-                    error={errors.newPhrase}
-                    type="text"
-                    name="newPhrase"
-                    placeholder="Inserta nueva frase"
-                    maxLength={20}
-                  />
+
+                <hr className="divider" />
+
+                <div className="phrases-container">
+                  {phrases.map((phrase, index) => (
+                    <div className="input-container" key={`input-phrase-${index}`}>
+                      <Input
+                        onKeyPress={(event) => {
+                          const regex = new RegExp("^[a-zA-Z ]+$");
+                          const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                          if (!regex.test(key)) {
+                            event.preventDefault();
+                            return false;
+                          }
+                        }}
+                        type="text"
+                        maxLength={20}
+                        defaultValue={phrase}
+                        className="input-phrase"
+                        placeholder="Inserta nueva frase"
+                        onBlur={(e) => {
+                          let newPhrase = phrases;
+                          newPhrase[index] = e.target.value;
+                          setPhrases([...newPhrase]);
+                        }}
+                      />
+                      <button
+                        className="btn-delete"
+                        onClick={() => {
+                          let newPhrases = phrases.filter((phrase, idx) => idx !== index);
+
+                          setPhrases([...newPhrases]);
+                        }}
+                      >
+                        <Image
+                          src={`${config.storageUrl}/resources/close.svg`}
+                          height="15px"
+                          width="15px"
+                          cursor="pointer"
+                          size="contain"
+                          margin="0"
+                        />
+                      </button>
+                    </div>
+                  ))}
 
                   <div className="btn-container">
                     <ButtonAnt
+                      onClick={() => setPhrases([...phrases, ""])}
                       className="btn"
                       color="secondary"
                       margin="auto"
                       loading={props.isLoadingSave}
                       disabled={props.isLoadingSave}
-                      htmlType="submit"
                     >
                       Agregar
                     </ButtonAnt>
@@ -130,14 +147,13 @@ export const GameMenu = (props) => {
                         margin="auto"
                         loading={props.isLoadingSave}
                         disabled={props.isLoadingSave}
-                        onClick={() => props.onUpdateGame?.()}
+                        onClick={() => props.onUpdateGame?.(phrases)}
                       >
                         Listo
                       </ButtonAnt>
                     )}
                   </div>
-
-                </form>
+                </div>
               </div>
             </div>
           </Panel>
@@ -265,6 +281,7 @@ const GameCss = styled.div`
 
       .btn {
         margin: 0 8px;
+
         &.success {
           span {
             color: ${(props) => props.theme.basic.secondary} !important;
@@ -272,13 +289,9 @@ const GameCss = styled.div`
         }
       }
     }
-
   }
 
-  .awards-container {
-    background: ${(props) => props.theme.basic.primary};
-    padding: 0.5rem;
-
+  .phrases-container {
     .input-container {
       margin: 0.5rem 0;
       position: relative;
@@ -296,7 +309,7 @@ const GameCss = styled.div`
       }
     }
 
-    .input-award {
+    .input-phrase {
       width: 100%;
       height: 32px;
       background: ${(props) => props.theme.basic.secondary};

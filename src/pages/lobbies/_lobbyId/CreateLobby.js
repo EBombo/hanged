@@ -3,15 +3,17 @@ import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, firestore, firestoreBomboGames } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
 import { useRouter } from "next/router";
-import { useUser } from "../../../hooks";
+import { useSendError, useUser } from "../../../hooks";
 import { GameMenu } from "../../../components/GameMenu";
-import { secondsPerRoundOptions, limbsOrder, defaultHandMan, PLAYING } from "../../../components/common/DataList";
+import { defaultHandMan, limbsOrder, PLAYING, secondsPerRoundOptions } from "../../../components/common/DataList";
 
 export const CreateLobby = (props) => {
   const { Fetch } = useFetch();
 
   const router = useRouter();
   const { userId, tokenId, gameId } = router.query;
+
+  const { sendError } = useSendError();
 
   const [, setLSAuthUser] = useUser();
 
@@ -21,6 +23,7 @@ export const CreateLobby = (props) => {
   const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const [settings, setSettings] = useState({ secondsPerRound: secondsPerRoundOptions[0] });
 
   useEffect(() => {
     if ((!tokenId && !userId) || !gameId) return;
@@ -67,7 +70,8 @@ export const CreateLobby = (props) => {
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);
-        setGame({ ...game, secondsPerRound: secondsPerRoundOptions[0] });
+        setGame(game);
+        setSettings({ ...settings, phrases: game.phrases });
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -77,7 +81,7 @@ export const CreateLobby = (props) => {
     fetchUserByToken();
   }, [tokenId, gameId]);
 
-  const createLobby = async (typeOfGame) => {
+  const createLobby = async (typeOfGame, phrases) => {
     setIsLoadingSave(true);
     try {
       const pin = await generatePin();
@@ -87,24 +91,21 @@ export const CreateLobby = (props) => {
       const lobbyId = lobbiesRef.doc().id;
 
       const newLobby = {
-        pin,
-        game: {
-          ...game,
-          hangedMan: { ...defaultHandMan },
-          lettersPressed: {},
-          lives: limbsOrder.length,
-          currentPhraseIndex: 0,
-          state: PLAYING,
-        },
-        typeOfGame,
         id: lobbyId,
+        pin,
+        game,
+        lettersPressed: {},
+        hangedMan: defaultHandMan,
+        lives: limbsOrder.length,
+        currentPhraseIndex: 0,
+        state: PLAYING,
+        typeOfGame,
         updateAt: new Date(),
         createAt: new Date(),
+        startAt: new Date(),
         isLocked: false,
         isClosed: false,
-        startAt: null,
-        settings: {
-        },
+        settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       };
 
       const promiseLobby = lobbiesRef.doc(lobbyId).set(newLobby);
@@ -117,9 +118,9 @@ export const CreateLobby = (props) => {
       return router.push(`/hanged/lobbies/${lobbyId}`);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoadingSave(false);
+      sendError(error, "createLobby");
     }
+    setIsLoadingSave(false);
   };
 
   const generatePin = async () => {
@@ -135,23 +136,20 @@ export const CreateLobby = (props) => {
     return gamesRef.empty;
   };
 
-  const addNewPhrase = (newPhrase) => {
-    setGame({...game, phrases: [...game.phrases, newPhrase]});
-  };
-
   if (isLoading) return spinLoaderMin();
 
   return (
-    <GameMenu {...props}
-      showChooseGameMode={true}
+    <GameMenu
+      {...props}
       game={game}
       audios={audios}
-      isLoadingSave={isLoadingSave}
+      showChooseGameMode
+      settings={settings}
       createLobby={createLobby}
-      addNewPhrase={addNewPhrase}
-      onAudioChange={(audioId) => setGame({...game, audio: {...game.audio, id: audioId}})}
-      onSecondsPerRoundChange={(seconds) => setGame({...game, secondsPerRound: seconds})}
+      isLoadingSave={isLoadingSave}
+      onAudioChange={(audioId) => setSettings({ ...settings, audio: { id: audioId } })}
+      onSecondsPerRoundChange={(seconds) => setSettings({ ...settings, secondsPerRound: seconds })}
+      addNewPhrase={(newPhrase) => setSettings({ ...settings, phrases: [...settings.phrases, newPhrase] })}
     />
   );
 };
-
