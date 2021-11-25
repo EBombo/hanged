@@ -137,7 +137,6 @@ export const LobbyInPlay = (props) => {
 
     setSecondsLeft(settings.secondsPerRound);
 
-    console.log("settings", settings);
     setLobby({
       ...props.lobby,
       settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
