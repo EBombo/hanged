@@ -132,7 +132,7 @@ export const LobbyInPlay = (props) => {
     });
   };
 
-  const updateGameAndRestart = (settings) => {
+  const updateGameAndRestart = (settings, phrases) => {
     setIsLoadingSave(true);
 
     setSecondsLeft(settings.secondsPerRound);
@@ -140,7 +140,7 @@ export const LobbyInPlay = (props) => {
     console.log("settings", settings);
     setLobby({
       ...props.lobby,
-      settings,
+      settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       state: PLAYING,
       lettersPressed: {},
       startAt: new Date(),
@@ -207,7 +207,7 @@ export const LobbyInPlay = (props) => {
           game={props.lobby.game}
           isLoadingSave={isLoadingSave}
           settings={props.lobby.settings}
-          onUpdateGame={(settings) => updateGameAndRestart(settings)}
+          onUpdateGame={(settings, phrases) => updateGameAndRestart(settings, phrases)}
           setGameMenuEnabled={setGameMenuEnabled}
         />
       )}

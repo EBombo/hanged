@@ -1,24 +1,17 @@
-import React from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { Collapse } from "antd";
-import { object, string } from "yup";
-import { useForm } from "react-hook-form";
 import { ButtonAnt, Input, Select } from "./form";
 import { mediaQuery } from "../constants";
 import { secondsPerRoundOptions } from "./common/DataList";
+import { config } from "../firebase";
+import { Image } from "./common/Image";
 
 const showLanguageOption = false;
 const { Panel } = Collapse;
 
 export const GameMenu = (props) => {
-  const schema = object().shape({
-    newPhrase: string().required().min(1),
-  });
-
-  const { register, errors, handleSubmit, reset } = useForm({
-    schema,
-    reValidateMode: "onSubmit",
-  });
+  const [phrases, setPhrases] = useState([...props.settings.phrases, ""]);
 
   return (
     <GameCss>
@@ -35,7 +28,7 @@ export const GameMenu = (props) => {
                 margin="auto"
                 loading={props.isLoadingSave}
                 disabled={props.isLoadingSave}
-                onClick={() => props.createLobby("individual")}
+                onClick={() => props.createLobby("individual", phrases)}
               >
                 Simple
               </ButtonAnt>
@@ -89,34 +82,53 @@ export const GameMenu = (props) => {
                 <div>
                   <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
                 </div>
+
                 <hr className="divider" />
-                {props.settings.phrases?.map((phrase, index) => (
-                  <Input key={`input-phrase-${index}`} className="input-phrase" type="text" defaultValue={phrase} />
-                ))}
-                <form
-                  onSubmit={handleSubmit((data) => {
-                    props.addNewPhrase(data.newPhrase);
-                    reset();
-                  })}
-                >
-                  <Input
-                    className="input-phrase"
-                    ref={register}
-                    error={errors.newPhrase}
-                    type="text"
-                    name="newPhrase"
-                    placeholder="Inserta nueva frase"
-                    maxLength={20}
-                  />
+
+                <div className="phrases-container">
+                  {phrases.map((phrase, index) => (
+                    <div className="input-container" key={`input-phrase-${index}`}>
+                      <Input
+                        className="input-phrase"
+                        defaultValue={phrase}
+                        onBlur={(e) => {
+                          let newPhrase = phrases;
+                          newPhrase[index] = e.target.value;
+                          setPhrases([...newPhrase]);
+                        }}
+                        type="text"
+                        name="newPhrase"
+                        placeholder="Inserta nueva frase"
+                        maxLength={20}
+                      />
+                      <button
+                        className="btn-delete"
+                        onClick={() => {
+                          let newPhrases = phrases.filter((phrase, idx) => idx !== index);
+
+                          setPhrases([...newPhrases]);
+                        }}
+                      >
+                        <Image
+                          src={`${config.storageUrl}/resources/close.svg`}
+                          height="15px"
+                          width="15px"
+                          cursor="pointer"
+                          size="contain"
+                          margin="0"
+                        />
+                      </button>
+                    </div>
+                  ))}
 
                   <div className="btn-container">
                     <ButtonAnt
+                      onClick={() => setPhrases([...phrases, ""])}
                       className="btn"
                       color="secondary"
                       margin="auto"
                       loading={props.isLoadingSave}
                       disabled={props.isLoadingSave}
-                      htmlType="submit"
                     >
                       Agregar
                     </ButtonAnt>
@@ -128,13 +140,13 @@ export const GameMenu = (props) => {
                         margin="auto"
                         loading={props.isLoadingSave}
                         disabled={props.isLoadingSave}
-                        onClick={() => props.onUpdateGame?.()}
+                        onClick={() => props.onUpdateGame?.(phrases)}
                       >
                         Listo
                       </ButtonAnt>
                     )}
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </Panel>
@@ -272,10 +284,7 @@ const GameCss = styled.div`
     }
   }
 
-  .awards-container {
-    background: ${(props) => props.theme.basic.primary};
-    padding: 0.5rem;
-
+  .phrases-container {
     .input-container {
       margin: 0.5rem 0;
       position: relative;
@@ -293,7 +302,7 @@ const GameCss = styled.div`
       }
     }
 
-    .input-award {
+    .input-phrase {
       width: 100%;
       height: 32px;
       background: ${(props) => props.theme.basic.secondary};

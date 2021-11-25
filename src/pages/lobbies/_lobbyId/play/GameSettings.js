@@ -16,8 +16,8 @@ export const GameSettings = (props) => {
         onAudioChange={(audioId) => setSettings({ ...settings, audio: { id: audioId } })}
         onSecondsPerRoundChange={(seconds) => setSettings({ ...settings, secondsPerRound: seconds })}
         addNewPhrase={(newPhrase) => setSettings({ ...settings, phrases: [...settings.phrases, newPhrase] })}
-        onUpdateGame={() => {
-          props.onUpdateGame(settings);
+        onUpdateGame={(phrases) => {
+          props.onUpdateGame(settings, phrases);
           props.setGameMenuEnabled(false);
         }}
       />

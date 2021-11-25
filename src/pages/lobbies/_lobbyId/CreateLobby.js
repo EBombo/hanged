@@ -81,7 +81,7 @@ export const CreateLobby = (props) => {
     fetchUserByToken();
   }, [tokenId, gameId]);
 
-  const createLobby = async (typeOfGame) => {
+  const createLobby = async (typeOfGame, phrases) => {
     setIsLoadingSave(true);
     try {
       const pin = await generatePin();
@@ -105,7 +105,7 @@ export const CreateLobby = (props) => {
         startAt: new Date(),
         isLocked: false,
         isClosed: false,
-        settings,
+        settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       };
 
       const promiseLobby = lobbiesRef.doc(lobbyId).set(newLobby);
