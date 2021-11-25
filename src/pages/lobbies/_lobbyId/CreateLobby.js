@@ -105,7 +105,11 @@ export const CreateLobby = (props) => {
         startAt: new Date(),
         isLocked: false,
         isClosed: false,
-        settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
+        settings: {
+          ...settings,
+          phrases: phrases.filter((phrase) => phrase !== ""),
+          audio: settings.audio ?? { id: audios[0]?.id },
+        },
       };
 
       const promiseLobby = lobbiesRef.doc(lobbyId).set(newLobby);
