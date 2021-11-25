@@ -14,7 +14,7 @@ export const UserLayout = (props) => {
   const [volume, setVolume] = useState(30);
 
   useEffect(() => {
-    const currentAudioToPlayId = props.lobby.settings?.audio.id ?? audios[0]?.id;
+    const currentAudioToPlayId = props.lobby.settings?.audio?.id ?? audios[0]?.id;
     const currentAudioToPlay = audios.find((audio) => audio.id === currentAudioToPlayId);
 
     const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay.audioUrl);
