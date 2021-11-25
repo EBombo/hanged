@@ -89,17 +89,24 @@ export const GameMenu = (props) => {
                   {phrases.map((phrase, index) => (
                     <div className="input-container" key={`input-phrase-${index}`}>
                       <Input
-                        className="input-phrase"
+                        onKeyPress={(event) => {
+                          const regex = new RegExp("^[a-zA-Z ]+$");
+                          const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                          if (!regex.test(key)) {
+                            event.preventDefault();
+                            return false;
+                          }
+                        }}
+                        type="text"
+                        maxLength={20}
                         defaultValue={phrase}
+                        className="input-phrase"
+                        placeholder="Inserta nueva frase"
                         onBlur={(e) => {
                           let newPhrase = phrases;
                           newPhrase[index] = e.target.value;
                           setPhrases([...newPhrase]);
                         }}
-                        type="text"
-                        name="newPhrase"
-                        placeholder="Inserta nueva frase"
-                        maxLength={20}
                       />
                       <button
                         className="btn-delete"
