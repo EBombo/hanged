@@ -141,10 +141,7 @@ export const LobbyInPlay = (props) => {
       ...props.lobby,
       settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       state: PLAYING,
-      lettersPressed: {},
       startAt: new Date(),
-      currentPhraseIndex: 0,
-      hangedMan: defaultHandMan,
     });
     setIsLoadingSave(false);
   };
