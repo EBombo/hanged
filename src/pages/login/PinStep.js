@@ -29,10 +29,7 @@ export const PinStep = (props) => {
   const validatePin = async (data) => {
     props.setIsLoading(true);
 
-    await props.fetchLobby(data.pin);
-
-    await setAuthUser({ ...authUser, isAdmin: false, avatar: avatars[avatarIdx] });
-    setAuthUserLs({ ...authUser, isAdmin: false, avatar: avatars[avatarIdx] });
+    await props.fetchLobby(data.pin, avatars[avatarIdx]);
   };
 
   return (

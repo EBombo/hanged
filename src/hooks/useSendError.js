@@ -19,6 +19,8 @@ export const useSendError = () => {
       error.url = `${hostName}${pathname}`;
       error.userId = get(authUser, "id", null);
 
+      if (process.env.NODE_ENV === "development") console.log(action, error);
+
       const response = await Fetch(`${config.serverUrl}/error-boundary`, "POST", error);
 
       if (response.error) throw Error(response.error.statusText);

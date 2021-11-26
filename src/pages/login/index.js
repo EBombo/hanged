@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useUser } from "../../hooks";
 import { PinStep } from "./PinStep";
+import { avatars } from "../../components/common/DataList";
 
 const Login = (props) => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const Login = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchLobby = async (pin) => {
+  const fetchLobby = async (pin, avatar = avatars[0]) => {
     try {
       const lobbyRef = await firestore.collection("lobbies").where("pin", "==", pin.toString()).limit(1).get();
 
@@ -40,8 +41,8 @@ const Login = (props) => {
         throw Error("Esta sala ha concluido");
       }
 
-      await setAuthUser({ ...authUser, lobby: currentLobby });
-      setAuthUserLs({ ...authUser, lobby: currentLobby });
+      await setAuthUser({ avatar, ...authUser, lobby: currentLobby });
+      setAuthUserLs({ avatar, ...authUser, lobby: currentLobby });
     } catch (error) {
       props.showNotification("UPS", error.message, "warning");
     }
@@ -63,7 +64,7 @@ const Login = (props) => {
 
     setIsLoading(true);
     fetchLobby(authUser.lobby.pin);
-  }, [authUser?.lobby?.pin]);
+  }, []);
 
   const emailIsRequired = useMemo(() => {
     return !!authUser?.lobby?.settings?.userIdentity;
