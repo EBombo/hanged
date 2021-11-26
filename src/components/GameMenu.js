@@ -101,7 +101,7 @@ export const GameMenu = (props) => {
                         maxLength={20}
                         defaultValue={phrase}
                         className="input-phrase"
-                        placeholder="Inserta nueva frase"
+                        placeholder="Insertar nueva frase/palabra"
                         onBlur={(e) => {
                           let newPhrase = phrases;
                           newPhrase[index] = e.target.value;
