@@ -6,6 +6,8 @@ steps:
           "build",
           "-t",
           "gcr.io/${PROJECT_ID}/${PROJECT_ID}",
+          "--cache-from",
+          "gcr.io/${PROJECT_ID}/${PROJECT_ID}:latest",
           "--build-arg=NEXT_PUBLIC_CONFIG=$_CONFIG",
           "--build-arg=NEXT_PUBLIC_DOMAIN=$_DOMAIN",
           "--build-arg=NEXT_PUBLIC_PORT=$_PORT",
