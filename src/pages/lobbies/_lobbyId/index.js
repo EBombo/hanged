@@ -2,9 +2,6 @@ import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import { firestore } from "../../../firebase";
 import { useRouter } from "next/router";
 import { spinLoaderMin } from "../../../components/common/loader";
-import { LobbyAdmin } from "./lobbyAdmin";
-import { LobbyUser } from "./LobbyUser";
-import { LobbyLoading } from "./LobbyLoading";
 import { LobbyInPlay } from "./play/LobbyInPlay";
 
 import { useUser } from "../../../hooks";
@@ -13,10 +10,13 @@ import { LobbyClosed } from "./closed/LobbyClosed";
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
+
   const [, setAuthUserLs] = useUser();
+
+  const [authUser, setAuthUser] = useGlobal("user");
+
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
-  const [authUser, setAuthUser] = useGlobal("user");
 
   const audioRef = useRef(null);
 
@@ -43,7 +43,7 @@ export const Lobby = (props) => {
           logout();
         }
 
-        // If the games is closed logout user.
+        // If the game is closed, log out the user.
         if (currentLobby?.isClosed && !authUser?.isAdmin) logout();
 
         setLobby(currentLobby);
@@ -63,18 +63,9 @@ export const Lobby = (props) => {
     ...props,
   };
 
-
   const lobbyIsClosed = lobby?.isClosed && authUser?.isAdmin;
-
-  return <LobbyInPlay {...additionalProps} />;
 
   if (lobbyIsClosed) return <LobbyClosed {...additionalProps} />;
 
-  if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
-
-  if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
-
-  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
-
-  return <LobbyUser {...additionalProps} />;
+  return <LobbyInPlay {...additionalProps} />;
 };
