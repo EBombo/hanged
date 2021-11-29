@@ -66,14 +66,13 @@ const MyApp = ({ Component, pageProps }) => {
         <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet" />
-
-        <Script
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: ``,
-          }}
-        />
       </Head>
+      <Script
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: ``,
+        }}
+      />
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <WithConfiguration>
           <WithAuthentication>
