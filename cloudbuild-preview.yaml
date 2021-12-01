@@ -2,7 +2,7 @@ steps:
   - id: "pull image"
     name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
-    args: [ "-c" , "docker pull gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:latest || exit 0" ]
+    args: [ "-c" , "docker pull gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${_PR_NUMBER}-${SHORT_SHA} || exit 0" ]
 
   - id: "build image"
     name: "gcr.io/cloud-builders/docker"
@@ -12,7 +12,7 @@ steps:
           "-t",
           "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${_PR_NUMBER}-${SHORT_SHA}",
           "--cache-from",
-          "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${_PR_NUMBER}-${SHORT_SHA}:latest",
+          "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${_PR_NUMBER}-${SHORT_SHA}",
           "--build-arg=NEXT_PUBLIC_CONFIG=$_CONFIG",
           "--build-arg=NEXT_PUBLIC_DOMAIN=$_DOMAIN",
           "--build-arg=NEXT_PUBLIC_PORT=$_PORT",
