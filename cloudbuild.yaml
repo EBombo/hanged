@@ -1,4 +1,9 @@
 steps:
+  # Pull image
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args: [ "-c" , "docker pull gcr.io/${PROJECT_ID}/${PROJECT_ID}:latest || exit 0" ]
+
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
     args:
@@ -13,9 +18,11 @@ steps:
           "--build-arg=NEXT_PUBLIC_PORT=$_PORT",
           ".",
       ]
+
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/${PROJECT_ID}/${PROJECT_ID}-red"]
+
   # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
@@ -31,11 +38,30 @@ steps:
           "managed",
           "--allow-unauthenticated",
       ]
+
+  # Force the new revision to serve 100% of traffic.
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      [
+          "run",
+          "services",
+          "update-traffic",
+          "${PROJECT_ID}-red",
+          "--to-latest",
+          "--platform",
+          "managed",
+          "--region",
+          "us-central1",
+      ]
+
     # TODO: Create access to the Google Cloud Storage object to xxxx-compute@developer.gserviceaccount.com.
     #- name: "gcr.io/cloud-builders/gsutil"
     #args: ["-m" , "cp" , "-r" , "-n" ,"gs://${PROJECT_ID}-dev.appspot.com/*", "gs://${PROJECT_ID}.appspot.com"]
+
 images:
   - "gcr.io/${PROJECT_ID}/${PROJECT_ID}-red"
+
 options:
   logging: CLOUD_LOGGING_ONLY
   # TODO: Solicitar confirmacion de build y deploy de una nueva version. [PROD]
