@@ -2,7 +2,7 @@ steps:
   # Pull image
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
-    args: [ "-c" , "docker pull gcr.io/${PROJECT_ID}/${PROJECT_ID}:latest || exit 0" ]
+    args: [ "-c" , "docker pull gcr.io/${PROJECT_ID}/${PROJECT_ID}-red:latest || exit 0" ]
 
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
