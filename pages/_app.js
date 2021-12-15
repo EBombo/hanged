@@ -12,6 +12,7 @@ import { WithConfiguration } from "../src/session/WithConfiguration";
 import { config, firestoreEvents } from "../src/firebase";
 import { snapshotToArray } from "../src/utils";
 import Head from "next/head";
+import Script from "next/script";
 
 const MyApp = ({ Component, pageProps }) => {
   const [authUserLS] = useUser();
@@ -66,6 +67,21 @@ const MyApp = ({ Component, pageProps }) => {
         <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet" />
       </Head>
+      <Script
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          (function(h,o,t,j,a,r){
+              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+              h._hjSettings={hjid:2724760,hjsv:6};
+              a=o.getElementsByTagName('head')[0];
+              r=o.createElement('script');r.async=1;
+              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+              a.appendChild(r);
+          })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+          `,
+        }}
+      />
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <WithConfiguration>
           <WithAuthentication>
