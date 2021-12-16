@@ -33,7 +33,9 @@ export const LobbyInPlay = (props) => {
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(
-    props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
+    props.lobby.settings.secondsPerRound === null
+    ? null
+    : props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
   );
 
   useEffect(() => {
@@ -56,6 +58,7 @@ export const LobbyInPlay = (props) => {
 
   // TODO: Consider move timer into Timer component. interval re-runs this component.
   useInterval(() => {
+    if (secondsLeft === null) return null;
     if (secondsLeft <= 0 && props.lobby.state === PLAYING) return setLobby({ ...props.lobby, state: TIME_OUT });
 
     if (props.lobby.state === TIME_OUT) return;
@@ -152,13 +155,15 @@ export const LobbyInPlay = (props) => {
       <UserLayout {...props} />
 
       <HangedGameContainer>
-        <Timer
-          {...props}
-          className="timer"
-          secondsLeft={secondsLeft}
-          roundOverMessage="Ronda terminada!"
-          isRoundOver={props.lobby.state !== PLAYING}
-        />
+        {secondsLeft && (
+          <Timer
+            {...props}
+            className="timer"
+            secondsLeft={secondsLeft}
+            roundOverMessage="Ronda terminada!"
+            isRoundOver={props.lobby.state !== PLAYING}
+          />
+        )}
 
         <HangedMan {...props} hangedMan={props.lobby.hangedMan} />
 
