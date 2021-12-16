@@ -30,6 +30,7 @@ export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(props.lobby);
+  const [hasStarted, setHasStarted] = useState(false);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(
