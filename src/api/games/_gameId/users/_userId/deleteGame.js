@@ -17,4 +17,3 @@ const deleteGame = async (req, res) => {
 };
 
 export default deleteGame;
-

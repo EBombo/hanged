@@ -3,7 +3,6 @@ import putGame from "../../../../../../src/api/games/_gameId/users/_userId/putGa
 import deleteGame from "../../../../../../src/api/games/_gameId/users/_userId/deleteGame";
 
 const apiGame = async (req, res) => {
-
   switch (req.method) {
     case "POST":
       return await postGame(req, res);
