@@ -34,8 +34,8 @@ export const LobbyInPlay = (props) => {
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(
     props.lobby.settings.secondsPerRound === null
-    ? null
-    : props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
+      ? null
+      : props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
   );
 
   useEffect(() => {

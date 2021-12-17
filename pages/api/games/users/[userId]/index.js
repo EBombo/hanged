@@ -1,7 +1,6 @@
 import getGames from "../../../../../src/api/games/users/_userId/getGames";
 
 const apiGame = async (req, res) => {
-
   switch (req.method) {
     case "GET":
       return await getGames(req, res);
@@ -11,4 +10,3 @@ const apiGame = async (req, res) => {
 };
 
 export default apiGame;
-
