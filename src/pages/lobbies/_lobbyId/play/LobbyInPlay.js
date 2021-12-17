@@ -38,6 +38,10 @@ export const LobbyInPlay = (props) => {
   );
 
   useEffect(() => {
+    if (hasStarted === true) setLobby({...lobby, startAt: new Date()});
+  }, [hasStarted]);
+
+  useEffect(() => {
     const currentUserId = authUser.id;
     if (props.lobby?.users?.[currentUserId]) return;
     if (props.lobby.game.usersIds.includes(currentUserId)) return;
