@@ -1,5 +1,5 @@
 import { firestore } from "../../../../firebase";
-import { snapshotToArray } from "../../../../utils/snapshotToArray"
+import { snapshotToArray } from "../../../../utils/snapshotToArray";
 
 const getGames = async (req, res) => {
   try {
@@ -16,11 +16,11 @@ const getGames = async (req, res) => {
 
     let games = snapshotToArray(gamesQuery);
 
-    games = games.map(game=> ({
+    games = games.map((game) => ({
       ...game,
       createAt: game.createAt.toDate().toString(),
-      updateAt: game.updateAt.toDate().toString()
-    }))
+      updateAt: game.updateAt.toDate().toString(),
+    }));
 
     return res.send(games);
   } catch (error) {
@@ -30,4 +30,3 @@ const getGames = async (req, res) => {
 };
 
 export default getGames;
-
