@@ -1,5 +1,6 @@
 import React, { useEffect, useGlobal } from "reactn";
 import "antd/dist/antd.css";
+import "../src/theme/globals.css";
 import { notification } from "antd";
 import { useUser } from "../src/hooks";
 import get from "lodash/get";
