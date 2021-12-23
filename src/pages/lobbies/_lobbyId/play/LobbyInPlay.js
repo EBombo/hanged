@@ -40,7 +40,8 @@ export const LobbyInPlay = (props) => {
   );
 
   useEffect(() => {
-    if (hasStarted) {
+    if (hasStarted && !props.lobby.hasStarted) {
+      setSecondsLeft(props.lobby.settings.secondsPerRound)
       setLobby({...lobby, hasStarted: true, startAt: new Date()})
     };
   }, [hasStarted]);
