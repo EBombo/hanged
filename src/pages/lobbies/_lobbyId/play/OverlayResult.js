@@ -27,7 +27,7 @@ export const OverlayResult = (props) => (
         </ButtonAnt>
       ) : (
         <ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>
-          Continuar
+          Siguiente
         </ButtonAnt>
       )}
     </div>
