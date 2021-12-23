@@ -19,7 +19,7 @@ export const OverlayResult = (props) => (
       </>
       { props.isGameOver
           ? (<ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>Jugar de nuevo</ButtonAnt>)
-          : (<ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>Continuar</ButtonAnt>)
+          : (<ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>Siguiente</ButtonAnt>)
       }
     </div>
   </OverlayResultContainer>
