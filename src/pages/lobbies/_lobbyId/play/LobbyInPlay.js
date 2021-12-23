@@ -30,7 +30,7 @@ export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(props.lobby);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [hasStarted, setHasStarted] = useState(props.lobby.hasStarted ?? false);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(
@@ -38,7 +38,9 @@ export const LobbyInPlay = (props) => {
   );
 
   useEffect(() => {
-    if (hasStarted === true) setLobby({...lobby, startAt: new Date()});
+    if (hasStarted) {
+      setLobby({...lobby, hasStarted: true, startAt: new Date()})
+    };
   }, [hasStarted]);
 
   useEffect(() => {
@@ -61,6 +63,8 @@ export const LobbyInPlay = (props) => {
 
   // TODO: Consider move timer into Timer component. interval re-runs this component.
   useInterval(() => {
+    if (!hasStarted) return;
+
     if (secondsLeft <= 0 && props.lobby.state === PLAYING) return setLobby({ ...props.lobby, state: TIME_OUT });
 
     if (props.lobby.state === TIME_OUT) return;
@@ -217,6 +221,18 @@ export const LobbyInPlay = (props) => {
         <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
           Editar juego
         </ButtonAnt>
+
+        <ButtonAnt
+          color="danger"
+          className="btn-action"
+          disabled={props.lobby.hasStarted}
+          onClick={() => {
+            setHasStarted(true);
+          }}
+        >
+          Empezar
+        </ButtonAnt>
+
         <ButtonAnt
           color="danger"
           className="btn-action"
