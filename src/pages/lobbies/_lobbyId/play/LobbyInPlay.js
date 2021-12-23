@@ -12,13 +12,8 @@ import { OverlayResult } from "./OverlayResult";
 import { ButtonAnt } from "../../../../components/form";
 import { GameSettings } from "./GameSettings";
 import { useInterval } from "../../../../hooks/useInterval";
+import { PauseOutlined, CaretRightOutlined, ReloadOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT } from "../../../../components/common/DataList";
-import moment from "moment";
-
-const getDeltaTime = (startAt) => {
-  const diffTime = moment(startAt).diff(moment(), "seconds");
-  return Math.abs(diffTime);
-};
 
 const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
 
@@ -30,14 +25,14 @@ export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(props.lobby);
-  const [hasStarted, setHasStarted] = useState(props.lobby.hasStarted ?? false);
+
+  const [hasStarted, setHasStarted] = useState(false); // props.lobby.hasStarted ?? false;
+  const [hasPaused, setHasPaused] = useState(false);
+
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(
-    props.lobby.settings.secondsPerRound === null
-      ? null
-      : props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
-  );
+
+  const [secondsLeft, setSecondsLeft] = useState(props.lobby.secondsLeft ?? props.lobby.settings.secondsPerRound);
 
   useEffect(() => {
     if (hasStarted && !props.lobby.hasStarted) {
@@ -64,9 +59,15 @@ export const LobbyInPlay = (props) => {
     updateLobby();
   }, [lobby]);
 
+  useEffect(() => {
+    setLobby({...lobby, secondsLeft: (secondsLeft)});
+  }, [secondsLeft]);
+
   // TODO: Consider move timer into Timer component. interval re-runs this component.
   useInterval(() => {
     if (!hasStarted) return;
+
+    if (hasPaused) return;
 
     if (secondsLeft === null) return null;
 
@@ -122,6 +123,7 @@ export const LobbyInPlay = (props) => {
     if (isLastRound(props.lobby)) return;
 
     setSecondsLeft(props.lobby.settings.secondsPerRound);
+    setHasStarted(false);
 
     setLobby({
       ...props.lobby,
@@ -135,6 +137,7 @@ export const LobbyInPlay = (props) => {
 
   const resetGame = async () => {
     setSecondsLeft(props.lobby.settings.secondsPerRound);
+    setHasStarted(false);
 
     setLobby({
       ...props.lobby,
@@ -150,11 +153,14 @@ export const LobbyInPlay = (props) => {
     setIsLoadingSave(true);
 
     setSecondsLeft(settings.secondsPerRound);
+    setHasStarted(false);
 
     setLobby({
       ...props.lobby,
       settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       state: PLAYING,
+      secondsLeft: props.lobby.settings.secondsPerRound,
+      hasStarted: false,
       startAt: new Date(),
     });
     setIsLoadingSave(false);
@@ -166,7 +172,7 @@ export const LobbyInPlay = (props) => {
       <UserLayout {...props} />
 
       <HangedGameContainer>
-        {secondsLeft && (
+        {secondsLeft !== null && (
           <Timer
             {...props}
             className="timer"
@@ -230,24 +236,52 @@ export const LobbyInPlay = (props) => {
         </ButtonAnt>
 
         <ButtonAnt
-          color="danger"
+          color="success"
           className="btn-action"
-          disabled={props.lobby.hasStarted}
+          disabled={hasStarted}
           onClick={() => {
             setHasStarted(true);
           }}
         >
-          Empezar
+          <span className="btn-text">Empezar</span>
+          <CaretRightOutlined />
         </ButtonAnt>
 
-        <ButtonAnt
-          color="danger"
-          className="btn-action"
-          onClick={() => nextRound()}
-          disabled={isLastRound(props.lobby)}
-        >
-          Saltar turno
-        </ButtonAnt>
+        {(hasStarted && secondsLeft !== null) && (
+          <ButtonAnt
+            color="success"
+            className="btn-action"
+            disabled={!hasStarted}
+            onClick={() => setHasPaused(!hasPaused)}
+          >
+            <span className="btn-text">
+              {hasPaused ? 'Reaundar' : 'Pausar'}
+            </span>
+            {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
+          </ButtonAnt>
+        )}
+
+        {
+          isLastRound(props.lobby)
+            ? (<ButtonAnt
+                color="danger"
+                className="btn-action"
+                onClick={() => resetGame()}
+              >
+                <span className="btn-text">Comenzar de nuevo</span>
+                <ReloadOutlined /> 
+              </ButtonAnt>)
+            : (<ButtonAnt
+                color="danger"
+                className="btn-action"
+                onClick={() => nextRound()}
+                disabled={isLastRound(props.lobby)}
+              >
+                <span className="btn-text">Saltar turno</span>
+                <FastForwardOutlined />
+              </ButtonAnt>)
+        }
+        
       </GameActions>
     </>
   );
@@ -255,18 +289,29 @@ export const LobbyInPlay = (props) => {
 
 const GameActions = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
   margin: 32px 8px 0 8px;
   padding-bottom: 32px;
 
   ${mediaQuery.afterTablet} {
     max-width: 1200px;
     margin: 32px auto 0 auto;
+    justify-content: space-between;
+  }
+
+  .btn-text {
+    vertical-align: text-top;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
   }
 
   .btn-action {
     display: inline-block;
     font-weight: bold;
+    margin: 1rem;
   }
 `;
 
