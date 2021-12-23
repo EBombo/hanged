@@ -7,27 +7,36 @@ import { ButtonAnt } from "../../../../components/form";
 export const OverlayResult = (props) => (
   <OverlayResultContainer>
     <div className="content">
-      { props.isGameOver && (<div className="label">¡Se acabó el juego!</div>) }
+      {props.isGameOver && <div className="label">¡Se acabó el juego!</div>}
       <>
-        <Image 
+        <Image
           className="status-icon"
-          src={props.hasGuessed ? `${config.storageUrl}/resources/success_guess.png` : `${config.storageUrl}/resources/fail_guessed.png`}
+          src={
+            props.hasGuessed
+              ? `${config.storageUrl}/resources/success_guess.png`
+              : `${config.storageUrl}/resources/fail_guessed.png`
+          }
           Desktopwidth="56px"
           width="32px"
         />
         <div className={`label ${props.hasGuessed ? "success" : ""}`}>La palabra era: {props.phrase}</div>
       </>
-      { props.isGameOver
-          ? (<ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>Jugar de nuevo</ButtonAnt>)
-          : (<ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>Siguiente</ButtonAnt>)
-      }
+      {props.isGameOver ? (
+        <ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>
+          Jugar de nuevo
+        </ButtonAnt>
+      ) : (
+        <ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>
+          Continuar
+        </ButtonAnt>
+      )}
     </div>
   </OverlayResultContainer>
 );
 
 const OverlayResultContainer = styled.div`
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -56,7 +65,4 @@ const OverlayResultContainer = styled.div`
       font-weight: bold;
     }
   }
-  
 `;
-
-

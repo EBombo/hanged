@@ -73,7 +73,7 @@ export const GameMenu = (props) => {
                   optionsdom={secondsPerRoundOptions.map((second) => ({
                     key: second,
                     code: second,
-                    name: second,
+                    name: second ?? "Sin tiempo",
                   }))}
                   onChange={(value) => props.onSecondsPerRoundChange?.(value)}
                 />

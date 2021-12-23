@@ -76,7 +76,7 @@ export const defaultHandMan = {
 
 export const limbsOrder = Object.keys(defaultHandMan);
 
-export const secondsPerRoundOptions = [20, 30, 40, 50, 60];
+export const secondsPerRoundOptions = [null, 20, 30, 40, 50, 60];
 
 export const PLAYING = "PLAYING";
 export const TIME_OUT = "TIME_OUT";

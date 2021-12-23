@@ -9,4 +9,3 @@ export const SPEED = {
   max: 20,
   default: 10,
 };
-
