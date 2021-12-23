@@ -65,12 +65,10 @@ export const LobbyInPlay = (props) => {
 
   // TODO: Consider move timer into Timer component. interval re-runs this component.
   useInterval(() => {
-<<<<<<< HEAD
     if (!hasStarted) return;
 
-=======
     if (secondsLeft === null) return null;
->>>>>>> red
+
     if (secondsLeft <= 0 && props.lobby.state === PLAYING) return setLobby({ ...props.lobby, state: TIME_OUT });
 
     if (props.lobby.state === TIME_OUT) return;
