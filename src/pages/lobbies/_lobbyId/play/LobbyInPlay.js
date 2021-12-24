@@ -26,7 +26,7 @@ export const LobbyInPlay = (props) => {
 
   const [lobby, setLobby] = useState(props.lobby);
 
-  const [hasStarted, setHasStarted] = useState(false); // props.lobby.hasStarted ?? false;
+  const [hasStarted, setHasStarted] = useState(false);
   const [hasPaused, setHasPaused] = useState(false);
 
   const [isLoadingSave, setIsLoadingSave] = useState(false);
@@ -159,6 +159,8 @@ export const LobbyInPlay = (props) => {
       ...props.lobby,
       settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       state: PLAYING,
+      lettersPressed: {},
+      hangedMan: defaultHandMan,
       secondsLeft: props.lobby.settings.secondsPerRound,
       hasStarted: false,
       startAt: new Date(),
@@ -204,7 +206,7 @@ export const LobbyInPlay = (props) => {
         <Alphabet
           {...props}
           lettersPressed={props.lobby.lettersPressed}
-          onLetterPressed={(letter) => onNewLetterPressed(letter)}
+          onLetterPressed={(letter) => (hasStarted && !hasPaused) && onNewLetterPressed(letter)}
         />
 
         {props.lobby.state !== PLAYING && (
