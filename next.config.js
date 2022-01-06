@@ -26,6 +26,7 @@ module.exports = withBundleAnalyzer({
 
     return config;
   },
+  assetPrefix: process.env.NEXT_PUBLIC_DOMAIN ?? "",
   async headers() {
     return [
       {
