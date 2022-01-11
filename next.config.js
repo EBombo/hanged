@@ -2,6 +2,8 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
+const isProd = process.env.NODE_ENV === "production";
+
 module.exports = withBundleAnalyzer({
   webpack: (config, { webpack }) => {
     config.plugins.push(
@@ -11,18 +13,19 @@ module.exports = withBundleAnalyzer({
       })
     );
 
-    config.optimization = {
-      sideEffects: true,
-      runtimeChunk: "single",
-      minimize: true,
-      minimizer: [],
-      splitChunks: {
-        chunks: "all",
-        maxInitialRequests: Infinity,
-        minSize: 200000,
-        maxSize: 250000,
-      },
-    };
+    if (isProd)
+      config.optimization = {
+        sideEffects: true,
+        runtimeChunk: "single",
+        minimize: true,
+        minimizer: [],
+        splitChunks: {
+          chunks: "all",
+          maxInitialRequests: Infinity,
+          minSize: 200000,
+          maxSize: 250000,
+        },
+      };
 
     return config;
   },
