@@ -320,10 +320,13 @@ const GameActions = styled.div`
 const HangedGameContainer = styled.div`
   margin: 0 12px;
   padding-top: 8px;
+  position: relative;
+  top: 50px;
 
   ${mediaQuery.afterTablet} {
     max-width: 700px;
     margin: 0 auto;
+    top: 0px;
   }
 
   .guess-phrase-container {

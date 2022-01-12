@@ -150,6 +150,8 @@ const UserLayoutCss = styled.div`
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
   height: 50px;
+  position: fixed;
+  z-index: 2;
 
   .title {
     color: ${(props) => props.theme.basic.blackDarken};
@@ -209,6 +211,7 @@ const UserLayoutCss = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
+    position: relative;
     padding: 0 1rem;
 
     .description {
