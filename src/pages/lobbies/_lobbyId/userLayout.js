@@ -154,7 +154,16 @@ const UserLayoutCss = styled.div`
   z-index: 2;
 
   .title {
+    color: ${(props) => props.theme.basic.blackDarken};
     text-align: center;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: bold;
+
+    ${mediaQuery.afterTablet} {
+      font-size: 24px;
+      line-height: 36px;
+    }
   }
 
   .right-content {
