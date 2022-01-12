@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { ButtonAnt } from "../../../../components/form";
+import { mediaQuery } from "../../../../constants";
 
 export const OverlayResult = (props) => (
-  <OverlayResultContainer>
+  <OverlayResultContainer className="flex flex-col justify-center">
     <div className="content">
       {props.isGameOver && <div className="label">¡Se acabó el juego!</div>}
       <>
@@ -18,6 +19,7 @@ export const OverlayResult = (props) => (
           }
           Desktopwidth="48px"
           width="48px"
+          height="48px"
         />
         <div className={`label ${props.hasGuessed ? "success" : ""}`}>La palabra era: <span class="answer">{props.phrase}</span></div>
       </>
@@ -26,7 +28,7 @@ export const OverlayResult = (props) => (
           Jugar de nuevo
         </ButtonAnt>
       ) : (
-        <ButtonAnt className="btn text-lg" color="default" onClick={() => props.onContinue?.()}>
+        <ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>
           Siguiente
         </ButtonAnt>
       )}
@@ -49,16 +51,20 @@ const OverlayResultContainer = styled.div`
   font-size: 20px;
   line-height: 24px;
 
+  ${mediaQuery.afterTablet} {
+    font-size: 32px;
+  }
+
   .content {
     color: ${(props) => props.theme.basic.whiteLight};
     text-align: center;
-    padding-top: 32px;
+    margin-top: -52px;
 
     .status-icon {
       margin-bottom: 12px;
     }
     .label {
-      margin-bottom: 24px;
+      margin-bottom: 56px;
       &.success {
         color: ${(props) => props.theme.basic.success};
       }
@@ -72,6 +78,7 @@ const OverlayResultContainer = styled.div`
       font-weight: bold;
       padding-left: 4rem;
       padding-right: 4rem;
+      font-size: 18px;
     }
   }
 `;
