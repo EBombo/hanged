@@ -16,17 +16,17 @@ export const OverlayResult = (props) => (
               ? `${config.storageUrl}/resources/success_guess.png`
               : `${config.storageUrl}/resources/fail_guessed.png`
           }
-          Desktopwidth="56px"
-          width="32px"
+          Desktopwidth="48px"
+          width="48px"
         />
-        <div className={`label ${props.hasGuessed ? "success" : ""}`}>La palabra era: {props.phrase}</div>
+        <div className={`label ${props.hasGuessed ? "success" : ""}`}>La palabra era: <span class="answer">{props.phrase}</span></div>
       </>
       {props.isGameOver ? (
         <ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>
           Jugar de nuevo
         </ButtonAnt>
       ) : (
-        <ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>
+        <ButtonAnt className="btn text-lg" color="default" onClick={() => props.onContinue?.()}>
           Siguiente
         </ButtonAnt>
       )}
@@ -36,7 +36,7 @@ export const OverlayResult = (props) => (
 
 const OverlayResultContainer = styled.div`
   position: fixed;
-  top: 0;
+  top: 50px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -46,8 +46,8 @@ const OverlayResultContainer = styled.div`
   font-family: Lato;
   font-style: normal;
   font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
+  font-size: 20px;
+  line-height: 24px;
 
   .content {
     color: ${(props) => props.theme.basic.whiteLight};
@@ -59,10 +59,19 @@ const OverlayResultContainer = styled.div`
     }
     .label {
       margin-bottom: 24px;
+      &.success {
+        color: ${(props) => props.theme.basic.success};
+      }
+
+      .answer {
+        text-transform: uppercase;
+      }
     }
     .btn {
       display: inline-block;
       font-weight: bold;
+      padding-left: 4rem;
+      padding-right: 4rem;
     }
   }
 `;

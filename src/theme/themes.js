@@ -11,7 +11,7 @@ export const darkTheme = {
     secondaryDark: "#170D33",
     secondaryDarken: "#221545",
     secondaryLight: "#2E2547",
-    secondaryWithTransparency: "#382079c2",
+    secondaryWithTransparency: "#170d30eb",
     white: "#ffffff",
     whiteDarken: "#D2D2D2",
     whiteDark: "#F2F2F2",
