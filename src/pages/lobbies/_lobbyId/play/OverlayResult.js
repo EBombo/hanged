@@ -8,7 +8,7 @@ import { mediaQuery } from "../../../../constants";
 export const OverlayResult = (props) => (
   <OverlayResultContainer className="flex flex-col justify-center">
     <div className="content">
-      {props.isGameOver && <div className="label">¡Se acabó el juego!</div>}
+      {props.isGameOver && <div className="label inline-block bg-secondaryDarken py-8 px-8 md:px-24">¡Se acabó el juego!</div>}
       <>
         <Image
           className="status-icon"

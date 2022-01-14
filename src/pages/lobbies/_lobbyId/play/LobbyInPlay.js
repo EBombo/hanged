@@ -237,17 +237,20 @@ export const LobbyInPlay = (props) => {
           Editar juego
         </ButtonAnt>
 
-        <ButtonAnt
-          color="success"
-          className="btn-action"
-          disabled={hasStarted}
-          onClick={() => {
-            setHasStarted(true);
-          }}
-        >
-          <span className="btn-text">Empezar</span>
-          <CaretRightOutlined />
-        </ButtonAnt>
+        {!hasStarted &&
+          <ButtonAnt
+            color="success"
+            className="btn-action"
+            disabled={hasStarted}
+            onClick={() => {
+              setHasStarted(true);
+            }}
+          >
+            <span className="btn-text">Empezar</span>
+            <CaretRightOutlined />
+          </ButtonAnt>
+        }
+        
 
         {(hasStarted && secondsLeft !== null) && (
           <ButtonAnt
@@ -257,23 +260,15 @@ export const LobbyInPlay = (props) => {
             onClick={() => setHasPaused(!hasPaused)}
           >
             <span className="btn-text">
-              {hasPaused ? 'Reaundar' : 'Pausar'}
+              {hasPaused ? 'Continuar' : 'Pausar'}
             </span>
             {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
           </ButtonAnt>
         )}
 
         {
-          isLastRound(props.lobby)
-            ? (<ButtonAnt
-                color="danger"
-                className="btn-action"
-                onClick={() => resetGame()}
-              >
-                <span className="btn-text">Comenzar de nuevo</span>
-                <ReloadOutlined /> 
-              </ButtonAnt>)
-            : (<ButtonAnt
+          !isLastRound(props.lobby) &&
+            (<ButtonAnt
                 color="danger"
                 className="btn-action"
                 onClick={() => nextRound()}
