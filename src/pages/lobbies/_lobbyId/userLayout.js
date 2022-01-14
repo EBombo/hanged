@@ -150,9 +150,20 @@ const UserLayoutCss = styled.div`
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
   height: 50px;
+  position: fixed;
+  z-index: 2;
 
   .title {
+    color: ${(props) => props.theme.basic.blackDarken};
     text-align: center;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: bold;
+
+    ${mediaQuery.afterTablet} {
+      font-size: 24px;
+      line-height: 36px;
+    }
   }
 
   .right-content {
@@ -200,6 +211,7 @@ const UserLayoutCss = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
+    position: relative;
     padding: 0 1rem;
 
     .description {
