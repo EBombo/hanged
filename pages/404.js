@@ -51,7 +51,7 @@ const ErrorPageStyled = styled.div`
     padding: 10px 23px 10px 0;
     font-size: 24px;
     font-weight: 500;
-    vertical-align: top
+    vertical-align: top;
   }
 
   .description {
