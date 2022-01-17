@@ -80,7 +80,7 @@ export const GameMenu = (props) => {
               </div>
               <div className="option with-custom-input">
                 <div>
-                  <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
+                  <div className="title-opt">Frases o palabras (Máx. 50 caractéres)</div>
                 </div>
 
                 <hr className="divider" />
