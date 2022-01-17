@@ -14,6 +14,7 @@ import { GameSettings } from "./GameSettings";
 import { useInterval } from "../../../../hooks/useInterval";
 import { PauseOutlined, CaretRightOutlined, ReloadOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT } from "../../../../components/common/DataList";
+import { Modal } from "antd";
 
 const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
 
@@ -206,7 +207,13 @@ export const LobbyInPlay = (props) => {
         <Alphabet
           {...props}
           lettersPressed={props.lobby.lettersPressed}
-          onLetterPressed={(letter) => (hasStarted && !hasPaused) && onNewLetterPressed(letter)}
+          onLetterPressed={(letter) => {
+            if (!hasStarted) return Modal.info({ title: 'Debes apretar el botón Empezar para iniciar el juego' });
+
+            if (hasPaused) return Modal.info({ title: 'Debes apretar el botón Continuar para iniciar el juego' });
+
+            onNewLetterPressed(letter)
+          }}
         />
 
         {props.lobby.state !== PLAYING && (
