@@ -98,7 +98,7 @@ export const GameMenu = (props) => {
                           }
                         }}
                         type="text"
-                        maxLength={20}
+                        maxLength={50}
                         defaultValue={phrase}
                         className="input-phrase"
                         placeholder="Insertar nueva frase/palabra"
