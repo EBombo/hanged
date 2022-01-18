@@ -24,6 +24,7 @@ export const GameMenu = (props) => {
               <div>Versión Simple</div>
               <div>La manera sencilla</div>
               <ButtonAnt
+                className="btn-bold"
                 color="success"
                 margin="auto"
                 loading={props.isLoadingSave}
@@ -354,5 +355,9 @@ const GameCss = styled.div`
 
   .ant-collapse-content {
     background: ${(props) => props.theme.basic.secondary} !important;
+  }
+
+  .btn-bold {
+    font-weight: bold;
   }
 `;
