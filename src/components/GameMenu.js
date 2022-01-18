@@ -30,7 +30,7 @@ export const GameMenu = (props) => {
                 disabled={props.isLoadingSave}
                 onClick={() => props.createLobby("individual", phrases)}
               >
-                Simple
+                Jugar
               </ButtonAnt>
             </div>
           </div>
