@@ -24,7 +24,7 @@ export const GameMenu = (props) => {
               <div>Versión Simple</div>
               <div>La manera sencilla</div>
               <ButtonAnt
-                color="secondary"
+                color="success"
                 margin="auto"
                 loading={props.isLoadingSave}
                 disabled={props.isLoadingSave}
