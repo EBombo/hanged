@@ -24,13 +24,14 @@ export const GameMenu = (props) => {
               <div>Versión Simple</div>
               <div>La manera sencilla</div>
               <ButtonAnt
-                color="secondary"
+                className="btn-bold"
+                color="success"
                 margin="auto"
                 loading={props.isLoadingSave}
                 disabled={props.isLoadingSave}
                 onClick={() => props.createLobby("individual", phrases)}
               >
-                Simple
+                Jugar
               </ButtonAnt>
             </div>
           </div>
@@ -80,7 +81,7 @@ export const GameMenu = (props) => {
               </div>
               <div className="option with-custom-input">
                 <div>
-                  <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
+                  <div className="title-opt">Frases o palabras (Máx. 50 caractéres)</div>
                 </div>
 
                 <hr className="divider" />
@@ -354,5 +355,9 @@ const GameCss = styled.div`
 
   .ant-collapse-content {
     background: ${(props) => props.theme.basic.secondary} !important;
+  }
+
+  .btn-bold {
+    font-weight: bold;
   }
 `;
