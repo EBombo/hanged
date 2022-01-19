@@ -162,7 +162,7 @@ export const GameMenu = (props) => {
                           disabled={props.isLoadingSave}
                           onClick={() => props.onUpdateGame?.(phrases)}
                         >
-                          Listo
+                          Guardar
                         </ButtonAnt>
                       </>
                     )}
