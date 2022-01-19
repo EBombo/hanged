@@ -236,9 +236,9 @@ const ButtonAntCss = styled(Button)`
           : color === "warning"
           ? theme.basic.warning
           : color === "danger"
-          ? theme.basic.danger
+          ? theme.basic.dangerDark
           : color === "default"
-          ? theme.basic.whiteDark
+          ? theme.basic.whiteDarken
           : color === "success"
           ? theme.basic.successLight
           : `${color}90`

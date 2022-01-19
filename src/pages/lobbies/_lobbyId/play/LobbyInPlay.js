@@ -174,6 +174,25 @@ export const LobbyInPlay = (props) => {
     <>
       <UserLayout {...props} />
 
+      <GameActions>
+        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
+          Editar juego
+        </ButtonAnt>
+
+        {
+          !isLastRound(props.lobby) &&
+            (<ButtonAnt
+                color="danger"
+                className="btn-action"
+                onClick={() => nextRound()}
+                disabled={isLastRound(props.lobby)}
+              >
+                <span className="btn-text">Saltar turno</span>
+                <FastForwardOutlined />
+              </ButtonAnt>)
+        }
+      </GameActions>
+
       <HangedGameContainer>
         {secondsLeft !== null && (
           <Timer
@@ -239,11 +258,7 @@ export const LobbyInPlay = (props) => {
         />
       )}
 
-      <GameActions>
-        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
-          Editar juego
-        </ButtonAnt>
-
+      <GameActions right>
         {!hasStarted &&
           <ButtonAnt
             color="success"
@@ -272,20 +287,6 @@ export const LobbyInPlay = (props) => {
             {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
           </ButtonAnt>
         )}
-
-        {
-          !isLastRound(props.lobby) &&
-            (<ButtonAnt
-                color="danger"
-                className="btn-action"
-                onClick={() => nextRound()}
-                disabled={isLastRound(props.lobby)}
-              >
-                <span className="btn-text">Saltar turno</span>
-                <FastForwardOutlined />
-              </ButtonAnt>)
-        }
-        
       </GameActions>
     </>
   );
@@ -294,14 +295,14 @@ export const LobbyInPlay = (props) => {
 const GameActions = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  margin: 32px 8px 0 8px;
+  justify-content: ${(props) => props.right ? 'end' : 'center'};
+  margin: 0px 8px 0 8px;
   padding-bottom: 32px;
 
   ${mediaQuery.afterTablet} {
     max-width: 1200px;
     margin: 32px auto 0 auto;
-    justify-content: space-between;
+    justify-content: ${(props) => props.right ? 'end' : 'space-between'};
   }
 
   .btn-text {
@@ -323,7 +324,6 @@ const HangedGameContainer = styled.div`
   margin: 0 12px;
   padding-top: 8px;
   position: relative;
-  top: 50px;
 
   ${mediaQuery.afterTablet} {
     max-width: 700px;
