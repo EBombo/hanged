@@ -154,16 +154,13 @@ export const LobbyInPlay = (props) => {
     setIsLoadingSave(true);
 
     setSecondsLeft(settings.secondsPerRound);
-    setHasStarted(false);
+    if (settings.secondsPerRound) setHasPaused(true);
 
     setLobby({
       ...props.lobby,
       settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       state: PLAYING,
-      lettersPressed: {},
-      hangedMan: defaultHandMan,
-      secondsLeft: props.lobby.settings.secondsPerRound,
-      hasStarted: false,
+      secondsLeft: settings.secondsPerRound,
       startAt: new Date(),
     });
     setIsLoadingSave(false);
@@ -274,7 +271,7 @@ export const LobbyInPlay = (props) => {
         }
         
 
-        {(hasStarted && secondsLeft !== null) && (
+        {((hasStarted && secondsLeft !== null)) && (
           <ButtonAnt
             color="success"
             className="btn-action"

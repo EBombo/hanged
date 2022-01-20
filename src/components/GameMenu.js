@@ -142,16 +142,29 @@ export const GameMenu = (props) => {
                     </ButtonAnt>
 
                     {!props.showChooseGameMode && (
-                      <ButtonAnt
-                        className="btn success"
-                        color="success"
-                        margin="auto"
-                        loading={props.isLoadingSave}
-                        disabled={props.isLoadingSave}
-                        onClick={() => props.onUpdateGame?.(phrases)}
-                      >
-                        Listo
-                      </ButtonAnt>
+                      <>
+                        <ButtonAnt
+                          className="btn btn-bold"
+                          color="danger"
+                          margin="auto"
+                          loading={props.isLoadingSave}
+                          disabled={props.isLoadingSave}
+                          onClick={() => props.setGameMenuEnabled(false)}
+                        >
+                          Cancelar
+                        </ButtonAnt>
+
+                        <ButtonAnt
+                          className="btn success btn-bold"
+                          color="success"
+                          margin="auto"
+                          loading={props.isLoadingSave}
+                          disabled={props.isLoadingSave}
+                          onClick={() => props.onUpdateGame?.(phrases)}
+                        >
+                          Guardar
+                        </ButtonAnt>
+                      </>
                     )}
                   </div>
                 </div>
