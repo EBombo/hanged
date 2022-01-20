@@ -171,10 +171,23 @@ export const LobbyInPlay = (props) => {
     <>
       <UserLayout {...props} />
 
-      <GameActions>
+      <GameHeader>
         <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
           Editar juego
         </ButtonAnt>
+
+        <div class="timer-container">
+          {secondsLeft !== null && (
+            <Timer
+              {...props}
+              className="timer"
+              secondsLeft={secondsLeft}
+              roundOverMessage="Ronda terminada!"
+              isRoundOver={props.lobby.state !== PLAYING}
+            />
+          )}
+        </div>
+        
 
         {
           !isLastRound(props.lobby) &&
@@ -188,18 +201,9 @@ export const LobbyInPlay = (props) => {
                 <FastForwardOutlined />
               </ButtonAnt>)
         }
-      </GameActions>
+      </GameHeader>
 
       <HangedGameContainer>
-        {secondsLeft !== null && (
-          <Timer
-            {...props}
-            className="timer"
-            secondsLeft={secondsLeft}
-            roundOverMessage="Ronda terminada!"
-            isRoundOver={props.lobby.state !== PLAYING}
-          />
-        )}
 
         <HangedMan {...props} hangedMan={props.lobby.hangedMan} />
 
@@ -289,6 +293,41 @@ export const LobbyInPlay = (props) => {
   );
 };
 
+const GameHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1000px;
+  margin: 0.5rem;
+  column-gap: 3rem;
+  row-gap: 1rem;
+
+  .timer-container {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    justify-self: center;
+
+    ${mediaQuery.afterTablet} {
+      justify-self: start;
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
+  }
+
+  ${mediaQuery.afterTablet} {
+    grid-template-columns: 1fr 600px 1fr;
+    margin: 4rem auto 0 auto;
+  }
+
+  .btn-action {
+    font-weight: bold;
+    font-size: 16px;
+
+    ${mediaQuery.afterTablet} {
+      font-size: 22px;
+    }
+  }
+`;
+
 const GameActions = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -314,6 +353,13 @@ const GameActions = styled.div`
     display: inline-block;
     font-weight: bold;
     margin: 1rem;
+
+    font-weight: bold;
+    font-size: 16px;
+    
+    ${mediaQuery.afterTablet} {
+      font-size: 22px;
+    }
   }
 `;
 
@@ -358,6 +404,12 @@ const HangedGameContainer = styled.div`
 
       .underscore {
         width: 100%;
+      }
+
+      ${mediaQuery.afterTablet} {
+        font-size: 35px;
+        min-width: 58px;
+        line-height: 47px;
       }
     }
   }
