@@ -229,7 +229,7 @@ export const LobbyInPlay = (props) => {
           lettersPressed={props.lobby.lettersPressed}
           onLetterPressed={(letter) => {
             if (!hasStarted || hasPaused) return Modal.info({
-              title: `Debes apretar el botón ${hasPaused ? 'Continuar' : 'Empezar'} para iniciar el juego`
+              title: `Debes apretar el botón ${hasPaused ? 'Continuar' : 'Empezar'} para iniciar el juego.`
             });
 
             onNewLetterPressed(letter)
