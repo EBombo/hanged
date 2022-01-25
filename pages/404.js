@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { timeoutPromise } from "../src/utils/promised";
 import { useRouter } from "next/router";
+import { Image } from "../src/components/common/Image";
+import { config } from "../src/firebase";
 
 const ErrorPage = () => {
   const router = useRouter();
@@ -21,6 +23,11 @@ const ErrorPage = () => {
   return (
     <ErrorPageStyled>
       <div className="content">
+        <div className="py-8">
+          <Image
+            width="150px"
+            src={`${config.storageUrl}/resources/white-icon-ebombo.png`}/>
+        </div>
         <h1>404</h1>
         <div className="description">
           <h2>This page could not be found.</h2>
