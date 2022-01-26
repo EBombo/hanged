@@ -24,13 +24,14 @@ export const GameMenu = (props) => {
               <div>Versión Simple</div>
               <div>La manera sencilla</div>
               <ButtonAnt
-                color="secondary"
+                className="btn-bold"
+                color="success"
                 margin="auto"
                 loading={props.isLoadingSave}
                 disabled={props.isLoadingSave}
                 onClick={() => props.createLobby("individual", phrases)}
               >
-                Simple
+                Jugar
               </ButtonAnt>
             </div>
           </div>
@@ -80,7 +81,7 @@ export const GameMenu = (props) => {
               </div>
               <div className="option with-custom-input">
                 <div>
-                  <div className="title-opt">Frases o palabras (Máx. 20 caractéres)</div>
+                  <div className="title-opt">Frases o palabras (Máx. 50 caractéres)</div>
                 </div>
 
                 <hr className="divider" />
@@ -98,7 +99,7 @@ export const GameMenu = (props) => {
                           }
                         }}
                         type="text"
-                        maxLength={20}
+                        maxLength={50}
                         defaultValue={phrase}
                         className="input-phrase"
                         placeholder="Insertar nueva frase/palabra"
@@ -141,16 +142,29 @@ export const GameMenu = (props) => {
                     </ButtonAnt>
 
                     {!props.showChooseGameMode && (
-                      <ButtonAnt
-                        className="btn success"
-                        color="success"
-                        margin="auto"
-                        loading={props.isLoadingSave}
-                        disabled={props.isLoadingSave}
-                        onClick={() => props.onUpdateGame?.(phrases)}
-                      >
-                        Listo
-                      </ButtonAnt>
+                      <>
+                        <ButtonAnt
+                          className="btn btn-bold"
+                          color="danger"
+                          margin="auto"
+                          loading={props.isLoadingSave}
+                          disabled={props.isLoadingSave}
+                          onClick={() => props.setGameMenuEnabled(false)}
+                        >
+                          Cancelar
+                        </ButtonAnt>
+
+                        <ButtonAnt
+                          className="btn success btn-bold"
+                          color="success"
+                          margin="auto"
+                          loading={props.isLoadingSave}
+                          disabled={props.isLoadingSave}
+                          onClick={() => props.onUpdateGame?.(phrases)}
+                        >
+                          Guardar
+                        </ButtonAnt>
+                      </>
                     )}
                   </div>
                 </div>
@@ -354,5 +368,9 @@ const GameCss = styled.div`
 
   .ant-collapse-content {
     background: ${(props) => props.theme.basic.secondary} !important;
+  }
+
+  .btn-bold {
+    font-weight: bold;
   }
 `;

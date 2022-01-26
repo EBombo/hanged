@@ -3,11 +3,12 @@ import styled from "styled-components";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { ButtonAnt } from "../../../../components/form";
+import { mediaQuery } from "../../../../constants";
 
 export const OverlayResult = (props) => (
-  <OverlayResultContainer>
+  <OverlayResultContainer className="flex flex-col justify-center">
     <div className="content">
-      {props.isGameOver && <div className="label">¡Se acabó el juego!</div>}
+      {props.isGameOver && <div className="label inline-block bg-secondaryDarken py-8 px-8 md:px-24">¡Se acabó el juego!</div>}
       <>
         <Image
           className="status-icon"
@@ -16,10 +17,11 @@ export const OverlayResult = (props) => (
               ? `${config.storageUrl}/resources/success_guess.png`
               : `${config.storageUrl}/resources/fail_guessed.png`
           }
-          Desktopwidth="56px"
-          width="32px"
+          Desktopwidth="48px"
+          width="48px"
+          height="48px"
         />
-        <div className={`label ${props.hasGuessed ? "success" : ""}`}>La palabra era: {props.phrase}</div>
+        <div className={`label ${props.hasGuessed ? "success" : ""}`}>La palabra era: <span class="answer">{props.phrase}</span></div>
       </>
       {props.isGameOver ? (
         <ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>
@@ -27,7 +29,7 @@ export const OverlayResult = (props) => (
         </ButtonAnt>
       ) : (
         <ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>
-          Continuar
+          Siguiente
         </ButtonAnt>
       )}
     </div>
@@ -36,7 +38,7 @@ export const OverlayResult = (props) => (
 
 const OverlayResultContainer = styled.div`
   position: fixed;
-  top: 0;
+  top: 50px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -46,23 +48,37 @@ const OverlayResultContainer = styled.div`
   font-family: Lato;
   font-style: normal;
   font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
+  font-size: 20px;
+  line-height: 24px;
+
+  ${mediaQuery.afterTablet} {
+    font-size: 32px;
+  }
 
   .content {
     color: ${(props) => props.theme.basic.whiteLight};
     text-align: center;
-    padding-top: 32px;
+    margin-top: -52px;
 
     .status-icon {
       margin-bottom: 12px;
     }
     .label {
-      margin-bottom: 24px;
+      margin-bottom: 56px;
+      &.success {
+        color: ${(props) => props.theme.basic.success};
+      }
+
+      .answer {
+        text-transform: uppercase;
+      }
     }
     .btn {
       display: inline-block;
       font-weight: bold;
+      padding-left: 4rem;
+      padding-right: 4rem;
+      font-size: 18px;
     }
   }
 `;

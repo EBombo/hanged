@@ -2,7 +2,7 @@ export const darkTheme = {
   basic: {
     success: "#56EEA5",
     successDark: "#3FA876",
-    successLight: "#77f1b7",
+    successLight: "#B8FFDD",
     primary: "#956DFC",
     primaryDark: "#5D449E",
     primaryLight: "#C4ADFF",
@@ -11,7 +11,7 @@ export const darkTheme = {
     secondaryDark: "#170D33",
     secondaryDarken: "#221545",
     secondaryLight: "#2E2547",
-    secondaryWithTransparency: "#382079c2",
+    secondaryWithTransparency: "#170d30eb",
     white: "#ffffff",
     whiteDarken: "#D2D2D2",
     whiteDark: "#F2F2F2",

@@ -2,6 +2,7 @@ import React from "reactn";
 import styled from "styled-components";
 import { alphabet } from "../../../../components/common/DataList";
 import { ButtonAnt } from "../../../../components/form";
+import { mediaQuery } from "../../../../constants";
 
 const getColorByLetterState = (lettersPressed, letter) => {
   if (lettersPressed[letter] === "unmatched") return "default";
@@ -42,5 +43,10 @@ const AlphabetContainer = styled.div`
     font-weight: bold;
     font-family: Lato;
     font-style: normal;
+
+    ${mediaQuery.afterTablet} {
+      font-size: 35px;
+      min-width: 67px;
+    }
   }
 `;
