@@ -27,11 +27,9 @@ export const UserLayout = (props) => {
 
   return (
     <UserLayoutCss>
-      <div className="description" />
-      <div className="title no-wrap">{props.lobby.game.name}</div>
-      <div className="right-content">
+      <div className="left-content">
         {authUser.isAdmin ? (
-          <div className="right-container">
+          <div className="left-container">
             <Popover
               trigger="click"
               content={
@@ -138,6 +136,7 @@ export const UserLayout = (props) => {
           </Popover>
         )}
       </div>
+      <div className="title no-wrap">{props.lobby.game.name}</div>
     </UserLayoutCss>
   );
 };
@@ -150,14 +149,23 @@ const UserLayoutCss = styled.div`
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
   height: 50px;
+  z-index: 2;
 
   .title {
+    color: ${(props) => props.theme.basic.blackDarken};
     text-align: center;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: bold;
+
+    ${mediaQuery.afterTablet} {
+      font-size: 24px;
+      line-height: 36px;
+    }
   }
 
-  .right-content {
+  .left-content {
     display: flex;
-    justify-content: flex-end;
 
     .icon-menu {
       cursor: pointer;
@@ -185,7 +193,7 @@ const UserLayoutCss = styled.div`
     line-height: 14px;
   }
 
-  .right-container {
+  .left-container {
     display: flex;
     align-items: center;
 
@@ -200,6 +208,7 @@ const UserLayoutCss = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
+    position: relative;
     padding: 0 1rem;
 
     .description {
@@ -207,7 +216,7 @@ const UserLayoutCss = styled.div`
       line-height: 22px;
     }
 
-    .right-container {
+    .left-container {
       button {
         width: 40px;
         height: 40px;

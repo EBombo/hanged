@@ -12,13 +12,9 @@ import { OverlayResult } from "./OverlayResult";
 import { ButtonAnt } from "../../../../components/form";
 import { GameSettings } from "./GameSettings";
 import { useInterval } from "../../../../hooks/useInterval";
+import { PauseOutlined, CaretRightOutlined, ReloadOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT } from "../../../../components/common/DataList";
-import moment from "moment";
-
-const getDeltaTime = (startAt) => {
-  const diffTime = moment(startAt).diff(moment(), "seconds");
-  return Math.abs(diffTime);
-};
+import { Modal } from "antd";
 
 const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
 
@@ -30,13 +26,21 @@ export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(props.lobby);
+
+  const [hasStarted, setHasStarted] = useState(false);
+  const [hasPaused, setHasPaused] = useState(false);
+
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(
-    props.lobby.settings.secondsPerRound === null
-      ? null
-      : props.lobby.settings.secondsPerRound - getDeltaTime(props.lobby.startAt.toDate())
-  );
+
+  const [secondsLeft, setSecondsLeft] = useState(props.lobby.secondsLeft ?? props.lobby.settings.secondsPerRound);
+
+  useEffect(() => {
+    if (hasStarted && !props.lobby.hasStarted) {
+      setSecondsLeft(props.lobby.settings.secondsPerRound)
+      setLobby({...lobby, hasStarted: true, startAt: new Date()})
+    };
+  }, [hasStarted]);
 
   useEffect(() => {
     const currentUserId = authUser.id;
@@ -56,9 +60,18 @@ export const LobbyInPlay = (props) => {
     updateLobby();
   }, [lobby]);
 
+  useEffect(() => {
+    setLobby({...lobby, secondsLeft: (secondsLeft)});
+  }, [secondsLeft]);
+
   // TODO: Consider move timer into Timer component. interval re-runs this component.
   useInterval(() => {
+    if (!hasStarted) return;
+
+    if (hasPaused) return;
+
     if (secondsLeft === null) return null;
+
     if (secondsLeft <= 0 && props.lobby.state === PLAYING) return setLobby({ ...props.lobby, state: TIME_OUT });
 
     if (props.lobby.state === TIME_OUT) return;
@@ -111,6 +124,7 @@ export const LobbyInPlay = (props) => {
     if (isLastRound(props.lobby)) return;
 
     setSecondsLeft(props.lobby.settings.secondsPerRound);
+    setHasStarted(false);
 
     setLobby({
       ...props.lobby,
@@ -124,6 +138,7 @@ export const LobbyInPlay = (props) => {
 
   const resetGame = async () => {
     setSecondsLeft(props.lobby.settings.secondsPerRound);
+    setHasStarted(false);
 
     setLobby({
       ...props.lobby,
@@ -139,11 +154,13 @@ export const LobbyInPlay = (props) => {
     setIsLoadingSave(true);
 
     setSecondsLeft(settings.secondsPerRound);
+    if (settings.secondsPerRound) setHasPaused(true);
 
     setLobby({
       ...props.lobby,
       settings: { ...settings, phrases: phrases.filter((phrase) => phrase !== "") },
       state: PLAYING,
+      secondsLeft: settings.secondsPerRound,
       startAt: new Date(),
     });
     setIsLoadingSave(false);
@@ -154,16 +171,39 @@ export const LobbyInPlay = (props) => {
     <>
       <UserLayout {...props} />
 
+      <GameHeader>
+        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
+          Editar juego
+        </ButtonAnt>
+
+        <div class="timer-container">
+          {secondsLeft !== null && (
+            <Timer
+              {...props}
+              className="timer"
+              secondsLeft={secondsLeft}
+              roundOverMessage="Ronda terminada!"
+              isRoundOver={props.lobby.state !== PLAYING}
+            />
+          )}
+        </div>
+        
+
+        {
+          !isLastRound(props.lobby) &&
+            (<ButtonAnt
+                color="danger"
+                className="btn-action"
+                onClick={() => nextRound()}
+                disabled={isLastRound(props.lobby)}
+              >
+                <span className="btn-text">Saltar turno</span>
+                <FastForwardOutlined />
+              </ButtonAnt>)
+        }
+      </GameHeader>
+
       <HangedGameContainer>
-        {secondsLeft && (
-          <Timer
-            {...props}
-            className="timer"
-            secondsLeft={secondsLeft}
-            roundOverMessage="Ronda terminada!"
-            isRoundOver={props.lobby.state !== PLAYING}
-          />
-        )}
 
         <HangedMan {...props} hangedMan={props.lobby.hangedMan} />
 
@@ -187,7 +227,13 @@ export const LobbyInPlay = (props) => {
         <Alphabet
           {...props}
           lettersPressed={props.lobby.lettersPressed}
-          onLetterPressed={(letter) => onNewLetterPressed(letter)}
+          onLetterPressed={(letter) => {
+            if (!hasStarted || hasPaused) return Modal.info({
+              title: `Debes apretar el botón ${hasPaused ? 'Continuar' : 'Empezar'} para iniciar el juego.`
+            });
+
+            onNewLetterPressed(letter)
+          }}
         />
 
         {props.lobby.state !== PLAYING && (
@@ -213,47 +259,119 @@ export const LobbyInPlay = (props) => {
         />
       )}
 
-      <GameActions>
-        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
-          Editar juego
-        </ButtonAnt>
-        <ButtonAnt
-          color="danger"
-          className="btn-action"
-          onClick={() => nextRound()}
-          disabled={isLastRound(props.lobby)}
-        >
-          Saltar turno
-        </ButtonAnt>
+      <GameActions right>
+        {!hasStarted &&
+          <ButtonAnt
+            color="success"
+            className="btn-action"
+            disabled={hasStarted}
+            onClick={() => {
+              setHasStarted(true);
+            }}
+          >
+            <span className="btn-text">Empezar</span>
+            <CaretRightOutlined />
+          </ButtonAnt>
+        }
+        
+
+        {((hasStarted && secondsLeft !== null)) && (
+          <ButtonAnt
+            color="success"
+            className="btn-action"
+            disabled={!hasStarted}
+            onClick={() => setHasPaused(!hasPaused)}
+          >
+            <span className="btn-text">
+              {hasPaused ? 'Continuar' : 'Pausar'}
+            </span>
+            {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
+          </ButtonAnt>
+        )}
       </GameActions>
     </>
   );
 };
 
+const GameHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1000px;
+  margin: 0.5rem;
+  column-gap: 3rem;
+  row-gap: 1rem;
+
+  .timer-container {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    justify-self: center;
+
+    ${mediaQuery.afterTablet} {
+      justify-self: start;
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
+  }
+
+  ${mediaQuery.afterTablet} {
+    grid-template-columns: 1fr 600px 1fr;
+    margin: 4rem auto 0 auto;
+  }
+
+  .btn-action {
+    font-weight: bold;
+    font-size: 16px;
+
+    ${mediaQuery.afterTablet} {
+      font-size: 22px;
+    }
+  }
+`;
+
 const GameActions = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: 32px 8px 0 8px;
+  flex-wrap: wrap;
+  justify-content: ${(props) => props.right ? 'end' : 'center'};
+  margin: 0px 8px 0 8px;
   padding-bottom: 32px;
 
   ${mediaQuery.afterTablet} {
     max-width: 1200px;
     margin: 32px auto 0 auto;
+    justify-content: ${(props) => props.right ? 'end' : 'space-between'};
+  }
+
+  .btn-text {
+    vertical-align: text-top;
+  }
+
+  .btn-icon {
+    font-size: 1rem;
   }
 
   .btn-action {
     display: inline-block;
     font-weight: bold;
+    margin: 1rem;
+
+    font-weight: bold;
+    font-size: 16px;
+    
+    ${mediaQuery.afterTablet} {
+      font-size: 22px;
+    }
   }
 `;
 
 const HangedGameContainer = styled.div`
   margin: 0 12px;
   padding-top: 8px;
+  position: relative;
 
   ${mediaQuery.afterTablet} {
     max-width: 700px;
     margin: 0 auto;
+    top: 0px;
   }
 
   .guess-phrase-container {
@@ -286,6 +404,12 @@ const HangedGameContainer = styled.div`
 
       .underscore {
         width: 100%;
+      }
+
+      ${mediaQuery.afterTablet} {
+        font-size: 35px;
+        min-width: 58px;
+        line-height: 47px;
       }
     }
   }

@@ -66,12 +66,12 @@ export const alphabet = [
 ];
 
 export const defaultHandMan = {
-  head: "hidden",
-  leftLeg: "hidden",
   rightLeg: "hidden",
-  leftArm: "hidden",
+  leftLeg: "hidden",
   rightArm: "hidden",
+  leftArm: "hidden",
   trunk: "hidden",
+  head: "hidden",
 };
 
 export const limbsOrder = Object.keys(defaultHandMan);

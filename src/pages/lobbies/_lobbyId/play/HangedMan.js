@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const HangedMan = (props) => (
   <HangedManContainer>
-    <div>
+    <div className="inner-content">
       <svg width="164" height="189" viewBox="0 0 164 189" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect y="180.484" width="163.973" height="7.9709" rx="3.98545" fill="#A18ED7" />
         <path
@@ -83,6 +83,10 @@ export const HangedMan = (props) => (
 const HangedManContainer = styled.div`
   text-align: center;
   padding: 32px 0 16px 0;
+
+  .inner-content {
+    display: inline-block;
+  }
 
   .hidden {
     &.head,
