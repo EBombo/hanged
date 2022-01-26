@@ -3,6 +3,7 @@ export const darkTheme = {
     success: "#56EEA5",
     successDark: "#3FA876",
     successLight: "#B8FFDD",
+    successLighten: "#6DC29A",
     primary: "#956DFC",
     primaryDark: "#5D449E",
     primaryLight: "#C4ADFF",
