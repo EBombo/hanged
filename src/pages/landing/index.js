@@ -1,14 +1,11 @@
 import React from "reactn";
 import styled from "styled-components";
 import { Anchor } from "../../components/form";
-import { useRouter } from "next/router";
 
 export const Landing = () => {
-  const router = useRouter();
-
   return (
     <LadingContainer>
-      <Anchor variant="primary" onClick={() => router.push("/login")}>
+      <Anchor variant="primary" onClick={() => { if (typeof window !== "undefined") window.location.href = "/"; }}>
         INGREGAR
       </Anchor>
     </LadingContainer>
