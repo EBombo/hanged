@@ -253,6 +253,25 @@ const ButtonAntCss = styled(Button)`
           : theme.basic.white
       }!important;
       border: none;
+      box-shadow: 0 2px ${
+        color === "primary"
+          ? theme.basic.primaryDark
+          : color === "secondary"
+          ? theme.basic.secondaryDark
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
+          : color === "warning"
+          ? theme.basic.warningDark
+          : color === "danger"
+          ? theme.basic.dangerDark
+          : color === "default"
+          ? "#979797"
+          : color === "success"
+          ? theme.basic.successLighten
+          : color
+      };
+      position: relative;
+      top: 2px;
       `
         : variant === "outlined"
         ? `
