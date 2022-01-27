@@ -4,7 +4,8 @@ import Cors from "cors";
 export const middleware = async (req, res) => {
   const cors = initMiddleware(
     Cors({
-      methods: ["GET", "POST", "DELETE"],
+      origin: "*",
+      methods: ["GET", "POST", "DELETE"]
     })
   );
 
