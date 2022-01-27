@@ -17,6 +17,8 @@ const apiGame = async (req, res) => {
   // Run cors
   await cors(req, res);
 
+  console.log("req.method", req.method);
+
   switch (req.method) {
     case "GET":
       return await getGames(req, res);
