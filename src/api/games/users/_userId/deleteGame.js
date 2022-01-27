@@ -2,9 +2,9 @@ import { firestore } from "../../../../firebase";
 
 export const deleteGame = async (req, res) => {
   try {
-    console.log("deleteGame->", req.params, req.query, req.body);
+    console.log("deleteGame->", req.query, req.body);
 
-    const { gameId } = req.params;
+    const { gameId } = req.query;
 
     await firestore.doc(`games/${gameId}`).update({
       deleted: true,
