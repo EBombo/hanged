@@ -14,7 +14,7 @@ const ErrorPage = () => {
     const redirect = async () => {
       await timeoutPromise(3000);
 
-      await router.push("/");
+      if (typeof window !== "undefined") window.location.href = "/";
     };
 
     redirect();
