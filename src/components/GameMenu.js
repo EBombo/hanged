@@ -132,7 +132,7 @@ export const GameMenu = (props) => {
                   <div className="btn-container">
                     <ButtonAnt
                       onClick={() => setPhrases([...phrases, ""])}
-                      className="btn"
+                      className="btn btn-bold"
                       color="secondary"
                       margin="auto"
                       loading={props.isLoadingSave}
@@ -372,5 +372,9 @@ const GameCss = styled.div`
 
   .btn-bold {
     font-weight: bold;
+
+    span {
+      font-weight: bold !important;
+    }
   }
 `;

@@ -13,8 +13,7 @@ import { ButtonAnt } from "../../../../components/form";
 import { GameSettings } from "./GameSettings";
 import { useInterval } from "../../../../hooks/useInterval";
 import { PauseOutlined, CaretRightOutlined, ReloadOutlined, FastForwardOutlined } from "@ant-design/icons";
-import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT } from "../../../../components/common/DataList";
-import { Modal } from "antd";
+import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE } from "../../../../components/common/DataList";
 
 const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
 
@@ -34,6 +33,9 @@ export const LobbyInPlay = (props) => {
   const [gameMenuEnabled, setGameMenuEnabled] = useState(false);
 
   const [secondsLeft, setSecondsLeft] = useState(props.lobby.secondsLeft ?? props.lobby.settings.secondsPerRound);
+
+  const [alertText, setAlertText] = useState('');
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   useEffect(() => {
     if (hasStarted && !props.lobby.hasStarted) {
@@ -120,6 +122,13 @@ export const LobbyInPlay = (props) => {
 
   const isGameOver = () => isLastRound(props.lobby) && props.lobby.state !== PLAYING;
 
+  const skipPhrase = () => {
+    setLobby({
+      ...props.lobby,
+      state: SKIP_PHRASE,
+    });
+  };
+
   const nextRound = () => {
     if (isLastRound(props.lobby)) return;
 
@@ -194,7 +203,7 @@ export const LobbyInPlay = (props) => {
             (<ButtonAnt
                 color="danger"
                 className="btn-action"
-                onClick={() => nextRound()}
+                onClick={() => skipPhrase()}
                 disabled={isLastRound(props.lobby)}
               >
                 <span className="btn-text">Saltar turno</span>
@@ -224,13 +233,20 @@ export const LobbyInPlay = (props) => {
           )}
         </div>
 
+        <div className={`alert text-center text-white font-bold text-xl ${isAlertOpen && 'opened'}`}>
+          {alertText}
+        </div>
+
         <Alphabet
           {...props}
           lettersPressed={props.lobby.lettersPressed}
           onLetterPressed={(letter) => {
-            if (!hasStarted || hasPaused) return Modal.info({
-              title: `Debes apretar el botón ${hasPaused ? 'Continuar' : 'Empezar'} para iniciar el juego.`
-            });
+            if (!hasStarted || hasPaused) {
+              setAlertText(`Debes apretar el botón ${hasPaused ? 'Continuar' : 'Empezar'} para iniciar el juego.`)
+
+              setIsAlertOpen(true)
+              return setTimeout(() => { setIsAlertOpen(false) }, 3000);
+            }
 
             onNewLetterPressed(letter)
           }}
@@ -239,6 +255,7 @@ export const LobbyInPlay = (props) => {
         {props.lobby.state !== PLAYING && (
           <OverlayResult
             {...props}
+            gameState={props.lobby.state}
             hasGuessed={props.lobby.state === GUESSED}
             phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]}
             isGameOver={isGameOver()}
@@ -411,6 +428,16 @@ const HangedGameContainer = styled.div`
         min-width: 58px;
         line-height: 47px;
       }
+    }
+  }
+  
+  .alert {
+    transition: max-height 1.5s ease;
+    max-height: 0;
+    overflow: hidden;
+
+    &.opened {
+      max-height: 300px;
     }
   }
 `;
