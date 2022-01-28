@@ -91,7 +91,7 @@ export const GameMenu = (props) => {
                     <div className="input-container" key={`input-phrase-${index}`}>
                       <Input
                         onKeyPress={(event) => {
-                          const regex = new RegExp("^[a-zA-Z ]+$");
+                          const regex = new RegExp("^[a-zA-Z, ]+$");
                           const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
                           if (!regex.test(key)) {
                             event.preventDefault();
