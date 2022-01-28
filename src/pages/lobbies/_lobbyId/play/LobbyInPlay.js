@@ -199,14 +199,22 @@ export const LobbyInPlay = (props) => {
         
 
         {
-          !isLastRound(props.lobby) &&
-            (<ButtonAnt
+          !isLastRound(props.lobby)
+          ? (<ButtonAnt
                 color="danger"
                 className="btn-action"
                 onClick={() => skipPhrase()}
                 disabled={isLastRound(props.lobby)}
               >
                 <span className="btn-text">Saltar turno</span>
+                <FastForwardOutlined />
+              </ButtonAnt>)
+          : (<ButtonAnt
+                color="danger"
+                className="btn-action"
+                onClick={() => skipPhrase()}
+              >
+                <span className="btn-text">Finalizar juego</span>
                 <FastForwardOutlined />
               </ButtonAnt>)
         }
@@ -259,7 +267,7 @@ export const LobbyInPlay = (props) => {
             hasGuessed={props.lobby.state === GUESSED}
             phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]}
             isGameOver={isGameOver()}
-            onContinue={() => nextRound()}
+            onContinue={() => isLastRound(props.lobby) ? resetGame() : nextRound()}
             onResetGame={() => resetGame()}
           />
         )}
