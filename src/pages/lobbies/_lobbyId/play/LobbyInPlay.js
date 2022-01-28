@@ -209,11 +209,11 @@ export const LobbyInPlay = (props) => {
 
         <div className="guess-phrase-container">
           {props.lobby.settings.phrases[props.lobby.currentPhraseIndex].split("").map((letter, i) =>
-            letter === " " ? (
-              <span key={`ws-${i}`} className="whitespace">
-                &nbsp;
-              </span>
-            ) : (
+            letter === " "
+            ? (<span key={`ws-${i}`} className="whitespace">&nbsp;</span>)
+            : letter === ","
+            ? (<span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-8xl whitespace">{ letter }</span>)
+            : (
               <div key={`letter-${i}`} className="letter">
                 <div className="character">
                   {Object.keys(props.lobby.lettersPressed).includes(letter.toUpperCase()) ? letter.toUpperCase() : " "}
