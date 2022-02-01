@@ -14,6 +14,7 @@ const cors = initMiddleware(
 );
 
 const apiGame = async (req, res) => {
+  res.header("Access-Control-Allow-Methods", "*");
   // Run cors
   await cors(req, res);
 
