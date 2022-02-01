@@ -1,5 +1,5 @@
-import initMiddleware from "../../lib/init-middleware.js";
 import Cors from "cors";
+import initMiddleware from "../../lib";
 
 export const middleware = async (req, res) => {
   const cors = initMiddleware(
