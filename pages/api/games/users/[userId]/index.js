@@ -1,6 +1,6 @@
 import getGames from "../../../../../src/api/games/users/_userId/getGames";
 import Cors from "cors";
-import initMiddleware from "../../../../../lib/";
+import initMiddleware from "../../../../../lib";
 import { deleteGame } from "../../../../../src/api/games/users/_userId/deleteGame";
 
 // Initialize the cors middleware
@@ -9,12 +9,11 @@ const cors = initMiddleware(
   Cors({
     origin: "*",
     // Only allow requests with GET, POST and OPTIONS
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
   })
 );
 
 const apiGame = async (req, res) => {
-  res.header("Access-Control-Allow-Methods", "*");
   // Run cors
   await cors(req, res);
 
