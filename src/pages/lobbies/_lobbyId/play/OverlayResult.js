@@ -26,7 +26,7 @@ export const OverlayResult = (props) => (
           height="48px"
           />
         }
-        <div className={`label py-8 ${props.hasGuessed ? "success" : ""}`}>La palabra era: <span class="answer">{props.phrase}</span></div>
+        <div className={`label py-8 ${props.hasGuessed ? "success" : ""}`}>La palabra era: <span className="answer">{props.phrase}</span></div>
       </div>
       {props.isGameOver ? (
         <ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>
@@ -72,6 +72,7 @@ const OverlayResultContainer = styled.div`
 
       .answer {
         text-transform: uppercase;
+        line-height: 1.4;
       }
     }
     .btn {
