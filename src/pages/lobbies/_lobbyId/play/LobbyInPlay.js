@@ -11,6 +11,7 @@ import { Alphabet } from "./Alphabet";
 import { OverlayResult } from "./OverlayResult";
 import { ButtonAnt } from "../../../../components/form";
 import { GameSettings } from "./GameSettings";
+import { GuessPhrase } from "./GuessPhrase";
 import { useInterval } from "../../../../hooks/useInterval";
 import { PauseOutlined, CaretRightOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE } from "../../../../components/common/DataList";
@@ -213,7 +214,7 @@ export const LobbyInPlay = (props) => {
             Editar juego
           </ButtonAnt>
 
-          <div class="timer-container inline-flex items-center">
+          <div className="timer-container inline-flex items-center">
             {secondsLeft !== null && (
               <Timer
                 {...props}
@@ -261,22 +262,7 @@ export const LobbyInPlay = (props) => {
 
         <HangedMan {...props} hangedMan={props.lobby.hangedMan}/>
 
-        <div className="guess-phrase-container max-w-[900px] mx-auto relative">
-          {props.lobby.settings.phrases[props.lobby.currentPhraseIndex].split("").map((letter, i) =>
-            letter === " "
-            ? (<span key={`ws-${i}`} className="whitespace">&nbsp;</span>)
-            : letter === ","
-            ? (<span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-7xl whitespace">{ letter }</span>)
-            : (
-              <div key={`letter-${i}`} className="letter">
-                <div className="character">
-                  {Object.keys(props.lobby.lettersPressed).includes(letter.toUpperCase()) ? letter.toUpperCase() : " "}
-                </div>
-                <hr className="underscore" />
-              </div>
-            )
-          )}
-        </div>
+        <GuessPhrase {...props} phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]} />
 
         <div className="max-w-[700px] mx-auto pb-8 relative">
           <div className={`alert text-center text-white font-bold text-xl ${isAlertOpen && 'opened'}`}>
@@ -356,50 +342,6 @@ const GameHeader = styled.div`
 
 const InPlayContainer = styled.div`
   background-image: url("${(props) => `${config.storageUrl}/resources/coral-pattern-tablet.svg`}");
-
-  .guess-phrase-container {
-    text-align: center;
-    margin-bottom: 60px;
-
-    .whitespace {
-      margin: 7px;
-    }
-
-    .letter {
-      color: ${(props) => props.theme.basic.white};
-      font-family: Lato;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 20px;
-      line-height: 28px;
-
-      margin: 8px 4px;
-      min-width: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      vertical-align: bottom;
-
-      .character {
-        text-transform: uppercase;
-        height: 47px;
-        width: 100%;
-      }
-
-      .underscore {
-        width: 100%;
-        height: 2px;
-        background: white;
-      }
-
-      ${mediaQuery.afterTablet} {
-        font-size: 32px;
-        min-width: 45px;
-        line-height: 47px;
-      }
-    }
-  }
 
   .alert {
     transition: max-height 1.5s ease;
