@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState, useMemo } from "reactn";
 import styled from "styled-components";
 import every from "lodash/every";
 import includes from "lodash/includes";
@@ -15,8 +15,6 @@ import { GuessPhrase } from "./GuessPhrase";
 import { useInterval } from "../../../../hooks/useInterval";
 import { PauseOutlined, CaretRightOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE } from "../../../../components/common/DataList";
-
-const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
 
 const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter((limb) => limb === "hidden").length;
 
@@ -37,6 +35,8 @@ export const LobbyInPlay = (props) => {
 
   const [alertText, setAlertText] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  const isLastRound = useMemo(() => (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length, [lobby]);
 
   useEffect(() => {
     if (hasStarted && !props.lobby.hasStarted) {
@@ -64,10 +64,10 @@ export const LobbyInPlay = (props) => {
   }, [lobby]);
 
   useEffect(() => {
-    if (!hasStarted && isFirstGame()) {
-      setIsAlertOpen(true);
-      setAlertText("Haz click en una letra para empezar");
-    };
+    if (hasStarted || !isFirstGame) return;
+
+    setIsAlertOpen(true);
+    setAlertText("Haz click en una letra para empezar");
   }, [hasStarted, lobby]);
 
   useEffect(() => {
@@ -96,11 +96,9 @@ export const LobbyInPlay = (props) => {
   };
 
   const onNewLetterPressed = (letter) => {
-    if (!hasStarted) {
-      setHasStarted(true);
+    if (!hasStarted) setHasStarted(true);
 
-      if (isAlertOpen) setIsAlertOpen(false);
-    }
+    if (!hasStarted && isAlertOpen) setIsAlertOpen(false);
 
     if (hasPaused) {
       setAlertText(`Debes apretar el botón "Play" para iniciar el juego.`);
@@ -141,19 +139,16 @@ export const LobbyInPlay = (props) => {
     });
   };
 
-  const isFirstGame = () => lobby.currentPhraseIndex === 0;
+  // const isFirstGame =  () => lobby.currentPhraseIndex === 0;
+  const isFirstGame = useMemo(() => (lobby) => lobby.currentPhraseIndex === 0, [lobby]);
 
-  const isGameOver = () => isLastRound(props.lobby) && props.lobby.state !== PLAYING;
+  // const isGameOver = () => isLastRound(props.lobby) && props.lobby.state !== PLAYING;
+  const isGameOver = useMemo(() => (lobby) => isLastRound && lobby?.state !== PLAYING, [lobby]) ;
 
-  const skipPhrase = () => {
-    setLobby({
-      ...props.lobby,
-      state: SKIP_PHRASE,
-    });
-  };
+  const skipPhrase = () => setLobby({ ...props.lobby, state: SKIP_PHRASE });
 
   const nextRound = () => {
-    if (isLastRound(props.lobby)) return;
+    if (isLastRound) return;
 
     setSecondsLeft(props.lobby.settings.secondsPerRound);
     setHasStarted(false);
@@ -239,12 +234,12 @@ export const LobbyInPlay = (props) => {
           </div>
 
           {
-            !isLastRound(props.lobby)
+            !isLastRound
             ? (<ButtonAnt
                   color="danger"
                   className="btn-action"
                   onClick={() => skipPhrase()}
-                  disabled={isLastRound(props.lobby)}
+                  disabled={isLastRound}
                 >
                   <span className="btn-text">Saltar turno</span>
                   <FastForwardOutlined />
@@ -282,8 +277,8 @@ export const LobbyInPlay = (props) => {
             gameState={props.lobby.state}
             hasGuessed={props.lobby.state === GUESSED}
             phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]}
-            isGameOver={isGameOver()}
-            onContinue={() => isLastRound(props.lobby) ? resetGame() : nextRound()}
+            isGameOver={isGameOver}
+            onContinue={() => isLastRound ? resetGame() : nextRound()}
             onResetGame={() => resetGame()}
           />
         )}
