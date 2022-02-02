@@ -4,7 +4,7 @@ import { mediaQuery } from "../../../../constants";
 
 export const GuessPhrase = (props) => {
 
-  const words = props.phrase.split(" ");
+  const words = props.phrase?.split(" ") ?? [];
 
   return (
   <GuessPhraseStyled className="max-w-[900px] mx-auto relative">
