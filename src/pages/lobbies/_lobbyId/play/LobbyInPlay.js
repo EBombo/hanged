@@ -63,6 +63,13 @@ export const LobbyInPlay = (props) => {
   }, [lobby]);
 
   useEffect(() => {
+    if (!hasStarted && isFirstGame()) {
+      setIsAlertOpen(true);
+      setAlertText("Haz click en una letra para empezar");
+    };
+  }, [hasStarted, lobby]);
+
+  useEffect(() => {
     setLobby({...lobby, secondsLeft: (secondsLeft)});
   }, [secondsLeft]);
 
@@ -88,6 +95,19 @@ export const LobbyInPlay = (props) => {
   };
 
   const onNewLetterPressed = (letter) => {
+    if (!hasStarted) {
+      setHasStarted(true);
+
+      if (isAlertOpen) setIsAlertOpen(false);
+    }
+
+    if (hasPaused) {
+      setAlertText(`Debes apretar el botón "Play" para iniciar el juego.`);
+
+      setIsAlertOpen(true);
+      return setTimeout(() => { setIsAlertOpen(false) }, 3000);
+    }
+
     if (getLivesLeft(props.lobby.hangedMan) === 0) return;
 
     const isMatched = props.lobby.settings.phrases[props.lobby.currentPhraseIndex].toUpperCase().includes(letter);
@@ -120,6 +140,8 @@ export const LobbyInPlay = (props) => {
     });
   };
 
+  const isFirstGame = () => lobby.currentPhraseIndex === 0;
+
   const isGameOver = () => isLastRound(props.lobby) && props.lobby.state !== PLAYING;
 
   const skipPhrase = () => {
@@ -134,6 +156,7 @@ export const LobbyInPlay = (props) => {
 
     setSecondsLeft(props.lobby.settings.secondsPerRound);
     setHasStarted(false);
+    setHasPaused(false);
 
     setLobby({
       ...props.lobby,
@@ -148,6 +171,7 @@ export const LobbyInPlay = (props) => {
   const resetGame = async () => {
     setSecondsLeft(props.lobby.settings.secondsPerRound);
     setHasStarted(false);
+    setHasPaused(false);
 
     setLobby({
       ...props.lobby,
@@ -183,68 +207,66 @@ export const LobbyInPlay = (props) => {
 
       <UserLayout {...props} />
 
-      <GameHeader>
-        <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
-          Editar juego
-        </ButtonAnt>
+      <div className="min-h-[calc(100vh-100px)] screen flex flex-col justify-evenly">
+        <GameHeader>
+          <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
+            Editar juego
+          </ButtonAnt>
 
-        <div class="timer-container inline-flex items-center">
-          {secondsLeft !== null && (
-            <Timer
-              {...props}
-              className="timer"
-              secondsLeft={secondsLeft}
-              roundOverMessage="Ronda terminada!"
-              isRoundOver={props.lobby.state !== PLAYING}
-            />
-          )}
+          <div class="timer-container inline-flex items-center">
+            {secondsLeft !== null && (
+              <Timer
+                {...props}
+                className="timer"
+                secondsLeft={secondsLeft}
+                roundOverMessage="Ronda terminada!"
+                isRoundOver={props.lobby.state !== PLAYING}
+              />
+            )}
 
-          {((hasStarted && secondsLeft !== null)) && (
-            <div className="inline mx-8">
-              <ButtonAnt
-                color="success"
-                disabled={!hasStarted}
-                onClick={() => setHasPaused(!hasPaused)}
-              >
-                {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
-              </ButtonAnt>
-            </div>
-          )}
-        </div>
-        
+            {((hasStarted && secondsLeft !== null)) && (
+              <div className="inline mx-8">
+                <ButtonAnt
+                  color="success"
+                  disabled={!hasStarted}
+                  onClick={() => setHasPaused(!hasPaused)}
+                >
+                  {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
+                </ButtonAnt>
+              </div>
+            )}
+          </div>
 
-        {
-          !isLastRound(props.lobby)
-          ? (<ButtonAnt
-                color="danger"
-                className="btn-action"
-                onClick={() => skipPhrase()}
-                disabled={isLastRound(props.lobby)}
-              >
-                <span className="btn-text">Saltar turno</span>
-                <FastForwardOutlined />
-              </ButtonAnt>)
-          : (<ButtonAnt
-                color="danger"
-                className="btn-action"
-                onClick={() => skipPhrase()}
-              >
-                <span className="btn-text">Finalizar juego</span>
-                <FastForwardOutlined />
-              </ButtonAnt>)
-        }
-      </GameHeader>
+          {
+            !isLastRound(props.lobby)
+            ? (<ButtonAnt
+                  color="danger"
+                  className="btn-action"
+                  onClick={() => skipPhrase()}
+                  disabled={isLastRound(props.lobby)}
+                >
+                  <span className="btn-text">Saltar turno</span>
+                  <FastForwardOutlined />
+                </ButtonAnt>)
+            : (<ButtonAnt
+                  color="danger"
+                  className="btn-action"
+                  onClick={() => skipPhrase()}
+                >
+                  <span className="btn-text">Finalizar juego</span>
+                  <FastForwardOutlined />
+                </ButtonAnt>)
+          }
+        </GameHeader>
 
-      <HangedGameContainer>
+        <HangedMan {...props} hangedMan={props.lobby.hangedMan}/>
 
-        <HangedMan {...props} hangedMan={props.lobby.hangedMan} />
-
-        <div className="guess-phrase-container">
+        <div className="guess-phrase-container max-w-[900px] mx-auto relative">
           {props.lobby.settings.phrases[props.lobby.currentPhraseIndex].split("").map((letter, i) =>
             letter === " "
             ? (<span key={`ws-${i}`} className="whitespace">&nbsp;</span>)
             : letter === ","
-            ? (<span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-8xl whitespace">{ letter }</span>)
+            ? (<span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-7xl whitespace">{ letter }</span>)
             : (
               <div key={`letter-${i}`} className="letter">
                 <div className="character">
@@ -256,27 +278,17 @@ export const LobbyInPlay = (props) => {
           )}
         </div>
 
-        <div className={`alert text-center text-white font-bold text-xl ${isAlertOpen && 'opened'}`}>
-          {alertText}
+        <div className="max-w-[700px] mx-auto pb-8 relative">
+          <div className={`alert text-center text-white font-bold text-xl ${isAlertOpen && 'opened'}`}>
+            {alertText}
+          </div>
+
+          <Alphabet
+            {...props}
+            lettersPressed={props.lobby.lettersPressed}
+            onLetterPressed={(letter) => onNewLetterPressed(letter)}
+          />
         </div>
-
-        <Alphabet
-          {...props}
-          lettersPressed={props.lobby.lettersPressed}
-          onLetterPressed={(letter) => {
-            if (!hasStarted) {
-              setHasStarted(true);
-            }
-            if (hasPaused) {
-              setAlertText(`Debes apretar el botón Continuar para iniciar el juego.`)
-
-              setIsAlertOpen(true)
-              return setTimeout(() => { setIsAlertOpen(false) }, 3000);
-            }
-
-            onNewLetterPressed(letter)
-          }}
-        />
 
         {props.lobby.state !== PLAYING && (
           <OverlayResult
@@ -289,18 +301,18 @@ export const LobbyInPlay = (props) => {
             onResetGame={() => resetGame()}
           />
         )}
-      </HangedGameContainer>
 
-      {gameMenuEnabled && (
-        <GameSettings
-          {...props}
-          game={props.lobby.game}
-          isLoadingSave={isLoadingSave}
-          settings={props.lobby.settings}
-          onUpdateGame={(settings, phrases) => updateGameAndRestart(settings, phrases)}
-          setGameMenuEnabled={setGameMenuEnabled}
-        />
-      )}
+        {gameMenuEnabled && (
+          <GameSettings
+            {...props}
+            game={props.lobby.game}
+            isLoadingSave={isLoadingSave}
+            settings={props.lobby.settings}
+            onUpdateGame={(settings, phrases) => updateGameAndRestart(settings, phrases)}
+            setGameMenuEnabled={setGameMenuEnabled}
+          />
+        )}
+      </div>
     </InPlayContainer>
   );
 };
@@ -312,6 +324,12 @@ const GameHeader = styled.div`
   margin: 0.5rem;
   column-gap: 3rem;
   row-gap: 1rem;
+
+  ${mediaQuery.afterTablet} {
+    grid-template-columns: 1fr 600px 1fr;
+    margin: 0 auto;
+    padding-top: 2rem;
+  }
 
   .timer-container {
     grid-column: 1 / 3;
@@ -325,11 +343,6 @@ const GameHeader = styled.div`
     }
   }
 
-  ${mediaQuery.afterTablet} {
-    grid-template-columns: 1fr 600px 1fr;
-    margin: 4rem auto 0 auto;
-  }
-
   .btn-action {
     font-weight: bold;
     font-size: 16px;
@@ -341,51 +354,8 @@ const GameHeader = styled.div`
   }
 `;
 
-const GameActions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: ${(props) => props.right ? 'end' : 'center'};
-  margin: 0px 8px 0 8px;
-  padding-bottom: 32px;
-
-  ${mediaQuery.afterTablet} {
-    max-width: 1200px;
-    margin: 32px auto 0 auto;
-    justify-content: ${(props) => props.right ? 'end' : 'space-between'};
-  }
-
-  .btn-text {
-    vertical-align: text-top;
-  }
-
-  .btn-icon {
-    font-size: 1rem;
-  }
-
-  .btn-action {
-    display: inline-block;
-    font-weight: bold;
-    margin: 1rem;
-
-    font-weight: bold;
-    font-size: 16px;
-    
-    ${mediaQuery.afterTablet} {
-      font-size: 18px;
-    }
-  }
-`;
-
-const HangedGameContainer = styled.div`
-  margin: 0 12px;
-  padding-top: 8px;
-  position: relative;
-
-  ${mediaQuery.afterTablet} {
-    max-width: 700px;
-    margin: 0 auto;
-    top: 0px;
-  }
+const InPlayContainer = styled.div`
+  background-image: url("${(props) => `${config.storageUrl}/resources/coral-pattern-tablet.svg`}");
 
   .guess-phrase-container {
     text-align: center;
@@ -413,6 +383,8 @@ const HangedGameContainer = styled.div`
 
       .character {
         text-transform: uppercase;
+        height: 47px;
+        width: 100%;
       }
 
       .underscore {
@@ -422,13 +394,13 @@ const HangedGameContainer = styled.div`
       }
 
       ${mediaQuery.afterTablet} {
-        font-size: 35px;
+        font-size: 32px;
         min-width: 45px;
         line-height: 47px;
       }
     }
   }
-  
+
   .alert {
     transition: max-height 1.5s ease;
     max-height: 0;
@@ -438,9 +410,5 @@ const HangedGameContainer = styled.div`
       max-height: 300px;
     }
   }
-`;
-
-const InPlayContainer = styled.div`
-  background-image: url("${(props) => `${config.storageUrl}/resources/coral-pattern-tablet.svg`}");
 `;
 

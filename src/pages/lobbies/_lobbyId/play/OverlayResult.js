@@ -72,6 +72,7 @@ const OverlayResultContainer = styled.div`
 
       .answer {
         text-transform: uppercase;
+        line-height: 1.4;
       }
     }
     .btn {

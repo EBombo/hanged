@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 export const HangedMan = (props) => (
   <HangedManContainer>
-    <div className="inner-content">
-      <svg width="164" height="189" viewBox="0 0 164 189" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div className="inner-content w-[240px] relative">
+      <svg viewBox="0 0 164 189" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect y="180.484" width="163.973" height="7.9709" rx="3.98545" fill="#A18ED7" />
         <path
           d="M22.774 155.447C22.774 153.238 24.5648 151.447 26.774 151.447H49.5189C51.728 151.447 53.5189 153.238 53.5189 155.447V180.484H22.774V155.447Z"
