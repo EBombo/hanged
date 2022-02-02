@@ -36,7 +36,11 @@ export const LobbyInPlay = (props) => {
   const [alertText, setAlertText] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  const isLastRound = useMemo(() => (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length, [lobby]);
+  const isLastRound = useMemo(() => lobby?.currentPhraseIndex + 1 === lobby?.settings.phrases.length, [lobby]);
+
+  const isFirstGame = useMemo(() => lobby.currentPhraseIndex === 0, [lobby]);
+
+  const isGameOver = useMemo(() => isLastRound && lobby?.state !== PLAYING, [lobby]) ;
 
   useEffect(() => {
     if (hasStarted && !props.lobby.hasStarted) {
@@ -138,12 +142,6 @@ export const LobbyInPlay = (props) => {
       },
     });
   };
-
-  // const isFirstGame =  () => lobby.currentPhraseIndex === 0;
-  const isFirstGame = useMemo(() => (lobby) => lobby.currentPhraseIndex === 0, [lobby]);
-
-  // const isGameOver = () => isLastRound(props.lobby) && props.lobby.state !== PLAYING;
-  const isGameOver = useMemo(() => (lobby) => isLastRound && lobby?.state !== PLAYING, [lobby]) ;
 
   const skipPhrase = () => setLobby({ ...props.lobby, state: SKIP_PHRASE });
 
