@@ -18,6 +18,7 @@ const TimerContainer = styled.div`
   font-weight: bold;
   font-size: 18px;
   line-height: 17px;
+  position: relative;
 
   display: flex;
   align-items: center;

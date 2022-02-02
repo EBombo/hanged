@@ -4,7 +4,7 @@ import every from "lodash/every";
 import includes from "lodash/includes";
 import { mediaQuery } from "../../../../constants";
 import { UserLayout } from "../userLayout";
-import { firestore } from "../../../../firebase";
+import { firestore, config } from "../../../../firebase";
 import { HangedMan } from "./HangedMan";
 import { Timer } from "./Timer";
 import { Alphabet } from "./Alphabet";
@@ -12,7 +12,7 @@ import { OverlayResult } from "./OverlayResult";
 import { ButtonAnt } from "../../../../components/form";
 import { GameSettings } from "./GameSettings";
 import { useInterval } from "../../../../hooks/useInterval";
-import { PauseOutlined, CaretRightOutlined, ReloadOutlined, FastForwardOutlined } from "@ant-design/icons";
+import { PauseOutlined, CaretRightOutlined, FastForwardOutlined } from "@ant-design/icons";
 import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE } from "../../../../components/common/DataList";
 
 const isLastRound = (lobby) => lobby.currentPhraseIndex + 1 === lobby.settings.phrases.length;
@@ -177,7 +177,10 @@ export const LobbyInPlay = (props) => {
 
   // TODO: Consider to refactoring, <Admin> & <User>.
   return (
-    <>
+    <InPlayContainer className="min-h-screen">
+
+      <div className="absolute inset-4 bg-secondaryDark opacity-50"></div>
+
       <UserLayout {...props} />
 
       <GameHeader>
@@ -185,7 +188,7 @@ export const LobbyInPlay = (props) => {
           Editar juego
         </ButtonAnt>
 
-        <div class="timer-container">
+        <div class="timer-container inline-flex items-center">
           {secondsLeft !== null && (
             <Timer
               {...props}
@@ -194,6 +197,18 @@ export const LobbyInPlay = (props) => {
               roundOverMessage="Ronda terminada!"
               isRoundOver={props.lobby.state !== PLAYING}
             />
+          )}
+
+          {((hasStarted && secondsLeft !== null)) && (
+            <div className="inline mx-8">
+              <ButtonAnt
+                color="success"
+                disabled={!hasStarted}
+                onClick={() => setHasPaused(!hasPaused)}
+              >
+                {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
+              </ButtonAnt>
+            </div>
           )}
         </div>
         
@@ -249,8 +264,11 @@ export const LobbyInPlay = (props) => {
           {...props}
           lettersPressed={props.lobby.lettersPressed}
           onLetterPressed={(letter) => {
-            if (!hasStarted || hasPaused) {
-              setAlertText(`Debes apretar el botón ${hasPaused ? 'Continuar' : 'Empezar'} para iniciar el juego.`)
+            if (!hasStarted) {
+              setHasStarted(true);
+            }
+            if (hasPaused) {
+              setAlertText(`Debes apretar el botón Continuar para iniciar el juego.`)
 
               setIsAlertOpen(true)
               return setTimeout(() => { setIsAlertOpen(false) }, 3000);
@@ -283,38 +301,7 @@ export const LobbyInPlay = (props) => {
           setGameMenuEnabled={setGameMenuEnabled}
         />
       )}
-
-      <GameActions right>
-        {!hasStarted &&
-          <ButtonAnt
-            color="success"
-            className="btn-action"
-            disabled={hasStarted}
-            onClick={() => {
-              setHasStarted(true);
-            }}
-          >
-            <span className="btn-text">Empezar</span>
-            <CaretRightOutlined />
-          </ButtonAnt>
-        }
-        
-
-        {((hasStarted && secondsLeft !== null)) && (
-          <ButtonAnt
-            color="success"
-            className="btn-action"
-            disabled={!hasStarted}
-            onClick={() => setHasPaused(!hasPaused)}
-          >
-            <span className="btn-text">
-              {hasPaused ? 'Continuar' : 'Pausar'}
-            </span>
-            {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
-          </ButtonAnt>
-        )}
-      </GameActions>
-    </>
+    </InPlayContainer>
   );
 };
 
@@ -346,9 +333,10 @@ const GameHeader = styled.div`
   .btn-action {
     font-weight: bold;
     font-size: 16px;
+    padding: 0.5rem 2rem;
 
     ${mediaQuery.afterTablet} {
-      font-size: 22px;
+      font-size: 16px;
     }
   }
 `;
@@ -383,7 +371,7 @@ const GameActions = styled.div`
     font-size: 16px;
     
     ${mediaQuery.afterTablet} {
-      font-size: 22px;
+      font-size: 18px;
     }
   }
 `;
@@ -429,11 +417,13 @@ const HangedGameContainer = styled.div`
 
       .underscore {
         width: 100%;
+        height: 2px;
+        background: white;
       }
 
       ${mediaQuery.afterTablet} {
         font-size: 35px;
-        min-width: 58px;
+        min-width: 45px;
         line-height: 47px;
       }
     }
@@ -449,3 +439,8 @@ const HangedGameContainer = styled.div`
     }
   }
 `;
+
+const InPlayContainer = styled.div`
+  background-image: url("${(props) => `${config.storageUrl}/resources/coral-pattern-tablet.svg`}");
+`;
+
