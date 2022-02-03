@@ -30,7 +30,7 @@ export const PrivateRoutes = (props) => {
   const isValidUser = () => aclRoutes.some((userAcl) => endsWith(_path(), userAcl));
 
   useEffect(() => {
-    if (!isValidUser()) router.push("/");
+    if (!isValidUser() && typeof window !== "undefined") window.location.href = "/";
   }, [aclRoutes]);
 
   return isValidUser() ? props.children : spinLoader();

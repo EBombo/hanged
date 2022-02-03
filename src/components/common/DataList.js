@@ -82,3 +82,5 @@ export const PLAYING = "PLAYING";
 export const TIME_OUT = "TIME_OUT";
 export const HANGED = "HANGED";
 export const GUESSED = "GUESSED";
+export const SKIP_PHRASE = "SKIP_PHRASE";
+

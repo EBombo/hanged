@@ -23,11 +23,11 @@ export const Lobby = (props) => {
   const logout = async () => {
     await setAuthUser({ id: firestore.collection("users").doc().id });
     setAuthUserLs(null);
-    router.push("/");
+    if (typeof window !== "undefined") window.location.href = "/";
   };
 
   useEffect(() => {
-    if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
+    if (!authUser?.nickname && !authUser.isAdmin && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
   useEffect(() => {
