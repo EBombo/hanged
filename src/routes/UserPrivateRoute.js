@@ -1,14 +1,11 @@
 import React, { useEffect, useGlobal } from "reactn";
-import { useRouter } from "next/router";
 import { spinLoader } from "../components/common/loader";
 
 export const UserPrivateRoute = (props) => {
   const [authUser] = useGlobal("user");
 
-  const router = useRouter();
-
   useEffect(() => {
-    if (!authUser) router.push("/");
+    if (!authUser && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
   return authUser ? props.children : spinLoader();

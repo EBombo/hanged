@@ -44,22 +44,23 @@ const MyApp = ({ Component, pageProps }) => {
         />
         <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-72x72.png`} />
         <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`} />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"
-          href={`${config.storageUrl}/resources/icons/icon-512x512.png`}
+          href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`}
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="114x114"
-          href={`${config.storageUrl}/resources/icons/icon-512x512.png`}
+          href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`}
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="72x72"
-          href={`${config.storageUrl}/resources/icons/icon-512x512.png`}
+          href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`}
         />
-        <link rel="apple-touch-icon-precomposed" href={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
+        <link rel="apple-touch-icon-precomposed" href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`} />
         <meta property="og:image" content={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
         <link rel="manifest" href={`${config.serverUrl}/api/manifest`} />
         <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet" />

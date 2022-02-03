@@ -149,6 +149,7 @@ const UserLayoutCss = styled.div`
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
   height: 50px;
+  position: relative;
   z-index: 2;
 
   .title {

@@ -45,8 +45,8 @@ const AlphabetContainer = styled.div`
     font-style: normal;
 
     ${mediaQuery.afterTablet} {
-      font-size: 35px;
-      min-width: 67px;
+      font-size: 22px;
+      min-width: 40px;
     }
   }
 `;
