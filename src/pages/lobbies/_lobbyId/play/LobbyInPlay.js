@@ -14,7 +14,7 @@ import { GameSettings } from "./GameSettings";
 import { GuessPhrase } from "./GuessPhrase";
 import { useInterval } from "../../../../hooks/useInterval";
 import { PauseOutlined, CaretRightOutlined, FastForwardOutlined } from "@ant-design/icons";
-import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE } from "../../../../components/common/DataList";
+import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE, tildes } from "../../../../components/common/DataList";
 
 const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter((limb) => limb === "hidden").length;
 
@@ -99,6 +99,20 @@ export const LobbyInPlay = (props) => {
     return { ...props.lobby.hangedMan, [limbsOrder[indexLimb]]: "active" };
   };
 
+  const hasMatch = (phrase, letter_) =>  {
+    const letter = letter_.toUpperCase();
+    const tildeChar = tildes[letter]?.toUpperCase();
+
+    const isMatch = phrase.toUpperCase().includes(letter);
+    if (isMatch) return [tildeChar
+      ? [letter, tildeChar]
+      : [letter], true];
+
+    return tildeChar
+      ? [[letter, tildeChar], phrase.toUpperCase().includes(tildeChar)]
+      : [[letter], false];
+  }
+
   const onNewLetterPressed = (letter) => {
     if (!hasStarted) setHasStarted(true);
 
@@ -113,7 +127,7 @@ export const LobbyInPlay = (props) => {
 
     if (getLivesLeft(props.lobby.hangedMan) === 0) return;
 
-    const isMatched = props.lobby.settings.phrases[props.lobby.currentPhraseIndex].toUpperCase().includes(letter);
+    const [ lettersMatched, isMatched ] = hasMatch(props.lobby.settings.phrases[props.lobby.currentPhraseIndex], letter);
 
     let hangedMan = props.lobby.hangedMan;
     let state = props.lobby.state;
@@ -122,7 +136,7 @@ export const LobbyInPlay = (props) => {
     if (
       isMatched &&
       phraseIsGuessed(
-        [...Object.keys(props.lobby.lettersPressed), letter],
+        [...Object.keys(props.lobby.lettersPressed), ...lettersMatched],
         props.lobby.settings.phrases[props.lobby.currentPhraseIndex].toUpperCase().replace(/ /g, "")
       )
     )
@@ -132,13 +146,17 @@ export const LobbyInPlay = (props) => {
 
     if (getLivesLeft(hangedMan) === 0) state = HANGED;
 
+    const letterPressedUpdate = lettersMatched.reduce(
+      (acc, char) => ({ [char]: isMatched ? "matched" : "unmatched" , ...acc }),
+      {});
+
     setLobby({
       ...props.lobby,
       state,
       hangedMan,
       lettersPressed: {
         ...props.lobby.lettersPressed,
-        [letter]: isMatched ? "matched" : "unmatched",
+        ...letterPressedUpdate,
       },
     });
   };
