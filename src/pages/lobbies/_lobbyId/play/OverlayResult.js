@@ -66,6 +66,8 @@ const OverlayResultContainer = styled.div`
 
     .label {
       margin-bottom: 56px;
+      line-height: 1.4;
+
       &.success {
         color: ${(props) => props.theme.basic.success};
       }

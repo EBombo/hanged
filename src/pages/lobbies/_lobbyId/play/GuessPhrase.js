@@ -7,9 +7,9 @@ export const GuessPhrase = (props) => {
   const words = props.phrase?.split(" ") ?? [];
 
   return (
-  <GuessPhraseStyled className="max-w-[900px] mx-auto relative">
+  <GuessPhraseStyled className="max-w-[1200px] mx-auto relative">
     {words.map((word, i) => (
-      <div key={`word-${i}`} className="inline-block mx-3">
+      <div key={`word-${i}`} className="inline-block mx-3 xl:whitespace-nowrap">
         {word.split("").map((letter, i) =>
           letter === " "
           ? (<span key={`ws-${i}`} className="whitespace">&nbsp;</span>)

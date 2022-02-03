@@ -84,3 +84,17 @@ export const HANGED = "HANGED";
 export const GUESSED = "GUESSED";
 export const SKIP_PHRASE = "SKIP_PHRASE";
 
+
+export const tildes = {
+  'a': 'á',
+  'e': 'é',
+  'i': 'í',
+  'o': 'ó',
+  'u': 'ú',
+  'A': 'Á',
+  'E': 'É',
+  'I': 'Í',
+  'O': 'Ó',
+  'U': 'Ú',
+};
+
