@@ -15,7 +15,7 @@ export const LobbyAdmin = (props) => {
   const { lobbyId } = router.query;
   const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
-  const [volume, setVolume] = useState(30);
+  const [volume, setVolume] = useState(20);
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
@@ -119,7 +119,7 @@ export const LobbyAdmin = (props) => {
             content={
               <SliderContent>
                 <Slider
-                  defaultValue={30}
+                  defaultValue={20}
                   value={volume}
                   onChange={(value) => {
                     if (!props.audioRef.current) return;
@@ -139,8 +139,8 @@ export const LobbyAdmin = (props) => {
                 if (!props.audioRef.current) return;
 
                 if (props.audioRef.current.volume === 0) {
-                  props.audioRef.current.volume = 0.3;
-                  setVolume(30);
+                  props.audioRef.current.volume = 0.2;
+                  setVolume(20);
 
                   return setIsMuted(false);
                 }
