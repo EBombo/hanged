@@ -98,3 +98,13 @@ export const tildes = {
   'U': 'Ú',
 };
 
+
+export const skippedWords = ";:!¡?¿ ";
+
+export const MAX_PHRASE_LENGTH = 50;
+
+export const allowedLetters = new RegExp("^[a-zA-ZñÑáéíóúÁÉÍÓÚ, ¿?!¡:;]*$");
+
+export const bannedLetters = new RegExp("[^a-zA-ZñÑáéíóúÁÉÍÓÚ, ¿?!¡:;]", "g");
+ 
+

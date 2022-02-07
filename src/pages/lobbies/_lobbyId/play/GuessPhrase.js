@@ -1,6 +1,7 @@
 import React from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
+import { skippedWords } from "../../../../components/common/DataList";
 
 export const GuessPhrase = (props) => {
 
@@ -11,9 +12,7 @@ export const GuessPhrase = (props) => {
     {words.map((word, i) => (
       <div key={`word-${i}`} className="inline-block mx-3 xl:whitespace-nowrap">
         {word.split("").map((letter, i) =>
-          letter === " "
-          ? (<span key={`ws-${i}`} className="whitespace">&nbsp;</span>)
-          : letter === ","
+           skippedWords.includes(letter)
           ? (<span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-7xl whitespace">{ letter }</span>)
           : (<div key={`letter-${i}`} className="letter">
               <div className="character">
