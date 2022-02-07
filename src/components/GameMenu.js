@@ -1,17 +1,35 @@
-import React, { useState } from "reactn";
+import React, { useState, useEffect } from "reactn";
 import styled from "styled-components";
 import { Collapse } from "antd";
 import { ButtonAnt, Input, Select } from "./form";
 import { mediaQuery } from "../constants";
-import { secondsPerRoundOptions } from "./common/DataList";
+import { MAX_PHRASE_LENGTH, secondsPerRoundOptions, bannedLetters, allowedLetters } from "./common/DataList";
 import { config } from "../firebase";
 import { Image } from "./common/Image";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 
 const showLanguageOption = false;
 const { Panel } = Collapse;
 
 export const GameMenu = (props) => {
   const [phrases, setPhrases] = useState([...props.settings.phrases, ""]);
+
+  const validationSchema = yup.object().shape({
+      phrase: yup.array().of(
+          yup.string()
+            .matches(allowedLetters, "Only letters, signs ?¿!¡, whitespace ( ) and comma (,) are allowed for this field ")
+      )
+  });
+
+  const { register, errors, handleSubmit } = useForm({
+    validationSchema: validationSchema,
+    reValidateMode: "onBlur",
+  });
+
+  const updateGame = () => {
+    props.onUpdateGame?.(phrases);
+  };
 
   return (
     <GameCss>
@@ -81,92 +99,109 @@ export const GameMenu = (props) => {
               </div>
               <div className="option with-custom-input">
                 <div>
-                  <div className="title-opt">Frases o palabras (Máx. 50 caractéres)</div>
+                  <div className="title-opt">Frases o palabras (Máx. 50 caractéres). Solo se aceptan letras, signos de interrogación y exclamación (¿?¡!), espacio y comma (,).</div>
                 </div>
 
                 <hr className="divider" />
 
                 <div className="phrases-container">
-                  {phrases.map((phrase, index) => (
-                    <div className="input-container" key={`input-phrase-${index}`}>
-                      <Input
-                        onKeyPress={(event) => {
-                          const regex = new RegExp("^[a-zA-Z, ]+$");
-                          const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                          if (!regex.test(key)) {
-                            event.preventDefault();
-                            return false;
-                          }
-                        }}
-                        type="text"
-                        maxLength={50}
-                        defaultValue={phrase}
-                        className="input-phrase"
-                        placeholder="Insertar nueva frase/palabra"
-                        onBlur={(e) => {
-                          let newPhrase = phrases;
-                          newPhrase[index] = e.target.value;
-                          setPhrases([...newPhrase]);
-                        }}
-                      />
-                      <button
-                        className="btn-delete"
-                        onClick={() => {
-                          let newPhrases = phrases.filter((phrase, idx) => idx !== index);
+                  <form action="" onSubmit={handleSubmit(updateGame)}>
+                    {phrases.map((phrase, index) => (
+                      <div className="input-container" key={`input-phrase-${index}`}>
+                        <Input
+                          ref={register}
+                          name={`phrase[${index}]`}
+                          onKeyPress={(event) => {
+                            const regex = allowedLetters;
+                            const key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                            if (!regex.test(key)) {
+                              event.preventDefault();
+                              return false;
+                            }
+                          }}
+                          onPaste={(ev) => {
+                            const pasteText = ev.clipboardData.getData("text")
 
-                          setPhrases([...newPhrases]);
-                        }}
-                      >
-                        <Image
-                          src={`${config.storageUrl}/resources/close.svg`}
-                          height="15px"
-                          width="15px"
-                          cursor="pointer"
-                          size="contain"
-                          margin="0"
+                            if (phrase.length + pasteText.length > MAX_PHRASE_LENGTH) return;
+
+                            const newPhrase = `${phrase}${pasteText}`.replaceAll(bannedLetters, '');
+
+                            ev.target.value = newPhrase;
+
+                            ev.preventDefault();
+                          }}
+                          type="text"
+                          maxLength={MAX_PHRASE_LENGTH}
+                          defaultValue={phrase}
+                          error={errors?.phrase?.[index]}
+                          className="input-phrase"
+                          placeholder="Insertar nueva frase/palabra"
+                          onBlur={(e) => {
+                            let newPhrase = phrases;
+                            newPhrase[index] = e.target.value;
+                            setPhrases([...newPhrase]);
+                          }}
                         />
-                      </button>
+                        <button
+                          className="btn-delete"
+                          onClick={() => {
+                            let newPhrases = phrases.filter((phrase, idx) => idx !== index);
+
+                            setPhrases([...newPhrases]);
+                          }}
+                        >
+                          <Image
+                            src={`${config.storageUrl}/resources/close.svg`}
+                            height="15px"
+                            width="15px"
+                            cursor="pointer"
+                            size="contain"
+                            margin="0"
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  
+                    <div className="btn-container">
+                      <ButtonAnt
+                        onClick={() => setPhrases([...phrases, ""])}
+                        className="btn btn-bold"
+                        color="secondary"
+                        margin="auto"
+                        loading={props.isLoadingSave}
+                        disabled={props.isLoadingSave}
+                      >
+                        Agregar
+                      </ButtonAnt>
+
+                      {!props.showChooseGameMode && (
+                        <>
+                          <ButtonAnt
+                            className="btn btn-bold"
+                            color="danger"
+                            margin="auto"
+                            loading={props.isLoadingSave}
+                            disabled={props.isLoadingSave}
+                            onClick={() => props.setGameMenuEnabled(false)}
+                          >
+                            Cancelar
+                          </ButtonAnt>
+
+                          {/* onClick={() => props.onUpdateGame?.(phrases)} */}
+                          <ButtonAnt
+                            className="btn success btn-bold"
+                            color="success"
+                            margin="auto"
+                            loading={props.isLoadingSave}
+                            disabled={props.isLoadingSave}
+                            htmlType="submit"
+                          >
+                            Guardar
+                          </ButtonAnt>
+                        </>
+                      )}
                     </div>
-                  ))}
-
-                  <div className="btn-container">
-                    <ButtonAnt
-                      onClick={() => setPhrases([...phrases, ""])}
-                      className="btn btn-bold"
-                      color="secondary"
-                      margin="auto"
-                      loading={props.isLoadingSave}
-                      disabled={props.isLoadingSave}
-                    >
-                      Agregar
-                    </ButtonAnt>
-
-                    {!props.showChooseGameMode && (
-                      <>
-                        <ButtonAnt
-                          className="btn btn-bold"
-                          color="danger"
-                          margin="auto"
-                          loading={props.isLoadingSave}
-                          disabled={props.isLoadingSave}
-                          onClick={() => props.setGameMenuEnabled(false)}
-                        >
-                          Cancelar
-                        </ButtonAnt>
-
-                        <ButtonAnt
-                          className="btn success btn-bold"
-                          color="success"
-                          margin="auto"
-                          loading={props.isLoadingSave}
-                          disabled={props.isLoadingSave}
-                          onClick={() => props.onUpdateGame?.(phrases)}
-                        >
-                          Guardar
-                        </ButtonAnt>
-                      </>
-                    )}
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
