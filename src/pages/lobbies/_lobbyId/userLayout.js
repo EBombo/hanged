@@ -11,7 +11,7 @@ export const UserLayout = (props) => {
 
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(30);
+  const [volume, setVolume] = useState(20);
 
   useEffect(() => {
     if (!audios?.length) return;
@@ -75,7 +75,7 @@ export const UserLayout = (props) => {
                 <SliderContent>
                   <Slider
                     value={volume}
-                    defaultValue={30}
+                    defaultValue={20}
                     onChange={(value) => {
                       if (!props.audioRef.current) return;
 
@@ -93,8 +93,8 @@ export const UserLayout = (props) => {
                   if (!props.audioRef.current) return;
 
                   if (props.audioRef.current.volume === 0) {
-                    props.audioRef.current.volume = 30 / 100;
-                    setVolume(30);
+                    props.audioRef.current.volume = 20 / 100;
+                    setVolume(20);
 
                     return setIsMuted(false);
                   }
