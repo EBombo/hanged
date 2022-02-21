@@ -1,14 +1,38 @@
 {
   "hosting": {
-    "public": "public",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "hanged",
+          "region": "us-central1"
+        }
+      }
+    ],
     "headers": [
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
       {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|ico)",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=2592000"
+            "value": "public, max-age=31536001"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
           }
         ]
       },
@@ -17,7 +41,11 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=2592000"
+            "value": "public, max-age=31536001"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
           }
         ]
       },
@@ -26,13 +54,21 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=2592000"
+            "value": "public, max-age=31536001"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
           }
         ]
       },
       {
         "source": "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
         "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536001"
+          },
           {
             "key": "Access-Control-Allow-Origin",
             "value": "*"
