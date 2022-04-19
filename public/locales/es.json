@@ -1,0 +1,28 @@
+{
+  "es": "Español",
+  "en": "Ingles",
+  "language": "Idioma",
+  "ingress": "Ingresar",
+  "ingress-button-label": "Ingresar",
+  "ok-button-label": "Ok",
+  "pages": {
+    "register": {
+      "title": "Regístrate",
+      "register-button-label": "Registrar"
+    },
+    "login": {
+      "email-step": {
+        "subtitle": "Añadir identificación del jugador",
+        "description": "El anfitrión del juego ha pedido que coloques tu mail cómo una medida de identificación para entrar al juego"
+        "placeholder-email-input": "Ingresa tu email"
+      },
+      "modal-container-title": "Identificación del jugador grabada",
+      "modal-container-description": "La próxima vez que juegues no va ha ser necesario que coloques tu identificación de jugador otra vez, asi que puedes ingresar rápidamente. Lo puedes cambiar en ajustes en cualquier momento.",
+      "nickname-step-input-placeholder": "Apodo",
+      "already-registered-nikname-error-message": "El nickname ya se encuentra registrado",
+      "pin-step-input-placeholder": "Pin del juego",
+      "verify-nickname-title": "Verificando tu apodo..."
+    }
+  }
+}
+

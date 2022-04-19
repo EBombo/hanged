@@ -3,9 +3,13 @@ import styled from "styled-components";
 import { ModalContainer } from "../../components/common/ModalContainer";
 import { darkTheme } from "../../theme";
 import { ButtonLobby } from "../../components/form";
+import { useTranslation } from "../../hooks/useTranslation";
 
-export const ModalVerification = (props) => (
-  <ModalContainer
+export const ModalVerification = (props) => { 
+
+  const { t } = useTranslation();
+
+  return (<ModalContainer
     footer={null}
     closable={false}
     visible={props.isVisibleModalVerification}
@@ -15,17 +19,14 @@ export const ModalVerification = (props) => (
     onCancel={() => props.setIsVisibleModalVerification(props.email)}
   >
     <ContentModal>
-      <div className="title">Identificación del jugador grabada</div>
-      <div className="description">
-        La próxima vez que juegues no va ha ser necesario que coloques tu identificación de jugador otra vez, asi que
-        puedes ingresar rápidamente. Lo puedes cambiar en ajustes en cualquier momento.
-      </div>
+      <div className="title">{t("pages.login.modal-container-title")}</div>
+      <div className="description">{t("pages.login.modal-container-description")}</div>
       <ButtonLobby variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
-        Ok
+        {t("ok-button-label")}
       </ButtonLobby>
     </ContentModal>
   </ModalContainer>
-);
+)};
 
 const ContentModal = styled.div`
   .title {

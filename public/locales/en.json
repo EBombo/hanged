@@ -1,0 +1,28 @@
+{
+  "en": "English",
+  "es": "Spanish",
+  "language": "Language",
+  "ingress": "Continue",
+  "ingress-button-label": "Continue",
+  "ok-button-label": "Ok",
+  "pages": {
+    "register": {
+      "title": "Sign up",
+      "register-button-label": "Register"
+    },
+    "login": {
+      "email-step": {
+        "subtitle": "Add player identification",
+        "description": "El anfitrión del juego ha pedido que coloques tu mail cómo una medida de identificación para entrar al juego",
+        "placeholder-email-input": "Fill in your email"
+      },
+      "modal-container-title": "Identificación del jugador grabada",
+      "modal-container-description": "",
+      "nickname-step-input-placeholder": "Nickname",
+      "already-registered-nikname-error-message": "nickname already registered",
+      "pin-step-input-placeholder": "Pin of the game",
+      "verify-nickname-title": "Verifying your nickname"
+    }
+  }
+}
+
