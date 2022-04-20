@@ -8,11 +8,14 @@ import { config } from "../firebase";
 import { Image } from "./common/Image";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "../hooks/useTranslation";
 
 const showLanguageOption = false;
 const { Panel } = Collapse;
 
 export const GameMenu = (props) => {
+  const { t } = useTranslation();
+
   const [phrases, setPhrases] = useState([...props.settings.phrases, ""]);
 
   const validationSchema = yup.object().shape({
@@ -39,8 +42,8 @@ export const GameMenu = (props) => {
         {props.showChooseGameMode && (
           <div className="container-game">
             <div className="item">
-              <div>Versión Simple</div>
-              <div>La manera sencilla</div>
+              <div>{t("pages.lobby.game-settings.simple-game-mode-label")}</div>
+              <div>{t("pages.lobby.game-settings.simple-game-mode-description")}</div>
               <ButtonAnt
                 className="btn-bold"
                 color="success"
@@ -49,7 +52,7 @@ export const GameMenu = (props) => {
                 disabled={props.isLoadingSave}
                 onClick={() => props.createLobby("individual", phrases)}
               >
-                Jugar
+                {t("pages.lobby.game-settings.play-button-label")}
               </ButtonAnt>
             </div>
           </div>
@@ -61,7 +64,7 @@ export const GameMenu = (props) => {
               {showLanguageOption && (
                 <div className="option with-select">
                   <div>
-                    <div className="title-opt">Idioma</div>
+                    <div className="title-opt">{t("language")}</div>
                   </div>
                   <Select />
                 </div>
@@ -69,7 +72,7 @@ export const GameMenu = (props) => {
 
               <div className="option with-select">
                 <div>
-                  <div className="title-opt">Música en el Lobby</div>
+                  <div className="title-opt">{t("pages.lobby.game-settings.lobby-music-title")} </div>
                 </div>
                 <Select
                   defaultValue={props.game?.audio?.id ?? props.audios[0]?.id}
@@ -84,7 +87,7 @@ export const GameMenu = (props) => {
               </div>
               <div className="option with-select">
                 <div>
-                  <div className="title-opt">Segundos por ronda</div>
+                  <div className="title-opt">{t("pages.lobby.game-settings.seconds-per-round-option-label")}</div>
                 </div>
                 <Select
                   defaultValue={props.settings?.secondsPerRound ?? secondsPerRoundOptions[0]}
@@ -92,14 +95,14 @@ export const GameMenu = (props) => {
                   optionsdom={secondsPerRoundOptions.map((second) => ({
                     key: second,
                     code: second,
-                    name: second ?? "Sin tiempo",
+                    name: second ?? t("pages.lobby.game-settings.no-time"),
                   }))}
                   onChange={(value) => props.onSecondsPerRoundChange?.(value)}
                 />
               </div>
               <div className="option with-custom-input">
                 <div>
-                  <div className="title-opt">Frases o palabras (Máx. 50 caractéres). Solo se aceptan letras, signos de interrogación y exclamación (¿?¡!), espacio y comma (,).</div>
+                  <div className="title-opt">{t("pages.lobby.game-settings.phrases-descriptions")}</div>
                 </div>
 
                 <hr className="divider" />
@@ -135,7 +138,7 @@ export const GameMenu = (props) => {
                           defaultValue={phrase}
                           error={errors?.phrase?.[index]}
                           className="input-phrase"
-                          placeholder="Insertar nueva frase/palabra"
+                          placeholder={t("pages.lobby.game-settings.new-phrase-placeholder")}
                           onBlur={(e) => {
                             let newPhrase = phrases;
                             newPhrase[index] = e.target.value;
@@ -171,7 +174,7 @@ export const GameMenu = (props) => {
                         loading={props.isLoadingSave}
                         disabled={props.isLoadingSave}
                       >
-                        Agregar
+                        {t("pages.lobby.game-settings.add-button-label")}
                       </ButtonAnt>
 
                       {!props.showChooseGameMode && (
@@ -184,7 +187,7 @@ export const GameMenu = (props) => {
                             disabled={props.isLoadingSave}
                             onClick={() => props.setGameMenuEnabled(false)}
                           >
-                            Cancelar
+                            {t("pages.lobby.game-settings.cancel-button-label")}
                           </ButtonAnt>
 
                           {/* onClick={() => props.onUpdateGame?.(phrases)} */}
@@ -196,7 +199,7 @@ export const GameMenu = (props) => {
                             disabled={props.isLoadingSave}
                             htmlType="submit"
                           >
-                            Guardar
+                            {t("pages.lobby.game-settings.save-button-label")}
                           </ButtonAnt>
                         </>
                       )}

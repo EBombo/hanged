@@ -5,6 +5,7 @@
   "ingress": "Ingresar",
   "ingress-button-label": "Ingresar",
   "ok-button-label": "Ok",
+  "next-button-label": "Siguiente",
   "pages": {
     "register": {
       "title": "Regístrate",
@@ -22,6 +23,45 @@
       "already-registered-nikname-error-message": "El nickname ya se encuentra registrado",
       "pin-step-input-placeholder": "Pin del juego",
       "verify-nickname-title": "Verificando tu apodo..."
+    },
+    "lobby": {
+      "closed": {
+        "assistants": "asistentes",
+        "play-again-label": "¿Se divirtieron?",
+        "play-again-button-label": "Jugar de nuevo",
+        "messages-label": "mensajes",
+        "see-full-report-button-label": "Ver reporte completo",
+        "go-back-button-label": "Volver al inicio",
+        "go-back-to-podium-button-label": "Volver al podio",
+        "see-all-positions-label": "Ver todas las posiciones"
+      },
+      "game-settings": {
+        "play-button-label": "Jugar",
+        "simple-game-mode-label": "Versión Simple",
+        "simple-game-mode-description": "La manera sencilla",
+        "lobby-music-title": "Música en el Lobby",
+        "seconds-per-round-option-label": "Segundos por ronda",
+        "no-time": "Sin tiempo",
+        "phrases-descriptions": "Frases o palabras (Máx. 50 caractéres). Solo se aceptan letras, signos de interrogación y exclamación (¿?¡!), espacio y comma (,).",
+        "add-button-label": "Agregar",
+        "cancel-button-label": "Cancelar",
+        "save-button-label": "Guardar",
+        "new-phrase-placeholder": "Insertar nueva frase/palabra"
+      },
+      "loading": {
+        "get-into-ebombo": "Entra a www.ebombo.io"
+      },
+      "in-play": {
+        "edit-game": "Editar juego",
+        "jump-phrase": "Saltar turno",
+        "finish-game": "Finalizar juego",
+        "jump-phrase-message": "¡Salto de turno!",
+        "game-is-over": "¡Se acabó el juego!",
+        "play-again-button-label": "Jugar de nuevo",
+        "word-was": "La palabra era",
+        "next-button-label": "Siguiente",
+        "seconds": "segundos",
+      }
     }
   }
 }

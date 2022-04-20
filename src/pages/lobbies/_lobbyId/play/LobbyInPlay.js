@@ -10,6 +10,7 @@ import { Timer } from "./Timer";
 import { Alphabet } from "./Alphabet";
 import { OverlayResult } from "./OverlayResult";
 import { ButtonAnt } from "../../../../components/form";
+import { useTranslation } from "../../../../hooks/useTranslation";
 import { GameSettings } from "./GameSettings";
 import { GuessPhrase } from "./GuessPhrase";
 import { useInterval } from "../../../../hooks/useInterval";
@@ -21,6 +22,8 @@ const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter((limb) => li
 const phraseIsGuessed = (letters, phrase) => every(phrase, (letter) => includes(letters, letter));
 
 export const LobbyInPlay = (props) => {
+  const { t } = useTranslation();
+
   const [authUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(props.lobby);
@@ -222,7 +225,7 @@ export const LobbyInPlay = (props) => {
       <div className="min-h-[calc(100vh-100px)] screen flex flex-col justify-evenly">
         <GameHeader>
           <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
-            Editar juego
+            {t("pages.lobby.in-game.edit-game")}
           </ButtonAnt>
 
           <div className="timer-container inline-flex items-center">
@@ -257,7 +260,7 @@ export const LobbyInPlay = (props) => {
                   onClick={() => skipPhrase()}
                   disabled={isLastRound}
                 >
-                  <span className="btn-text">Saltar turno</span>
+                  <span className="btn-text">{t("pages.lobby.in-game.jump-phrase")}</span>
                   <FastForwardOutlined />
                 </ButtonAnt>)
             : (<ButtonAnt
@@ -265,7 +268,7 @@ export const LobbyInPlay = (props) => {
                   className="btn-action"
                   onClick={() => skipPhrase()}
                 >
-                  <span className="btn-text">Finalizar juego</span>
+                  <span className="btn-text">{t("pages.lobby.in-game.finish-game")}</span>
                   <FastForwardOutlined />
                 </ButtonAnt>)
           }

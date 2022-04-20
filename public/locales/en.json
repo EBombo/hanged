@@ -5,6 +5,7 @@
   "ingress": "Continue",
   "ingress-button-label": "Continue",
   "ok-button-label": "Ok",
+  "next-button-label": "Next",
   "pages": {
     "register": {
       "title": "Sign up",
@@ -22,6 +23,45 @@
       "already-registered-nikname-error-message": "nickname already registered",
       "pin-step-input-placeholder": "Pin of the game",
       "verify-nickname-title": "Verifying your nickname"
+    },
+    "lobby": {
+      "closed": {
+        "assistants": "assistants",
+        "play-again-label": "Had you all have fun?",
+        "play-again-button-label": "Play again",
+        "messages-label": "messages",
+        "see-full-report-button-label": "See full report",
+        "go-back-button-label": "Go back",
+        "go-back-to-podium-button-label": "Go back to podium",
+        "see-all-positions-label": "See all positions"
+      },
+      "game-settings": {
+        "play-button-label": "Play",
+        "simple-game-mode-label": "Simple version",
+        "simple-game-mode-description": "The seamless way",
+        "lobby-music-title": "Music on the Lobby",
+        "seconds-per-round-option-label": "Seconds per round",
+        "no-time": "No time",
+        "phrases-descriptions": "Phrases or words (Max. 50 characters). Letters, symbols (?!), white-space and comma are only allowed.",
+        "add-button-label": "Agregar",
+        "cancel-button-label": "Cancel",
+        "save-button-label": "Save",
+        "new-phrase-placeholder": "Insert new phrase/word"
+      },
+      "loading": {
+        "get-into-ebombo": "Visit www.ebombo.io"
+      },
+      "in-play": {
+        "edit-game": "Edit game"
+        "jump-phrase": "Skip phrase",
+        "finish-game": "Finish game",
+        "jump-phrase-message": "Skip phrase!",
+        "game-is-over": "Game is over!",
+        "play-again-button-label": "Play again",
+        "word-was": "The word was",
+        "next-button-label": "Next",
+        "seconds": "seconds",
+      }
     }
   }
 }

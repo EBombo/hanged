@@ -5,8 +5,11 @@ import React, { useEffect, useGlobal } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 import { animatedBackground } from "../../../theme";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 export const LobbyLoading = (props) => {
+  const { t } = useTranslation();
+
   const [authUser] = useGlobal("user");
 
   useEffect(() => {
@@ -37,7 +40,7 @@ export const LobbyLoading = (props) => {
               margin="0 auto"
               className="step-one-logo"
             />
-            <div className="step-one-description">Entra a www.ebombo.io</div>
+            <div className="step-one-description">{t("pages.lobby.loading.get-into-ebombo")}</div>
           </div>
           <div className="step-two">
             <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
