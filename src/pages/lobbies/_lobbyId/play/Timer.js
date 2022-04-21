@@ -5,7 +5,6 @@ import { Image } from "../../../../components/common/Image";
 import { useTranslation } from "../../../../hooks/useTranslation";
 
 export const Timer = (props) => {
-
   const { t } = useTranslation();
 
   return (
@@ -13,9 +12,12 @@ export const Timer = (props) => {
       <div className="timer">
         <Image src={`${config.storageUrl}/resources/timer.png`} Desktopwidth="56px" width="36px" />
       </div>
-      <div className="label">{props.isRoundOver ? props.roundOverMessage : `${props.secondsLeft} ${t("pages.lobby.in-game.seconds")}`}</div>
+      <div className="label">
+        {props.isRoundOver ? props.roundOverMessage : `${props.secondsLeft} ${t("pages.lobby.in-game.seconds")}`}
+      </div>
     </TimerContainer>
-)};
+  );
+};
 
 const TimerContainer = styled.div`
   font-family: Lato;

@@ -5,28 +5,29 @@ import { darkTheme } from "../../theme";
 import { ButtonLobby } from "../../components/form";
 import { useTranslation } from "../../hooks/useTranslation";
 
-export const ModalVerification = (props) => { 
-
+export const ModalVerification = (props) => {
   const { t } = useTranslation();
 
-  return (<ModalContainer
-    footer={null}
-    closable={false}
-    visible={props.isVisibleModalVerification}
-    padding={"1rem"}
-    topDesktop="20%"
-    background={darkTheme.basic.whiteLight}
-    onCancel={() => props.setIsVisibleModalVerification(props.email)}
-  >
-    <ContentModal>
-      <div className="title">{t("pages.login.modal-container-title")}</div>
-      <div className="description">{t("pages.login.modal-container-description")}</div>
-      <ButtonLobby variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
-        {t("ok-button-label")}
-      </ButtonLobby>
-    </ContentModal>
-  </ModalContainer>
-)};
+  return (
+    <ModalContainer
+      footer={null}
+      closable={false}
+      visible={props.isVisibleModalVerification}
+      padding={"1rem"}
+      topDesktop="20%"
+      background={darkTheme.basic.whiteLight}
+      onCancel={() => props.setIsVisibleModalVerification(props.email)}
+    >
+      <ContentModal>
+        <div className="title">{t("pages.login.modal-container-title")}</div>
+        <div className="description">{t("pages.login.modal-container-description")}</div>
+        <ButtonLobby variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
+          {t("ok-button-label")}
+        </ButtonLobby>
+      </ContentModal>
+    </ModalContainer>
+  );
+};
 
 const ContentModal = styled.div`
   .title {

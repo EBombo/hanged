@@ -20,7 +20,6 @@ export const PinStep = (props) => {
 
   const [avatarIdx, setAvatarIdx] = useState(0);
 
-
   const validationSchema = object().shape({
     pin: string().required().min(6),
   });

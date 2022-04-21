@@ -51,7 +51,7 @@ export const Register = (props) => {
 
   return (
     <RegisterContainer>
-      <div className="title">{t('pages.register.title')}</div>
+      <div className="title">{t("pages.register.title")}</div>
       <form onSubmit={handleSubmit(signUp)} autoComplete="off" noValidate>
         <Input
           error={errors.name}
@@ -131,7 +131,7 @@ export const Register = (props) => {
           htmlType="submit"
           width="100%"
         >
-          {t('pages.register.register-button-label')}
+          {t("pages.register.register-button-label")}
         </ButtonAnt>
       </form>
       <Divider>o</Divider>

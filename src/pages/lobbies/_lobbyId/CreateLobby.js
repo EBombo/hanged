@@ -70,7 +70,7 @@ export const CreateLobby = (props) => {
 
         if (!game.usersIds.includes(formatUser.id) && typeof window !== "undefined") {
           window.location.href = "/";
-        };
+        }
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);

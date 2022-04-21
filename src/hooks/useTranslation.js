@@ -46,4 +46,3 @@ export const useTranslation = (path) => {
 // https://betterprogramming.pub/build-your-own-usetranslation-hook-with-next-js-2c65017d323a
 // https://nextjs.org/docs/advanced-features/i18n-routing#limits-for-the-i18n-config
 // https://github.com/a-chris/use-translation-example
-

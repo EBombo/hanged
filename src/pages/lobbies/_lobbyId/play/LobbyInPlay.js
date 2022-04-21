@@ -15,7 +15,16 @@ import { GameSettings } from "./GameSettings";
 import { GuessPhrase } from "./GuessPhrase";
 import { useInterval } from "../../../../hooks/useInterval";
 import { PauseOutlined, CaretRightOutlined, FastForwardOutlined } from "@ant-design/icons";
-import { defaultHandMan, GUESSED, HANGED, limbsOrder, PLAYING, TIME_OUT, SKIP_PHRASE, tildes } from "../../../../components/common/DataList";
+import {
+  defaultHandMan,
+  GUESSED,
+  HANGED,
+  limbsOrder,
+  PLAYING,
+  TIME_OUT,
+  SKIP_PHRASE,
+  tildes,
+} from "../../../../components/common/DataList";
 
 const getLivesLeft = (hangedMan) => Object.values(hangedMan).filter((limb) => limb === "hidden").length;
 
@@ -36,20 +45,20 @@ export const LobbyInPlay = (props) => {
 
   const [secondsLeft, setSecondsLeft] = useState(props.lobby.secondsLeft ?? props.lobby.settings.secondsPerRound);
 
-  const [alertText, setAlertText] = useState('');
+  const [alertText, setAlertText] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const isLastRound = useMemo(() => lobby?.currentPhraseIndex + 1 === lobby?.settings.phrases.length, [lobby]);
 
   const isFirstGame = useMemo(() => lobby.currentPhraseIndex === 0, [lobby]);
 
-  const isGameOver = useMemo(() => isLastRound && lobby?.state !== PLAYING, [lobby]) ;
+  const isGameOver = useMemo(() => isLastRound && lobby?.state !== PLAYING, [lobby]);
 
   useEffect(() => {
     if (hasStarted && !props.lobby.hasStarted) {
-      setSecondsLeft(props.lobby.settings.secondsPerRound)
-      setLobby({...lobby, hasStarted: true, startAt: new Date()})
-    };
+      setSecondsLeft(props.lobby.settings.secondsPerRound);
+      setLobby({ ...lobby, hasStarted: true, startAt: new Date() });
+    }
   }, [hasStarted]);
 
   useEffect(() => {
@@ -78,7 +87,7 @@ export const LobbyInPlay = (props) => {
   }, [hasStarted, lobby]);
 
   useEffect(() => {
-    setLobby({...lobby, secondsLeft: (secondsLeft)});
+    setLobby({ ...lobby, secondsLeft: secondsLeft });
   }, [secondsLeft]);
 
   // TODO: Consider move timer into Timer component. interval re-runs this component.
@@ -102,19 +111,15 @@ export const LobbyInPlay = (props) => {
     return { ...props.lobby.hangedMan, [limbsOrder[indexLimb]]: "active" };
   };
 
-  const hasMatch = (phrase, letter_) =>  {
+  const hasMatch = (phrase, letter_) => {
     const letter = letter_.toUpperCase();
     const tildeChar = tildes[letter]?.toUpperCase();
 
     const isMatch = phrase.toUpperCase().includes(letter);
-    if (isMatch) return [tildeChar
-      ? [letter, tildeChar]
-      : [letter], true];
+    if (isMatch) return [tildeChar ? [letter, tildeChar] : [letter], true];
 
-    return tildeChar
-      ? [[letter, tildeChar], phrase.toUpperCase().includes(tildeChar)]
-      : [[letter], false];
-  }
+    return tildeChar ? [[letter, tildeChar], phrase.toUpperCase().includes(tildeChar)] : [[letter], false];
+  };
 
   const onNewLetterPressed = (letter) => {
     if (!hasStarted) setHasStarted(true);
@@ -125,12 +130,14 @@ export const LobbyInPlay = (props) => {
       setAlertText(t("pages.lobby.in-play.resume-game"));
 
       setIsAlertOpen(true);
-      return setTimeout(() => { setIsAlertOpen(false) }, 3000);
+      return setTimeout(() => {
+        setIsAlertOpen(false);
+      }, 3000);
     }
 
     if (getLivesLeft(props.lobby.hangedMan) === 0) return;
 
-    const [ lettersMatched, isMatched ] = hasMatch(props.lobby.settings.phrases[props.lobby.currentPhraseIndex], letter);
+    const [lettersMatched, isMatched] = hasMatch(props.lobby.settings.phrases[props.lobby.currentPhraseIndex], letter);
 
     let hangedMan = props.lobby.hangedMan;
     let state = props.lobby.state;
@@ -150,8 +157,9 @@ export const LobbyInPlay = (props) => {
     if (getLivesLeft(hangedMan) === 0) state = HANGED;
 
     const letterPressedUpdate = lettersMatched.reduce(
-      (acc, char) => ({ [char]: isMatched ? "matched" : "unmatched" , ...acc }),
-      {});
+      (acc, char) => ({ [char]: isMatched ? "matched" : "unmatched", ...acc }),
+      {}
+    );
 
     setLobby({
       ...props.lobby,
@@ -217,7 +225,6 @@ export const LobbyInPlay = (props) => {
   // TODO: Consider to refactoring, <Admin> & <User>.
   return (
     <InPlayContainer className="min-h-screen">
-
       <div className="absolute inset-4 bg-secondaryDark opacity-50"></div>
 
       <UserLayout {...props} />
@@ -239,49 +246,34 @@ export const LobbyInPlay = (props) => {
               />
             )}
 
-            {((hasStarted && secondsLeft !== null)) && (
+            {hasStarted && secondsLeft !== null && (
               <div className="inline mx-8">
-                <ButtonAnt
-                  color="success"
-                  disabled={!hasStarted}
-                  onClick={() => setHasPaused(!hasPaused)}
-                >
+                <ButtonAnt color="success" disabled={!hasStarted} onClick={() => setHasPaused(!hasPaused)}>
                   {hasPaused ? <CaretRightOutlined /> : <PauseOutlined />}
                 </ButtonAnt>
               </div>
             )}
           </div>
 
-          {
-            !isLastRound
-            ? (<ButtonAnt
-                  color="danger"
-                  className="btn-action"
-                  onClick={() => skipPhrase()}
-                  disabled={isLastRound}
-                >
-                  <span className="btn-text">{t("pages.lobby.in-play.jump-phrase")}</span>
-                  <FastForwardOutlined />
-                </ButtonAnt>)
-            : (<ButtonAnt
-                  color="danger"
-                  className="btn-action"
-                  onClick={() => skipPhrase()}
-                >
-                  <span className="btn-text">{t("pages.lobby.in-play.finish-game")}</span>
-                  <FastForwardOutlined />
-                </ButtonAnt>)
-          }
+          {!isLastRound ? (
+            <ButtonAnt color="danger" className="btn-action" onClick={() => skipPhrase()} disabled={isLastRound}>
+              <span className="btn-text">{t("pages.lobby.in-play.jump-phrase")}</span>
+              <FastForwardOutlined />
+            </ButtonAnt>
+          ) : (
+            <ButtonAnt color="danger" className="btn-action" onClick={() => skipPhrase()}>
+              <span className="btn-text">{t("pages.lobby.in-play.finish-game")}</span>
+              <FastForwardOutlined />
+            </ButtonAnt>
+          )}
         </GameHeader>
 
-        <HangedMan {...props} hangedMan={props.lobby.hangedMan}/>
+        <HangedMan {...props} hangedMan={props.lobby.hangedMan} />
 
         <GuessPhrase {...props} phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]} />
 
         <div className="max-w-[700px] mx-auto pb-8 relative">
-          <div className={`alert text-center text-white font-bold text-xl ${isAlertOpen && 'opened'}`}>
-            {alertText}
-          </div>
+          <div className={`alert text-center text-white font-bold text-xl ${isAlertOpen && "opened"}`}>{alertText}</div>
 
           <Alphabet
             {...props}
@@ -297,7 +289,7 @@ export const LobbyInPlay = (props) => {
             hasGuessed={props.lobby.state === GUESSED}
             phrase={props.lobby.settings.phrases[props.lobby.currentPhraseIndex]}
             isGameOver={isGameOver}
-            onContinue={() => isLastRound ? resetGame() : nextRound()}
+            onContinue={() => (isLastRound ? resetGame() : nextRound())}
             onResetGame={() => resetGame()}
           />
         )}
@@ -367,4 +359,3 @@ const InPlayContainer = styled.div`
     }
   }
 `;
-

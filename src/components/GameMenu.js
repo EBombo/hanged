@@ -19,10 +19,13 @@ export const GameMenu = (props) => {
   const [phrases, setPhrases] = useState([...props.settings.phrases, ""]);
 
   const validationSchema = yup.object().shape({
-      phrase: yup.array().of(
-          yup.string()
-            .matches(allowedLetters, "Only letters, signs ?¿!¡, whitespace ( ) and comma (,) are allowed for this field ")
-      )
+    phrase: yup
+      .array()
+      .of(
+        yup
+          .string()
+          .matches(allowedLetters, "Only letters, signs ?¿!¡, whitespace ( ) and comma (,) are allowed for this field ")
+      ),
   });
 
   const { register, errors, handleSubmit } = useForm({
@@ -123,11 +126,11 @@ export const GameMenu = (props) => {
                             }
                           }}
                           onPaste={(ev) => {
-                            const pasteText = ev.clipboardData.getData("text")
+                            const pasteText = ev.clipboardData.getData("text");
 
                             if (phrase.length + pasteText.length > MAX_PHRASE_LENGTH) return;
 
-                            const newPhrase = `${phrase}${pasteText}`.replaceAll(bannedLetters, '');
+                            const newPhrase = `${phrase}${pasteText}`.replaceAll(bannedLetters, "");
 
                             ev.target.value = newPhrase;
 
@@ -164,7 +167,7 @@ export const GameMenu = (props) => {
                         </button>
                       </div>
                     ))}
-                  
+
                     <div className="btn-container">
                       <ButtonAnt
                         onClick={() => setPhrases([...phrases, ""])}
