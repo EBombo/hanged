@@ -6,6 +6,9 @@
   "ingress-button-label": "Ingresar",
   "ok-button-label": "Ok",
   "next-button-label": "Siguiente",
+  "nav": {
+    "exit": "Exit"
+  },
   "pages": {
     "register": {
       "title": "Regístrate",
@@ -14,7 +17,7 @@
     "login": {
       "email-step": {
         "subtitle": "Añadir identificación del jugador",
-        "description": "El anfitrión del juego ha pedido que coloques tu mail cómo una medida de identificación para entrar al juego"
+        "description": "El anfitrión del juego ha pedido que coloques tu mail cómo una medida de identificación para entrar al juego",
         "placeholder-email-input": "Ingresa tu email"
       },
       "modal-container-title": "Identificación del jugador grabada",
@@ -46,7 +49,8 @@
         "add-button-label": "Agregar",
         "cancel-button-label": "Cancelar",
         "save-button-label": "Guardar",
-        "new-phrase-placeholder": "Insertar nueva frase/palabra"
+        "new-phrase-placeholder": "Insertar nueva frase/palabra",
+        "options-game-title": "Opciones del juego"
       },
       "loading": {
         "get-into-ebombo": "Entra a www.ebombo.io"
@@ -61,6 +65,8 @@
         "word-was": "La palabra era",
         "next-button-label": "Siguiente",
         "seconds": "segundos",
+        "alert-start-game": "Haz click en una letra para empezar",
+        "resume-game": "Debes apretar el botón \"Play\" para iniciar el juego."
       }
     }
   }

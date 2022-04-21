@@ -6,6 +6,9 @@
   "ingress-button-label": "Continue",
   "ok-button-label": "Ok",
   "next-button-label": "Next",
+  "nav": {
+    "exit": "Exit"
+  },
   "pages": {
     "register": {
       "title": "Sign up",
@@ -43,16 +46,17 @@
         "seconds-per-round-option-label": "Seconds per round",
         "no-time": "No time",
         "phrases-descriptions": "Phrases or words (Max. 50 characters). Letters, symbols (?!), white-space and comma are only allowed.",
-        "add-button-label": "Agregar",
+        "add-button-label": "Add",
         "cancel-button-label": "Cancel",
         "save-button-label": "Save",
-        "new-phrase-placeholder": "Insert new phrase/word"
+        "new-phrase-placeholder": "Insert new phrase/word",
+        "options-game-title": "Game options"
       },
       "loading": {
         "get-into-ebombo": "Visit www.ebombo.io"
       },
       "in-play": {
-        "edit-game": "Edit game"
+        "edit-game": "Edit game",
         "jump-phrase": "Skip phrase",
         "finish-game": "Finish game",
         "jump-phrase-message": "Skip phrase!",
@@ -61,6 +65,8 @@
         "word-was": "The word was",
         "next-button-label": "Next",
         "seconds": "seconds",
+        "alert-start-game": "Click on any letter to start!",
+        "resume-game": "To start the game, you should click on the \"Play\" button."
       }
     }
   }

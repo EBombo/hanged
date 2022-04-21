@@ -74,7 +74,7 @@ export const LobbyInPlay = (props) => {
     if (hasStarted || !isFirstGame) return;
 
     setIsAlertOpen(true);
-    setAlertText("Haz click en una letra para empezar");
+    setAlertText(t("pages.lobby.in-play.alert-start-game"));
   }, [hasStarted, lobby]);
 
   useEffect(() => {
@@ -122,7 +122,7 @@ export const LobbyInPlay = (props) => {
     if (!hasStarted && isAlertOpen) setIsAlertOpen(false);
 
     if (hasPaused) {
-      setAlertText(`Debes apretar el botón "Play" para iniciar el juego.`);
+      setAlertText(t("pages.lobby.in-play.resume-game"));
 
       setIsAlertOpen(true);
       return setTimeout(() => { setIsAlertOpen(false) }, 3000);
@@ -225,7 +225,7 @@ export const LobbyInPlay = (props) => {
       <div className="min-h-[calc(100vh-100px)] screen flex flex-col justify-evenly">
         <GameHeader>
           <ButtonAnt color="default" className="btn-action" onClick={() => setGameMenuEnabled(true)}>
-            {t("pages.lobby.in-game.edit-game")}
+            {t("pages.lobby.in-play.edit-game")}
           </ButtonAnt>
 
           <div className="timer-container inline-flex items-center">
@@ -260,7 +260,7 @@ export const LobbyInPlay = (props) => {
                   onClick={() => skipPhrase()}
                   disabled={isLastRound}
                 >
-                  <span className="btn-text">{t("pages.lobby.in-game.jump-phrase")}</span>
+                  <span className="btn-text">{t("pages.lobby.in-play.jump-phrase")}</span>
                   <FastForwardOutlined />
                 </ButtonAnt>)
             : (<ButtonAnt
@@ -268,7 +268,7 @@ export const LobbyInPlay = (props) => {
                   className="btn-action"
                   onClick={() => skipPhrase()}
                 >
-                  <span className="btn-text">{t("pages.lobby.in-game.finish-game")}</span>
+                  <span className="btn-text">{t("pages.lobby.in-play.finish-game")}</span>
                   <FastForwardOutlined />
                 </ButtonAnt>)
           }

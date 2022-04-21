@@ -4,10 +4,13 @@ import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
 import { config } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
+
+  const { t } = useTranslation();
 
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -123,7 +126,7 @@ export const UserLayout = (props) => {
             content={
               <div>
                 <div onClick={() => props.logout()} style={{ cursor: "pointer" }}>
-                  Salir
+                  {t("nav.exit")}
                 </div>
               </div>
             }

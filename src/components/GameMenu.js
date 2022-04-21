@@ -59,7 +59,7 @@ export const GameMenu = (props) => {
         )}
 
         <Collapse defaultActiveKey={["1"]} accordion>
-          <Panel header="Opciones del juego" key="1">
+          <Panel header={t("pages.lobby.game-settings.options-game-title")} key="1">
             <div className="options">
               {showLanguageOption && (
                 <div className="option with-select">

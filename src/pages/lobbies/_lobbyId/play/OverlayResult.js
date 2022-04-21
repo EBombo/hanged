@@ -15,7 +15,7 @@ export const OverlayResult = (props) => {
     <OverlayResultContainer className="flex flex-col pt-8">
       <div className="content">
         <div className={`label inline-block bg-secondarydarken py-8 px-8 md:px-24 ${props.gameState === SKIP_PHRASE && 'text-primary'}`}>
-          { props.gameState === SKIP_PHRASE ? t("pages.lobby.in-game.jump-phrase-message") : props.isGameOver ? t("pages.lobby.in-game.game-is-over") : '' }
+          { props.gameState === SKIP_PHRASE ? t("pages.lobby.in-play.jump-phrase-message") : props.isGameOver ? t("pages.lobby.in-play.game-is-over") : '' }
         </div>
         <div className="max-w-[500px] m-[auto] bg-secondaryDarken min-h-[80px] mb-8 relative">
           { props.gameState !== SKIP_PHRASE && 
@@ -31,15 +31,15 @@ export const OverlayResult = (props) => {
             height="48px"
             />
           }
-          <div className={`label py-8 ${props.hasGuessed ? "success" : ""}`}>{t("pages.lobby.in-game.word-was")}: <span className="answer">{props.phrase}</span></div>
+          <div className={`label py-8 ${props.hasGuessed ? "success" : ""}`}>{t("pages.lobby.in-play.word-was")}: <span className="answer">{props.phrase}</span></div>
         </div>
         {props.isGameOver ? (
           <ButtonAnt className="btn" color="default" onClick={() => props.onResetGame?.()}>
-            {t("pages.lobby.in-game.play-again-button-label")}
+            {t("pages.lobby.in-play.play-again-button-label")}
           </ButtonAnt>
         ) : (
           <ButtonAnt className="btn" color="default" onClick={() => props.onContinue?.()}>
-            {t("pages.lobby.in-game.next-button-label")}
+            {t("pages.lobby.in-play.next-button-label")}
           </ButtonAnt>
         )}
       </div>
