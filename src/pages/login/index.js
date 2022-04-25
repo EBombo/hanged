@@ -5,7 +5,7 @@ import { snapshotToArray } from "../../utils";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useUser } from "../../hooks";
+import { useUser, useTranslation } from "../../hooks";
 import { PinStep } from "./PinStep";
 import { avatars } from "../../components/common/DataList";
 
@@ -14,6 +14,8 @@ const Login = (props) => {
 
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
+
+  const { SwitchTranslation } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,6 +74,9 @@ const Login = (props) => {
 
   return (
     <LoginContainer storageUrl={config.storageUrl}>
+      <div className="absolute top-4 right-4 lg:top-10 lg:right-10">
+        <SwitchTranslation />
+      </div>
       <div className="main-container">
         {!authUser?.lobby && (
           <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
