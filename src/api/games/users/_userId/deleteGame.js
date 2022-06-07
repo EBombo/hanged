@@ -8,7 +8,7 @@ export const deleteGame = async (req, res) => {
 
     await firestore.doc(`games/${gameId}`).update({
       deleted: true,
-      updateAt: new Date()
+      updateAt: new Date(),
     });
 
     return res.send({ success: true });
@@ -16,4 +16,3 @@ export const deleteGame = async (req, res) => {
     console.error(error);
   }
 };
-

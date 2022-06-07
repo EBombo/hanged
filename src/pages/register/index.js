@@ -3,6 +3,7 @@ import { Divider } from "../../components/common/Divider";
 import { Controller, useForm } from "react-hook-form";
 import React, { useEffect, useGlobal } from "reactn";
 import { useAuth } from "../../hooks/useAuth";
+import { useTranslation } from "../../hooks/useTranslation";
 import { mediaQuery } from "../../constants";
 import styled from "styled-components";
 import { dialCodes } from "../../utils";
@@ -29,6 +30,8 @@ export const Register = (props) => {
   const [isLoadingUser] = useGlobal("isLoadingUser");
   const [isLoadingCreateUser] = useGlobal("isLoadingCreateUser");
 
+  const { t } = useTranslation();
+
   const { register, errors, handleSubmit, control, watch } = useForm({
     validationSchema,
     reValidateMode: "onSubmit",
@@ -48,7 +51,7 @@ export const Register = (props) => {
 
   return (
     <RegisterContainer>
-      <div className="title">Registrate</div>
+      <div className="title">{t("pages.register.title")}</div>
       <form onSubmit={handleSubmit(signUp)} autoComplete="off" noValidate>
         <Input
           error={errors.name}
@@ -128,7 +131,7 @@ export const Register = (props) => {
           htmlType="submit"
           width="100%"
         >
-          Registrar
+          {t("pages.register.register-button-label")}
         </ButtonAnt>
       </form>
       <Divider>o</Divider>
