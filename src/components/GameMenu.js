@@ -9,8 +9,8 @@ import { Image } from "./common/Image";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "../hooks/useTranslation";
+import { languages } from "./common/DataList";
 
-const showLanguageOption = false;
 const { Panel } = Collapse;
 
 export const GameMenu = (props) => {
@@ -64,14 +64,21 @@ export const GameMenu = (props) => {
         <Collapse defaultActiveKey={["1"]} accordion>
           <Panel header={t("pages.lobby.game-settings.options-game-title")} key="1">
             <div className="options">
-              {showLanguageOption && (
-                <div className="option with-select">
-                  <div>
-                    <div className="title-opt">{t("language")}</div>
-                  </div>
-                  <Select />
+              <div className="option with-select">
+                <div>
+                  <div className="title-opt">{t("language")}</div>
                 </div>
-              )}
+                <Select
+                  defaultValue={props.settings?.language ?? languages[0].name}
+                  key={props.settings?.language ?? languages[0]}
+                  optionsdom={languages.map((language) => ({
+                    key: language.key,
+                    code: language.value,
+                    name: t(language.value),
+                  }))}
+                  onChange={(value) => props.onLanguageChange?.(value)}
+                />
+              </div>
 
               <div className="option with-select">
                 <div>
