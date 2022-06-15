@@ -104,3 +104,8 @@ export const MAX_PHRASE_LENGTH = 50;
 export const allowedLetters = new RegExp("^[a-zA-ZñÑáéíóúÁÉÍÓÚ, ¿?!¡:;]*$");
 
 export const bannedLetters = new RegExp("[^a-zA-ZñÑáéíóúÁÉÍÓÚ, ¿?!¡:;]", "g");
+
+export const languages = [
+  { key: "spanish", value: "es", name: "Español" },
+  { key: "english", value: "en", name: "Inglés" },
+];
