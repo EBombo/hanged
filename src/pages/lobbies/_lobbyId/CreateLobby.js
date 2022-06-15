@@ -3,15 +3,17 @@ import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, firestore, firestoreBomboGames } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
 import { useRouter } from "next/router";
-import { useSendError, useUser } from "../../../hooks";
+import { useSendError, useTranslation, useUser } from "../../../hooks";
 import { GameMenu } from "../../../components/GameMenu";
-import { defaultHandMan, limbsOrder, PLAYING, secondsPerRoundOptions } from "../../../components/common/DataList";
+import { defaultHandMan, limbsOrder, PLAYING, secondsPerRoundOptions, languages } from "../../../components/common/DataList";
 
 export const CreateLobby = (props) => {
   const { Fetch } = useFetch();
 
   const router = useRouter();
   const { userId, tokenId, gameId } = router.query;
+
+  const { locale, setLocale } = useTranslation();
 
   const { sendError } = useSendError();
 
@@ -23,7 +25,7 @@ export const CreateLobby = (props) => {
   const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
-  const [settings, setSettings] = useState({ secondsPerRound: secondsPerRoundOptions[0] });
+  const [settings, setSettings] = useState({ secondsPerRound: secondsPerRoundOptions[0], language: locale });
 
   useEffect(() => {
     if ((!tokenId && !userId) || !gameId) return;
@@ -158,6 +160,10 @@ export const CreateLobby = (props) => {
       onAudioChange={(audioId) => setSettings({ ...settings, audio: { id: audioId } })}
       onSecondsPerRoundChange={(seconds) => setSettings({ ...settings, secondsPerRound: seconds })}
       addNewPhrase={(newPhrase) => setSettings({ ...settings, phrases: [...settings.phrases, newPhrase] })}
+      onLanguageChange={(language) => {
+        setLocale(language);
+        setSettings({ ...settings, language });
+      }}
     />
   );
 };
