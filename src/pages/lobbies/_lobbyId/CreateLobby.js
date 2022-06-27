@@ -111,6 +111,7 @@ export const CreateLobby = (props) => {
         startAt: new Date(),
         isLocked: false,
         isClosed: false,
+        deleted: false,
         settings: {
           ...settings,
           phrases: phrases.filter((phrase) => phrase !== ""),
