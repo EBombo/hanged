@@ -9,9 +9,12 @@ import { useForm } from "react-hook-form";
 import { Carousel } from "../../components/common/Carousel";
 import { avatars } from "../../components/common/DataList";
 import { darkTheme } from "../../theme";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export const PinStep = (props) => {
   const [, setAuthUserLs] = useUser();
+
+  const { t } = useTranslation();
 
   const [authUser, setAuthUser] = useGlobal("user");
 
@@ -71,10 +74,10 @@ export const PinStep = (props) => {
             margin="10px auto"
             defaultValue={authUser?.lobby?.pin ?? null}
             disabled={props.isLoading}
-            placeholder="Pin del juego"
+            placeholder={t("pages.login.pin-step-input-placeholder")}
           />
           <ButtonLobby width="100%" disabled={props.isLoading} loading={props.isLoading} htmlType="submit">
-            Ingresar
+            {t("ingress-button-label")}
           </ButtonLobby>
         </div>
       </form>

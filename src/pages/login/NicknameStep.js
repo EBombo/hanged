@@ -7,12 +7,15 @@ import styled from "styled-components";
 import { object, string } from "yup";
 import { useSendError, useUser } from "../../hooks";
 import { ValidateNickname } from "./ValidateNickname";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export const NicknameStep = (props) => {
   const { sendError } = useSendError();
 
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
+
+  const { t } = useTranslation();
 
   const [users, setUsers] = useState(null);
   const [isValidating, setIsValidating] = useState(false);
@@ -50,7 +53,7 @@ export const NicknameStep = (props) => {
 
       if (users.some((user) => user.nickname === data.nickname)) {
         setIsValidating(false);
-        throw Error("ERROR", "El nickname ya se encuentra registrado");
+        throw Error("ERROR", t("pages.login.already-registered-nikname-error-message"));
       }
 
       await setAuthUser({ ...authUser, nickname: data.nickname });
@@ -85,11 +88,11 @@ export const NicknameStep = (props) => {
           variant="default"
           defaultValue={authUser?.nickname ?? null}
           disabled={props.isLoading}
-          placeholder="Apodo"
+          placeholder={t("pages.login.nickname-step-input-placeholder")}
         />
 
         <ButtonLobby width="100%" disabled={props.isLoading} loading={props.isLoading} htmlType="submit">
-          Ingresar
+          {t("ingress-button-label")}
         </ButtonLobby>
       </div>
     </NicknameForm>

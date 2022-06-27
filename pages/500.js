@@ -24,9 +24,7 @@ const ErrorPage = () => {
     <ErrorPageStyled>
       <div className="content">
         <div className="py-8">
-          <Image
-            width="150px"
-            src={`${config.storageUrl}/resources/white-icon-ebombo.png`}/>
+          <Image width="150px" src={`${config.storageUrl}/resources/white-icon-ebombo.png`} />
         </div>
         <h1>500</h1>
         <div className="description">

@@ -2,15 +2,22 @@ import React from "reactn";
 import styled from "styled-components";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
-export const Timer = (props) => (
-  <TimerContainer>
-    <div className="timer">
-      <Image src={`${config.storageUrl}/resources/timer.png`} Desktopwidth="56px" width="36px" />
-    </div>
-    <div className="label">{props.isRoundOver ? props.roundOverMessage : `${props.secondsLeft} segundos`}</div>
-  </TimerContainer>
-);
+export const Timer = (props) => {
+  const { t } = useTranslation();
+
+  return (
+    <TimerContainer>
+      <div className="timer">
+        <Image src={`${config.storageUrl}/resources/timer.png`} Desktopwidth="56px" width="36px" />
+      </div>
+      <div className="label">
+        {props.isRoundOver ? props.roundOverMessage : `${props.secondsLeft} ${t("pages.lobby.in-game.seconds")}`}
+      </div>
+    </TimerContainer>
+  );
+};
 
 const TimerContainer = styled.div`
   font-family: Lato;

@@ -14,9 +14,12 @@ import {
 } from "react-animations";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
+import { useTranslation } from "../../../../hooks/useTranslation";
 
 export const LobbyClosed = (props) => {
   const [authUser] = useGlobal("user");
+
+  const { t } = useTranslation();
 
   const [isVisibleTitle, setIsVisibleTitle] = useState(true);
   const [isVisibleTitleAnimation, setIsVisibleTitleAnimation] = useState(false);
@@ -66,7 +69,7 @@ export const LobbyClosed = (props) => {
           <Image src={`${config.storageUrl}/resources/attendees.png`} width="55px" desktopWidth="75px" />
           <div>
             <div className="number">{Object.keys(props.lobby.users)?.length ?? 0}</div>
-            <div className="label">asistentes</div>
+            <div className="label">{t("pages.lobby.closed.assistants")}</div>
           </div>
         </div>
       </div>
@@ -78,7 +81,7 @@ export const LobbyClosed = (props) => {
     () => (
       <div className="item flex">
         <div className="content-center">
-          ¿Se divirtieron?
+          {t("pages.lobby.closed.play-again-label")}
           <ButtonAnt
             variant="contained"
             color="success"
@@ -89,7 +92,7 @@ export const LobbyClosed = (props) => {
               window.open(redirectUrl, "blank");
             }}
           >
-            Jugar de nuevo
+            {t("pages.lobby.closed.play-again-button-label")}
           </ButtonAnt>
         </div>
       </div>
@@ -104,7 +107,7 @@ export const LobbyClosed = (props) => {
           <Image src={`${config.storageUrl}/resources/messages.png`} width="55px" desktopWidth="75px" />
           <div>
             <div className="number">{props.lobby.totalMessages ?? 0}</div>
-            <div className="label">mensages</div>
+            <div className="label">{t("pages.lobby.closed.messages-label")}</div>
           </div>
         </div>
       </div>
@@ -122,7 +125,7 @@ export const LobbyClosed = (props) => {
           width="80%"
           onClick={initializeTransitionToListWinners}
         >
-          Ver reporte completo
+          {t("pages.lobby.closed.see-full-report-button-label")}
         </ButtonAnt>
         <ButtonAnt
           variant="contained"
@@ -131,7 +134,7 @@ export const LobbyClosed = (props) => {
           width="80%"
           onClick={initializeTransitionToWinners}
         >
-          Volver al inicio
+          {t("pages.lobby.closed.go-back-button-label")}
         </ButtonAnt>
       </div>
     ),
@@ -142,7 +145,7 @@ export const LobbyClosed = (props) => {
     return (
       <LobbyWinnersCss>
         <div className="anchor-link" onClick={() => setShowWinners(false)}>
-          Volver al podio
+          {t("pages.lobby.closed.go-back-to-podium-button-label")}
         </div>
         <div className="list">
           {props.lobby.winners.map((winner, index) => (
@@ -169,7 +172,7 @@ export const LobbyClosed = (props) => {
             margin="auto auto 15px auto"
             onClick={initializeTransitionToWinners}
           >
-            Volver al podio
+            {t("pages.lobby.closed.go-back-to-podium-button-label")}
           </ButtonAnt>
         </div>
         <div className="child">
@@ -199,7 +202,7 @@ export const LobbyClosed = (props) => {
       <div className="header">
         {!isVisibleTitle && (
           <ButtonLobby variant="primary" margin="10px 10px auto auto" onClick={initializeTransitionToResume}>
-            Siguiente
+            {t("pages.lobby.closed.next-button-label")}
           </ButtonLobby>
         )}
       </div>
@@ -216,7 +219,7 @@ export const LobbyClosed = (props) => {
       {!isVisibleTitle && (
         <div className="footer">
           <div className="anchor-link" onClick={initializeTransitionToListWinners}>
-            Ver todas las posiciones
+            {t("pages.lobby.closed.see-all-positions-label")}
           </div>
         </div>
       )}

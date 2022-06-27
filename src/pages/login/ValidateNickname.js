@@ -3,11 +3,14 @@ import styled from "styled-components";
 import { mediaQuery } from "../../constants";
 import { config } from "../../firebase";
 import { Image } from "../../components/common/Image";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export const ValidateNickname = (props) => {
+  const { t } = useTranslation("pages.login");
+
   return (
     <ValidatingContainer>
-      <div className="title">Verificando tu apodo...</div>
+      <div className="title">{t("verify-nickname-title")}</div>
       <Image
         src={`${config.storageUrl}/resources/white_spinner.gif`}
         height="75px"

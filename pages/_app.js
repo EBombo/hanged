@@ -44,7 +44,11 @@ const MyApp = ({ Component, pageProps }) => {
         />
         <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-72x72.png`} />
         <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
-        <link rel="apple-touch-icon" sizes="180x180" href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`} />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`}
+        />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"

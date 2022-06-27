@@ -4,68 +4,72 @@ import { mediaQuery } from "../../../../constants";
 import { skippedWords } from "../../../../components/common/DataList";
 
 export const GuessPhrase = (props) => {
-
   const words = props.phrase?.split(" ") ?? [];
 
   return (
-  <GuessPhraseStyled className="max-w-[1200px] mx-auto relative">
-    {words.map((word, i) => (
-      <div key={`word-${i}`} className="inline-block mx-3 xl:whitespace-nowrap">
-        {word.split("").map((letter, i) =>
-           skippedWords.includes(letter)
-          ? (<span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-7xl whitespace">{ letter }</span>)
-          : (<div key={`letter-${i}`} className="letter">
-              <div className="character">
-                {Object.keys(props.lobby.lettersPressed).includes(letter.toUpperCase()) ? letter.toUpperCase() : " "}
+    <GuessPhraseStyled className="max-w-[1200px] mx-auto relative">
+      {words.map((word, i) => (
+        <div key={`word-${i}`} className="inline-block mx-3 xl:whitespace-nowrap">
+          {word.split("").map((letter, i) =>
+            skippedWords.includes(letter) ? (
+              <span key={`ws-${i}`} className="text-white leading-6 text-6xl md:text-7xl whitespace">
+                {letter}
+              </span>
+            ) : (
+              <div key={`letter-${i}`} className="letter">
+                <div className="character">
+                  {Object.keys(props.lobby.lettersPressed).includes(letter.toUpperCase()) ? letter.toUpperCase() : " "}
+                </div>
+                <hr className="underscore" />
               </div>
-              <hr className="underscore" />
-            </div>)
-        )}
+            )
+          )}
         </div>
-    ))}
-  </GuessPhraseStyled>
-)};
+      ))}
+    </GuessPhraseStyled>
+  );
+};
 
 const GuessPhraseStyled = styled.div`
-text-align: center;
-margin-bottom: 60px;
+  text-align: center;
+  margin-bottom: 60px;
 
-.whitespace {
-  margin: 7px;
-}
-
-.letter {
-  color: ${(props) => props.theme.basic.white};
-  font-family: Lato;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 28px;
-
-  margin: 8px 4px;
-  min-width: 28px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  vertical-align: bottom;
-
-  .character {
-    text-transform: uppercase;
-    height: 47px;
-    width: 100%;
+  .whitespace {
+    margin: 7px;
   }
 
-  .underscore {
-    width: 100%;
-    height: 2px;
-    background: white;
-  }
+  .letter {
+    color: ${(props) => props.theme.basic.white};
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
 
-  ${mediaQuery.afterTablet} {
-    font-size: 32px;
-    min-width: 45px;
-    line-height: 47px;
+    margin: 8px 4px;
+    min-width: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    vertical-align: bottom;
+
+    .character {
+      text-transform: uppercase;
+      height: 47px;
+      width: 100%;
+    }
+
+    .underscore {
+      width: 100%;
+      height: 2px;
+      background: white;
+    }
+
+    ${mediaQuery.afterTablet} {
+      font-size: 32px;
+      min-width: 45px;
+      line-height: 47px;
+    }
   }
-}
 `;
