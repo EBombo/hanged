@@ -59,9 +59,6 @@ export const WithConfiguration = (props) => {
         isAdmin: false,
         theme: get(authUserLS, "theme") === "lightTheme" ? lightTheme : darkTheme,
       });
-
-      moment.locale(languageCode);
-      setLocale(yup[languageCode]);
     };
 
     const fetchVersion = () =>
@@ -87,6 +84,11 @@ export const WithConfiguration = (props) => {
 
     return () => unsubscribeVersion();
   }, []);
+
+  useEffect(() => {
+    moment.locale(languageCode);
+    setLocale(yup[languageCode]);
+  }, [languageCode]);
 
   useEffect(() => {
     authUser && setIsVisibleLoginModal(false);
