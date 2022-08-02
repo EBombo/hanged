@@ -5,6 +5,8 @@ import { Switch } from "../components/form/Switch";
 
 import en from "../../public/locales/en.json";
 import es from "../../public/locales/es.json";
+import { useLanguageCode } from "./useLocalStorageState";
+import { cookieUtils } from "../utils";
 
 // TODO: Consider chunk the json files.
 const TRANSLATIONS = {
@@ -17,6 +19,8 @@ export const useTranslation = (path) => {
   const router = useRouter();
   const { locale, asPath } = router;
 
+  const [, setLanguageCode] = useLanguageCode();
+
   const inputRef = useRef(null);
 
   // Current languages.
@@ -25,6 +29,9 @@ export const useTranslation = (path) => {
   // Update language and redirect.
   const setLocale = useCallback(
     (locale) => {
+      setLanguageCode(locale);
+      cookieUtils.setCookie("NEXT_LOCALE", locale, 365);
+
       router.push(asPath, asPath, { locale });
     },
     [asPath, router, locale]
